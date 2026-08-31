@@ -4,7 +4,6 @@ import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { ProfilesModule } from './profiles/profiles.module';
 import { SeekersModule } from './seekers/seekers.module';
 import { RecruitersModule } from './recruiters/recruiters.module';
 import { CompetencesModule } from './competences/competences.module';
@@ -35,7 +34,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     UsersModule,
-    ProfilesModule,
     SeekersModule,
     RecruitersModule,
     CompetencesModule,

@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Recruiter {
@@ -10,4 +11,8 @@ export class Recruiter {
 
   @Column()
   localisation: string;
+
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
 }

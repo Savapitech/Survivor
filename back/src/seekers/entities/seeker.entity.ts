@@ -4,7 +4,10 @@ import {
   Column,
   ManyToMany,
   JoinTable,
+  JoinColumn,
+  OneToOne
 } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
 import { Localisation } from '../../localisations/entities/localisation.entity';
 import { Competence } from '../../competences/entities/competence.entity';
 import { ActivitySector } from '../../activity-sectors/entities/activity-sector.entity';
@@ -37,4 +40,8 @@ export class Seeker {
   @ManyToMany(() => ActivitySector, (activitySector) => activitySector.seekers)
   @JoinTable()
   activitySectors: ActivitySector[];
+
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
 }
