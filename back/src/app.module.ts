@@ -10,6 +10,8 @@ import { RecruitersModule } from './recruiters/recruiters.module';
 import { CompetencesModule } from './competences/competences.module';
 import { ActivitySectorsModule } from './activity-sectors/activity-sectors.module';
 import { LocalisationsModule } from './localisations/localisations.module';
+import { QuestionnaireModule } from './questionnaire/questionnaire.module';
+import { InteractionsModule } from './interactions/interactions.module';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -39,6 +41,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     CompetencesModule,
     ActivitySectorsModule,
     LocalisationsModule,
+    QuestionnaireModule,
+    InteractionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
