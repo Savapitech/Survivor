@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 import { Seeker } from '../../seekers/entities/seeker.entity';
 
 @Entity()
@@ -9,6 +9,6 @@ export class Localisation {
   @Column()
   localisation: string;
 
-  @ManyToOne(() => Seeker, (seeker) => seeker.localisations)
-  seeker: Seeker;
+  @ManyToMany(() => Seeker, (seeker) => seeker.localisations)
+  seekers: Seeker[];
 }

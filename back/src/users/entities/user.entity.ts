@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
-import { Profile } from '../../profiles/entities/profile.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -20,7 +19,4 @@ export class User {
 
   @Column({ type: 'enum', enum: UserRole })
   role: UserRole;
-
-  @OneToOne(() => Profile, (profile) => profile.user)
-  profile: Profile;
 }
