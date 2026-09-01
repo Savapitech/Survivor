@@ -1,26 +1,79 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Recruiter } from './entities/recruiter.entity';
 import { CreateRecruiterDto } from './dto/create-recruiter.dto';
 import { UpdateRecruiterDto } from './dto/update-recruiter.dto';
+import { User, UserRole } from '../users/entities/user.entity';
+import { PaginationQueryDto, paginate, toSkipTake } from '../common/pagination';
 
 @Injectable()
 export class RecruitersService {
-  create(createRecruiterDto: CreateRecruiterDto) {
-    return 'This action adds a new recruiter';
+  constructor(
+    @InjectRepository(Recruiter)
+    private readonly recruitersRepository: Repository<Recruiter>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+  ) {}
+
+  async create(dto: CreateRecruiterDto) {
+    const user = await this.usersRepository.findOneBy({ id: dto.userId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (user.role !== UserRole.RECRUITER) {
+      throw new BadRequestException('User does not have the recruiter role');
+    }
+    const alreadyLinked = await this.recruitersRepository.existsBy({
+      user: { id: user.id },
+    });
+    if (alreadyLinked) {
+      throw new ConflictException('This user already has a recruiter profile');
+    }
+
+    const recruiter = this.recruitersRepository.create({
+      companyName: dto.companyName,
+      localisation: dto.localisation,
+      user,
+    });
+    return this.recruitersRepository.save(recruiter);
   }
 
-  findAll() {
-    return `This action returns all recruiters`;
+  async findAll(query: PaginationQueryDto) {
+    const { skip, take } = toSkipTake(query);
+    const [items, total] = await this.recruitersRepository.findAndCount({
+      skip,
+      take,
+      order: { id: 'ASC' },
+    });
+    return paginate(items, total, query);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} recruiter`;
+  async findOne(id: number) {
+    const recruiter = await this.recruitersRepository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
+    if (!recruiter) {
+      throw new NotFoundException('Recruiter not found');
+    }
+    return recruiter;
   }
 
-  update(id: number, updateRecruiterDto: UpdateRecruiterDto) {
-    return `This action updates a #${id} recruiter`;
+  async update(id: number, dto: UpdateRecruiterDto) {
+    await this.findOne(id);
+    await this.recruitersRepository.update(id, dto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} recruiter`;
+  async remove(id: number) {
+    const result = await this.recruitersRepository.delete(id);
+    if (!result.affected) {
+      throw new NotFoundException('Recruiter not found');
+    }
   }
 }
