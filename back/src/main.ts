@@ -28,9 +28,7 @@ async function bootstrap() {
     app,
     new DocumentBuilder()
       .setTitle('ProfilsActifs API')
-      .setDescription(
-        'Ministère du Job et du Bonheur',
-      )
+      .setDescription('Ministère du Job et du Bonheur')
       .setVersion(version)
       .build(),
   );

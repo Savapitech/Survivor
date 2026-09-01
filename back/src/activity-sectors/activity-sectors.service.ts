@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { ActivitySector } from './entities/activity-sector.entity';
@@ -38,7 +42,9 @@ export class ActivitySectorsService {
   }
 
   async findOne(id: number) {
-    const activitySector = await this.activitySectorsRepository.findOneBy({ id });
+    const activitySector = await this.activitySectorsRepository.findOneBy({
+      id,
+    });
     if (!activitySector) {
       throw new NotFoundException('Activity sector not found');
     }
@@ -47,7 +53,10 @@ export class ActivitySectorsService {
 
   async update(id: number, dto: UpdateActivitySectorDto) {
     const activitySector = await this.findOne(id);
-    if (dto.activitySector && dto.activitySector !== activitySector.activitySector) {
+    if (
+      dto.activitySector &&
+      dto.activitySector !== activitySector.activitySector
+    ) {
       const existing = await this.activitySectorsRepository.existsBy({
         activitySector: dto.activitySector,
       });

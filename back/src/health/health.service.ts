@@ -18,9 +18,7 @@ export interface HealthStatus {
 
 @Injectable()
 export class HealthService {
-  constructor(
-    @InjectDataSource() private readonly dataSource: DataSource,
-  ) {}
+  constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
 
   async check(): Promise<HealthStatus> {
     const database = await this.pingDatabase();

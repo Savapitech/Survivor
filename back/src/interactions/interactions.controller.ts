@@ -61,8 +61,13 @@ export class InteractionsController {
   }
 
   @Patch(':id/seen')
-  @ApiOperation({ summary: 'Mark an interaction as seen by its recipient seeker' })
-  @ApiResponse({ status: 200, description: 'Interaction marked seen (idempotent)' })
+  @ApiOperation({
+    summary: 'Mark an interaction as seen by its recipient seeker',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Interaction marked seen (idempotent)',
+  })
   @ApiResponse({
     status: 403,
     description: 'This interaction does not belong to the given seekerId',

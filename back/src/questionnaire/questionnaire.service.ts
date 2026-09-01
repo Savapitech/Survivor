@@ -225,12 +225,14 @@ export class QuestionnaireService {
     });
 
     const maxScore =
-      ANSWER_MAX_VALUE * questions.reduce((sum, question) => sum + question.weight, 0);
+      ANSWER_MAX_VALUE *
+      questions.reduce((sum, question) => sum + question.weight, 0);
     const rawScore = answers.reduce(
       (sum, answer) => sum + answer.value * answer.question.weight,
       0,
     );
-    const score = maxScore > 0 ? Math.round((rawScore / maxScore) * 10000) / 100 : 0;
+    const score =
+      maxScore > 0 ? Math.round((rawScore / maxScore) * 10000) / 100 : 0;
     const certified = score >= PASS_THRESHOLD;
     const submittedAt = new Date();
 
