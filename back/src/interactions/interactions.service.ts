@@ -35,10 +35,13 @@ export class InteractionsService {
       throw new NotFoundException('Seeker not found');
     }
 
-    if (dto.type === InteractionType.FAVORITE) {
+    if (
+      dto.type === InteractionType.FAVORITE ||
+      dto.type === InteractionType.LIKE
+    ) {
       const existing = await this.interactionsRepository.findOne({
         where: {
-          type: InteractionType.FAVORITE,
+          type: dto.type,
           recruiter: { id: recruiter.id },
           seeker: { id: seeker.id },
         },
