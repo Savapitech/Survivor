@@ -41,7 +41,7 @@ export class Seeker {
   @JoinTable()
   activitySectors: ActivitySector[];
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 }

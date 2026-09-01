@@ -6,7 +6,7 @@ export class ActivitySector {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   activitySector: string;
 
   @ManyToMany(() => Seeker, (seeker) => seeker.activitySectors)

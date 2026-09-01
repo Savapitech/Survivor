@@ -10,4 +10,7 @@ export class Question {
 
   @Column({ type: 'float', default: 1 })
   weight: number;
+
+  @Column({ default: true })
+  active: boolean;
 }

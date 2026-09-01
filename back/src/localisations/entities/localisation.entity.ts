@@ -6,7 +6,7 @@ export class Localisation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   localisation: string;
 
   @ManyToMany(() => Seeker, (seeker) => seeker.localisations)

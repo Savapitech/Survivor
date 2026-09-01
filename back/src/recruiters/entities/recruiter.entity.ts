@@ -12,7 +12,7 @@ export class Recruiter {
   @Column()
   localisation: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 }

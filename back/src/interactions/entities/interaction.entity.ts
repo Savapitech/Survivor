@@ -22,10 +22,10 @@ export class Interaction {
   @Column({ type: 'enum', enum: InteractionType })
   type: InteractionType;
 
-  @ManyToOne(() => Recruiter)
+  @ManyToOne(() => Recruiter, { onDelete: 'CASCADE' })
   recruiter: Recruiter;
 
-  @ManyToOne(() => Seeker)
+  @ManyToOne(() => Seeker, { onDelete: 'CASCADE' })
   seeker: Seeker;
 
   @CreateDateColumn()

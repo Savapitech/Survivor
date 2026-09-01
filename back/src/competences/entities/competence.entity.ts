@@ -6,7 +6,7 @@ export class Competence {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   competence: string;
 
   @ManyToMany(() => Seeker, (seeker) => seeker.competences)

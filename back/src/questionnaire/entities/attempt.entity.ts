@@ -6,9 +6,12 @@ export class Attempt {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Seeker)
+  @OneToOne(() => Seeker, { onDelete: 'CASCADE' })
   @JoinColumn()
   seeker: Seeker;
+
+  @Column({ type: 'int', array: true, default: () => "'{}'" })
+  questionIds: number[];
 
   @Column({ type: 'float', nullable: true })
   score: number | null;
