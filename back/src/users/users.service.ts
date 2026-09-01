@@ -47,6 +47,14 @@ export class UsersService {
     return this.toPublicUser(user);
   }
 
+  async findOneAll(email: string) {
+    const user = await this.usersRepository.findOneBy({ email });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
   async update(id: string, dto: UpdateUserDto) {
     const user = await this.usersRepository.findOneBy({ id });
     if (!user) {
