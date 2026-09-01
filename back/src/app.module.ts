@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -11,18 +10,10 @@ import { ActivitySectorsModule } from './activity-sectors/activity-sectors.modul
 import { LocalisationsModule } from './localisations/localisations.module';
 import { QuestionnaireModule } from './questionnaire/questionnaire.module';
 import { InteractionsModule } from './interactions/interactions.module';
-
-export const { ObserveModule, ObserveInstrument } = createObserveModule();
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
-    // Distributed tracing, auto-correlated logs, request/job metrics, error
-    // telemetry, alarms, and more — out of the box. Sign up at https://observe.nestjs.com
-    ObserveModule.forRoot({
-      appKey: process.env.OBSERVE_KEY ?? 'APP_KEY',
-      appSecret: process.env.OBSERVE_SECRET ?? 'APP_SECRET',
-      serviceId: process.env.OBSERVE_ID ?? 'APP_ID',
-    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST ?? 'localhost',
@@ -41,6 +32,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     LocalisationsModule,
     QuestionnaireModule,
     InteractionsModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
