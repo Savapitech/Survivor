@@ -1,0 +1,38 @@
+.fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin: 0 0 var(--space-5);
+}
+
+.legend {
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+  padding: 0 var(--space-2);
+  white-space: normal;
+}
+
+.scale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.option label {
+  cursor: pointer;
+}
+
+.endLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+}
