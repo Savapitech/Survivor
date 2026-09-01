@@ -1,11 +1,10 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { ConsoleLogger, ValidationPipe } from '@nestjs/common';
-import { AppModule, ObserveInstrument } from './app.module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    instrument: ObserveInstrument,
     logger: new ConsoleLogger({
       prefix: 'ProfilsActifs',
     }),
