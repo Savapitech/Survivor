@@ -16,6 +16,7 @@ async function bootstrap() {
       prefix: 'ProfilsActifs',
     }),
   });
+  app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
