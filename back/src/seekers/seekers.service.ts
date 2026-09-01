@@ -133,11 +133,7 @@ export class SeekersService {
         { activitySectorIds: query.activitySectorIds },
       );
     }
-    if (query.certification !== undefined) {
-      idQb.andWhere('seeker.certification = :certification', {
-        certification: query.certification,
-      });
-    }
+    idQb.andWhere('seeker.certification = true');
     if (query.search) {
       idQb.andWhere(
         '(seeker.name ILIKE :search OR seeker.lastname ILIKE :search)',
