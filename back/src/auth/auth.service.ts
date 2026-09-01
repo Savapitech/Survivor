@@ -3,8 +3,6 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 
-const SALT_ROUNDS = 10;
-
 @Injectable()
 export class AuthService {
   constructor(
