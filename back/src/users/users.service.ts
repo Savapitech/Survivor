@@ -5,6 +5,7 @@ import * as bcrypt from 'bcryptjs';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PaginationQueryDto, paginate, toSkipTake } from '../common/pagination';
 
 const SALT_ROUNDS = 10;
 
@@ -34,9 +35,18 @@ export class UsersService {
     return this.toPublicUser(user);
   }
 
-  async findAll() {
-    const users = await this.usersRepository.find();
-    return users.map((user) => this.toPublicUser(user));
+  async findAll(query: PaginationQueryDto) {
+    const { skip, take } = toSkipTake(query);
+    const [users, total] = await this.usersRepository.findAndCount({
+      skip,
+      take,
+      order: { email: 'ASC' },
+    });
+    return paginate(
+      users.map((user) => this.toPublicUser(user)),
+      total,
+      query,
+    );
   }
 
   async findOne(id: string) {
@@ -53,6 +63,15 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
+    if (dto.email && dto.email !== user.email) {
+      const emailTaken = await this.usersRepository.existsBy({
+        email: dto.email,
+      });
+      if (emailTaken) {
+        throw new ConflictException('Email already in use');
+      }
+    }
+
     const patch = { ...dto };
     if (patch.password) {
       patch.password = await bcrypt.hash(patch.password, SALT_ROUNDS);
@@ -63,6 +82,17 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    await this.usersRepository.delete(id);
+    const result = await this.usersRepository.delete(id);
+    if (!result.affected) {
+      throw new NotFoundException('User not found');
+    }
+  }
+
+  async findByEmailWithPassword(email: string): Promise<User | null> {
+    return this.usersRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.email = :email', { email })
+      .getOne();
   }
 }
