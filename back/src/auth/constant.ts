@@ -1,3 +1,2 @@
-export const jwtConstants = {
-    secret: 'N UTILISEZ PAS CETTE VALEUR. CRÉEZ PLUTÔT UN SECRET COMPLEXE ET GARDEZ-LE EN SÉCURITÉ EN DEHORS DU CODE SOURCE.',
-};
+export const jwtSecret = process.env.JWT_SECRET ?? "missing secret";
+export const jwtExpiresIn = process.env.JWT_EXPIRES_IN ?? '60';
