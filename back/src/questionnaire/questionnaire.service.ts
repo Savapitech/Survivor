@@ -117,6 +117,11 @@ export class QuestionnaireService {
       where: { seeker: { id: seekerId } },
     });
 
+    if (attempt && !attempt.submittedAt) {
+      await this.attemptsRepository.delete(attempt.id);
+      attempt = null;
+    }
+
     if (!attempt) {
       const activeQuestions = await this.questionsRepository.find({
         where: { active: true },
