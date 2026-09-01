@@ -5,7 +5,7 @@ import {
   ManyToMany,
   JoinTable,
   JoinColumn,
-  OneToOne
+  OneToOne,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Localisation } from '../../localisations/entities/localisation.entity';

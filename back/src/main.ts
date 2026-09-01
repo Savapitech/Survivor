@@ -16,6 +16,7 @@ async function bootstrap() {
       prefix: 'ProfilsActifs',
     }),
   });
+  app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -28,9 +29,7 @@ async function bootstrap() {
     app,
     new DocumentBuilder()
       .setTitle('ProfilsActifs API')
-      .setDescription(
-        'Ministère du Job et du Bonheur',
-      )
+      .setDescription('Ministère du Job et du Bonheur')
       .setVersion(version)
       .build(),
   );

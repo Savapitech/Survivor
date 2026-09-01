@@ -25,7 +25,8 @@ const SEEKER_RELATIONS = {
 @Injectable()
 export class SeekersService {
   constructor(
-    @InjectRepository(Seeker) private readonly seekersRepository: Repository<Seeker>,
+    @InjectRepository(Seeker)
+    private readonly seekersRepository: Repository<Seeker>,
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     @InjectRepository(Competence)
     private readonly competencesRepository: Repository<Competence>,
@@ -57,7 +58,9 @@ export class SeekersService {
     return found;
   }
 
-  private async resolveActivitySectors(ids?: number[]): Promise<ActivitySector[]> {
+  private async resolveActivitySectors(
+    ids?: number[],
+  ): Promise<ActivitySector[]> {
     if (!ids || ids.length === 0) {
       return [];
     }
@@ -133,11 +136,7 @@ export class SeekersService {
         { activitySectorIds: query.activitySectorIds },
       );
     }
-    if (query.certification !== undefined) {
-      idQb.andWhere('seeker.certification = :certification', {
-        certification: query.certification,
-      });
-    }
+    idQb.andWhere('seeker.certification = true');
     if (query.search) {
       idQb.andWhere(
         '(seeker.name ILIKE :search OR seeker.lastname ILIKE :search)',
@@ -199,7 +198,9 @@ export class SeekersService {
       seeker.competences = await this.resolveCompetences(dto.competenceIds);
     }
     if (dto.localisationIds !== undefined) {
-      seeker.localisations = await this.resolveLocalisations(dto.localisationIds);
+      seeker.localisations = await this.resolveLocalisations(
+        dto.localisationIds,
+      );
     }
     if (dto.activitySectorIds !== undefined) {
       seeker.activitySectors = await this.resolveActivitySectors(

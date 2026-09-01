@@ -18,7 +18,9 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('activity-sectors')
 @Controller('activity-sectors')
 export class ActivitySectorsController {
-  constructor(private readonly activitySectorsService: ActivitySectorsService) {}
+  constructor(
+    private readonly activitySectorsService: ActivitySectorsService,
+  ) {}
 
   @Post()
   create(@Body() createActivitySectorDto: CreateActivitySectorDto) {

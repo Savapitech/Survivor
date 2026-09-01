@@ -12,6 +12,7 @@ export enum InteractionType {
   VIEW = 'view',
   CONTACT = 'contact',
   FAVORITE = 'favorite',
+  LIKE = 'like',
 }
 
 @Entity()
