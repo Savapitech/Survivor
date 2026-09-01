@@ -25,14 +25,12 @@ export class SeekersController {
   @ApiResponse({ status: 201, description: 'Seeker profile created' })
   @ApiResponse({
     status: 422,
-    description: 'Invalid body (missing field, video not a YouTube/Vimeo link, ...)',
+    description:
+      'Invalid body (missing field, video not a YouTube/Vimeo link, ...)',
     schema: {
       example: {
         statusCode: 422,
-        message: [
-          'name should not be empty',
-          'video must be a URL address',
-        ],
+        message: ['name should not be empty', 'video must be a URL address'],
         error: 'Unprocessable Entity',
       },
     },
@@ -41,7 +39,11 @@ export class SeekersController {
     status: 404,
     description: 'userId does not match an existing user',
     schema: {
-      example: { statusCode: 404, message: 'User not found', error: 'Not Found' },
+      example: {
+        statusCode: 404,
+        message: 'User not found',
+        error: 'Not Found',
+      },
     },
   })
   create(@Body() createSeekerDto: CreateSeekerDto) {
@@ -49,7 +51,9 @@ export class SeekersController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Paginated, filterable public feed of seeker profiles' })
+  @ApiOperation({
+    summary: 'Paginated, filterable public feed of seeker profiles',
+  })
   findAll(@Query() query: FindSeekersQueryDto) {
     return this.seekersService.findAll(query);
   }
@@ -71,7 +75,11 @@ export class SeekersController {
     status: 404,
     description: 'No seeker with this id',
     schema: {
-      example: { statusCode: 404, message: 'Seeker not found', error: 'Not Found' },
+      example: {
+        statusCode: 404,
+        message: 'Seeker not found',
+        error: 'Not Found',
+      },
     },
   })
   findOne(@Param('id', ParseIntPipe) id: number) {

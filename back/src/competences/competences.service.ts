@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { Competence } from './entities/competence.entity';
@@ -65,7 +69,9 @@ export class CompetencesService {
         err instanceof QueryFailedError &&
         (err as { code?: string }).code === FOREIGN_KEY_VIOLATION
       ) {
-        throw new ConflictException('Competence is still referenced by seekers');
+        throw new ConflictException(
+          'Competence is still referenced by seekers',
+        );
       }
       throw err;
     });
