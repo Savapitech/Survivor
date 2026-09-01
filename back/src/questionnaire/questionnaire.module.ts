@@ -5,9 +5,10 @@ import { QuestionnaireController } from './questionnaire.controller';
 import { Question } from './entities/question.entity';
 import { Attempt } from './entities/attempt.entity';
 import { Answer } from './entities/answer.entity';
+import { Seeker } from '../seekers/entities/seeker.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Question, Attempt, Answer])],
+  imports: [TypeOrmModule.forFeature([Question, Attempt, Answer, Seeker])],
   controllers: [QuestionnaireController],
   providers: [QuestionnaireService],
 })

@@ -1,34 +1,76 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { QuestionnaireService } from './questionnaire.service';
-import { CreateQuestionnaireDto } from './dto/create-questionnaire.dto';
-import { UpdateQuestionnaireDto } from './dto/update-questionnaire.dto';
+import { CreateQuestionDto } from './dto/create-question.dto';
+import { UpdateQuestionDto } from './dto/update-question.dto';
+import { FindQuestionsQueryDto } from './dto/find-questions-query.dto';
+import { AttemptQueryDto } from './dto/attempt-query.dto';
+import { SaveAnswersDto } from './dto/save-answers.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('questionnaire')
 @Controller('questionnaire')
 export class QuestionnaireController {
   constructor(private readonly questionnaireService: QuestionnaireService) {}
 
-  @Post()
-  create(@Body() createQuestionnaireDto: CreateQuestionnaireDto) {
-    return this.questionnaireService.create(createQuestionnaireDto);
+  @Post('questions')
+  createQuestion(@Body() createQuestionDto: CreateQuestionDto) {
+    return this.questionnaireService.createQuestion(createQuestionDto);
   }
 
-  @Get()
-  findAll() {
-    return this.questionnaireService.findAll();
+  @Get('questions')
+  findQuestions(@Query() query: FindQuestionsQueryDto) {
+    return this.questionnaireService.findQuestions(query);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.questionnaireService.findOne(+id);
+  @Get('questions/:id')
+  findQuestion(@Param('id', ParseIntPipe) id: number) {
+    return this.questionnaireService.findQuestion(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateQuestionnaireDto: UpdateQuestionnaireDto) {
-    return this.questionnaireService.update(+id, updateQuestionnaireDto);
+  @Patch('questions/:id')
+  updateQuestion(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateQuestionDto: UpdateQuestionDto,
+  ) {
+    return this.questionnaireService.updateQuestion(id, updateQuestionDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.questionnaireService.remove(+id);
+  @Delete('questions/:id')
+  deactivateQuestion(@Param('id', ParseIntPipe) id: number) {
+    return this.questionnaireService.deactivateQuestion(id);
+  }
+
+  @Get('attempts/current')
+  getOrCreateCurrentAttempt(@Query() query: AttemptQueryDto) {
+    return this.questionnaireService.getOrCreateCurrentAttempt(query.seekerId);
+  }
+
+  @Get('attempts/:id')
+  findAttempt(@Param('id', ParseIntPipe) id: number) {
+    return this.questionnaireService.findAttempt(id);
+  }
+
+  @Put('attempts/:id/answers')
+  saveAnswers(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() saveAnswersDto: SaveAnswersDto,
+  ) {
+    return this.questionnaireService.saveAnswers(id, saveAnswersDto);
+  }
+
+  @Post('attempts/:id/submit')
+  submitAttempt(@Param('id', ParseIntPipe) id: number) {
+    return this.questionnaireService.submitAttempt(id);
   }
 }
