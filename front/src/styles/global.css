@@ -40,8 +40,6 @@ a {
   color: var(--color-primary);
 }
 
-/* Anneau de focus visible et cohérent partout - jamais de outline: none sans
-   remplacement équivalent. */
 :focus-visible {
   outline: 3px solid var(--color-focus-ring);
   outline-offset: 2px;
