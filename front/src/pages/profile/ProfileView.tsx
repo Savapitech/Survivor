@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getSeeker } from '../../api/seekers';
-import { createInteraction } from '../../api/interactions';
+import {
+  createInteraction,
+  listSent,
+  removeLike,
+} from '../../api/interactions';
 import { useSession } from '../../context/SessionContext';
 import { useAnnounce } from '../../context/AnnounceContext';
 import { useAsync } from '../../hooks/useAsync';
@@ -20,15 +24,23 @@ export function ProfileView() {
   const id = Number(params.id);
   const { session, isRecruiter } = useSession();
   const { announce } = useAnnounce();
+  const navigate = useNavigate();
   const hasLoggedView = useRef(false);
   const [contacted, setContacted] = useState(false);
+  const [liked, setLiked] = useState(false);
+
+  const recruiterId = isRecruiter ? session?.recruiterId : undefined;
+  const viewerId = session?.role === 'seeker' ? session.userId : undefined;
 
   const {
     data: seeker,
     loading,
     error,
     refetch,
-  } = useAsync(() => getSeeker(id), [id]);
+  } = useAsync(
+    () => getSeeker(id, { recruiterId, viewerId }),
+    [id, recruiterId, viewerId],
+  );
 
   useDocumentTitle(seeker ? `${seeker.name} ${seeker.lastname}` : 'Profil');
 
@@ -48,6 +60,13 @@ export function ProfileView() {
     }).catch(() => undefined);
   }, [seeker, isRecruiter, session?.recruiterId]);
 
+  useEffect(() => {
+    if (!seeker || !isRecruiter || !session?.recruiterId) return;
+    listSent(session.recruiterId, { type: 'like', pageSize: 100 })
+      .then((res) => setLiked(res.data.some((i) => i.seeker.id === seeker.id)))
+      .catch(() => undefined);
+  }, [seeker, isRecruiter, session?.recruiterId]);
+
   if (loading) return <LoadingState label="Chargement du profil..." />;
   if (error) return <ErrorState onRetry={refetch} />;
   if (!seeker) return null;
@@ -64,6 +83,24 @@ export function ProfileView() {
     });
     setContacted(true);
     announce(`${seeker!.name} à été contacté.`);
+    navigate(`/messagerie?seekerId=${seeker!.id}`);
+  }
+
+  async function handleToggleLike() {
+    if (!session?.recruiterId) return;
+    if (liked) {
+      await removeLike(session.recruiterId, seeker!.id);
+      setLiked(false);
+      announce('Recommandation retirée.');
+    } else {
+      await createInteraction({
+        type: 'like',
+        recruiterId: session.recruiterId,
+        seekerId: seeker!.id,
+      });
+      setLiked(true);
+      announce(`${seeker!.name} a été recommandé.`);
+    }
   }
 
   return (
@@ -75,11 +112,44 @@ export function ProfileView() {
           </h1>
           {seeker.certification ? (
             <Badge variant="success">Certifié JEB</Badge>
+          ) : isOwnProfile ? (
+            <Link to="/questionnaire" className={styles.certificationLink}>
+              <Badge variant="neutral">
+                Non certifié - lancer la certification
+              </Badge>
+            </Link>
           ) : (
-            <Badge variant="neutral">Certification en cours</Badge>
+            <Badge variant="neutral">Non certifié</Badge>
+          )}
+          {isOwnProfile && typeof seeker.likeCount === 'number' && (
+            <p className={styles.likeCount}>
+              <span aria-hidden="true">♦</span> {seeker.likeCount}{' '}
+              recommandation{seeker.likeCount === 1 ? '' : 's'}
+              <span className="visually-hidden">
+                {' '}
+                (visible uniquement par vous)
+              </span>
+            </p>
           )}
         </div>
       </div>
+
+      {isOwnProfile && seeker.videoStatus === 'pending' && (
+        <p role="status" className={styles.moderationNotice}>
+          Votre vidéo est en cours de modération. Elle ne sera visible des
+          recruteurs et du public qu'après validation.
+        </p>
+      )}
+      {isOwnProfile && seeker.videoStatus === 'rejected' && (
+        <p role="alert" className={styles.moderationNoticeError}>
+          Votre vidéo a été refusée
+          {seeker.videoRejectionReason
+            ? ` : ${seeker.videoRejectionReason}`
+            : '.'}{' '}
+          Vous pouvez déposer un nouveau lien depuis la page de modification de
+          votre profil.
+        </p>
+      )}
 
       <ProfileVideo
         url={seeker.video}
@@ -120,6 +190,13 @@ export function ProfileView() {
         <div className={styles.actions}>
           <Button onClick={handleContact} disabled={contacted}>
             {contacted ? 'Contacté ' : `Contacter ${seeker.name}`}
+          </Button>
+          <Button
+            variant={liked ? 'primary' : 'ghost'}
+            onClick={handleToggleLike}
+            aria-pressed={liked}
+          >
+            {liked ? 'Recommandé' : 'Recommander'}
           </Button>
         </div>
       )}

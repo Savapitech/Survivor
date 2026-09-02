@@ -12,17 +12,20 @@ export interface PaginationQuery {
 }
 
 export type UserRole = 'admin' | 'seeker' | 'recruiter';
+export type VideoStatus = 'pending' | 'approved' | 'rejected';
 
 export interface PublicUser {
   id: string;
   email: string;
   role: UserRole;
+  birthDate: string;
 }
 
 export interface CreateUserDto {
   email: string;
   password: string;
-  role: 'seeker' | 'recruiter';
+  role: 'seeker' | 'recruiter' | 'admin';
+  birthDate: string;
 }
 
 export type LookupEntity<K extends string> = { id: number } & Record<K, string>;
@@ -36,6 +39,7 @@ interface SeekerBase {
   name: string;
   lastname: string;
   video: string | null;
+  videoStatus: VideoStatus;
   certification: boolean;
   competences: Competence[];
   localisations: Localisation[];
@@ -43,7 +47,18 @@ interface SeekerBase {
 }
 
 export type SeekerListItem = SeekerBase;
-export type SeekerDetail = SeekerBase & { user: PublicUser };
+export type SeekerDetail = SeekerBase & {
+  user: PublicUser;
+  videoRejectionReason?: string | null;
+  likeCount?: number;
+};
+export type SeekerAdmin = SeekerDetail & {
+  user: PublicUser;
+  videoRejectionReason: string | null;
+  videoModeratedAt: string | null;
+  videoModeratedBy: string | null;
+  likeCount: number;
+};
 
 export interface CreateSeekerDto {
   name: string;
@@ -62,12 +77,22 @@ export interface FindSeekersQuery extends PaginationQuery {
   localisationIds?: number[];
   activitySectorIds?: number[];
   search?: string;
+  recruiterId?: number;
+}
+
+export interface FindSeekersAdminQuery extends PaginationQuery {
+  videoStatus?: VideoStatus;
+}
+
+export interface ModerateSeekerVideoDto {
+  status: 'approved' | 'rejected';
+  reason?: string;
+  adminUserId: string;
 }
 
 interface RecruiterBase {
   id: number;
   companyName: string;
-  localisation: string;
 }
 
 export type RecruiterListItem = RecruiterBase;
@@ -75,7 +100,6 @@ export type RecruiterDetail = RecruiterBase & { user: PublicUser };
 
 export interface CreateRecruiterDto {
   companyName: string;
-  localisation: string;
   userId: string;
 }
 
@@ -136,4 +160,50 @@ export interface CreateInteractionDto {
   type: InteractionType;
   recruiterId: number;
   seekerId: number;
+}
+
+export type MessageSenderRole = 'seeker' | 'recruiter';
+
+export interface MessagePreview {
+  id: number;
+  senderRole: MessageSenderRole;
+  content: string;
+  createdAt: string;
+  seenAt: string | null;
+}
+
+export interface CreateMessageDto {
+  recruiterId: number;
+  seekerId: number;
+  senderRole: MessageSenderRole;
+  content: string;
+}
+
+export interface ConversationSeekerSummary {
+  id: number;
+  name: string;
+  lastname: string;
+  certification: boolean;
+}
+
+export interface RecruiterConversation {
+  seeker: ConversationSeekerSummary;
+  lastMessage: MessagePreview;
+  unreadCount: number;
+}
+
+export interface SeekerConversation {
+  recruiter: RecruiterListItem;
+  lastMessage: MessagePreview;
+  unreadCount: number;
+}
+
+export interface LoginDto {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  user: PublicUser;
 }

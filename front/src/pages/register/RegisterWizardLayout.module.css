@@ -37,3 +37,12 @@
   border-color: var(--color-primary);
   background: var(--color-primary-light);
 }
+
+.minorNotice {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  margin-bottom: var(--space-4);
+}

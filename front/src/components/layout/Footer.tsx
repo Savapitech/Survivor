@@ -6,7 +6,7 @@ export function Footer() {
     <footer className={styles.footer}>
       <div className={`container ${styles.grid}`}>
         <div>
-          <p className={styles.columnTitle}>ProfilsActifs</p>
+          <p className={styles.columnTitle}>JibJob</p>
           <p>
             La plateforme publique de valorisation des compétences par la vidéo
             et la certification d'État, éditée par le Ministère du Job et du
@@ -32,7 +32,7 @@ export function Footer() {
         </div>
       </div>
       <div className={`container ${styles.bottom}`}>
-        <p>© 2026 ProfilsActifs - Service public gratuit pour l'emploi.</p>
+        <p>© 2026 JibJob - Service public gratuit pour l'emploi.</p>
       </div>
     </footer>
   );

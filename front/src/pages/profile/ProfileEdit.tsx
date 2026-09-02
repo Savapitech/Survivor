@@ -24,7 +24,8 @@ export function ProfileEdit() {
   const { announce, announceError } = useAnnounce();
   const navigate = useNavigate();
 
-  const seeker = useAsync(() => getSeeker(id), [id]);
+  const viewerId = session?.userId;
+  const seeker = useAsync(() => getSeeker(id, { viewerId }), [id, viewerId]);
   const competences = useAsync(() => listCompetences({ pageSize: 100 }), []);
   const sectors = useAsync(() => listActivitySectors({ pageSize: 100 }), []);
   const localisations = useAsync(

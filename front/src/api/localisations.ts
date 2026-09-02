@@ -11,3 +11,14 @@ export function createLocalisation(localisation: string) {
     body: { localisation },
   });
 }
+
+export function updateLocalisation(id: number, localisation: string) {
+  return apiFetch<Localisation>(`/localisations/${id}`, {
+    method: 'PATCH',
+    body: { localisation },
+  });
+}
+
+export function deleteLocalisation(id: number) {
+  return apiFetch<void>(`/localisations/${id}`, { method: 'DELETE' });
+}

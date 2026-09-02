@@ -10,6 +10,7 @@ import { CreateInteractionDto } from './dto/create-interaction.dto';
 import { FindInteractionsQueryDto } from './dto/find-interactions-query.dto';
 import { Recruiter } from '../recruiters/entities/recruiter.entity';
 import { Seeker } from '../seekers/entities/seeker.entity';
+import { toPublicSeeker } from '../seekers/seeker-view.util';
 import { paginate, toSkipTake } from '../common/pagination';
 
 @Injectable()
@@ -67,12 +68,16 @@ export class InteractionsService {
         recruiter: { id: recruiterId },
         ...(query.type && { type: query.type }),
       },
-      relations: { seeker: true },
+      relations: { seeker: { user: true } },
       order: { createdAt: 'DESC' },
       skip,
       take,
     });
-    return paginate(items, total, query);
+    return paginate(
+      items.map((item) => ({ ...item, seeker: toPublicSeeker(item.seeker) })),
+      total,
+      query,
+    );
   }
 
   async findReceived(seekerId: number, query: FindInteractionsQueryDto) {
@@ -99,10 +104,10 @@ export class InteractionsService {
     return { unread };
   }
 
-  async findOne(id: number) {
+  private async findOneRaw(id: number) {
     const interaction = await this.interactionsRepository.findOne({
       where: { id },
-      relations: { recruiter: true, seeker: true },
+      relations: { recruiter: true, seeker: { user: true } },
     });
     if (!interaction) {
       throw new NotFoundException('Interaction not found');
@@ -110,8 +115,13 @@ export class InteractionsService {
     return interaction;
   }
 
+  async findOne(id: number) {
+    const interaction = await this.findOneRaw(id);
+    return { ...interaction, seeker: toPublicSeeker(interaction.seeker) };
+  }
+
   async markSeen(id: number, seekerId: number) {
-    const interaction = await this.findOne(id);
+    const interaction = await this.findOneRaw(id);
     if (interaction.seeker.id !== seekerId) {
       throw new ForbiddenException('This interaction does not belong to you');
     }
@@ -119,7 +129,7 @@ export class InteractionsService {
       interaction.seenAt = new Date();
       await this.interactionsRepository.save(interaction);
     }
-    return interaction;
+    return { ...interaction, seeker: toPublicSeeker(interaction.seeker) };
   }
 
   async markAllSeen(seekerId: number) {
@@ -138,6 +148,17 @@ export class InteractionsService {
     });
     if (!result.affected) {
       throw new NotFoundException('Favorite not found');
+    }
+  }
+
+  async removeLike(recruiterId: number, seekerId: number) {
+    const result = await this.interactionsRepository.delete({
+      recruiter: { id: recruiterId },
+      seeker: { id: seekerId },
+      type: InteractionType.LIKE,
+    });
+    if (!result.affected) {
+      throw new NotFoundException('Like not found');
     }
   }
 

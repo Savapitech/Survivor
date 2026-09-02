@@ -8,12 +8,15 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SeekersService } from './seekers.service';
 import { CreateSeekerDto } from './dto/create-seeker.dto';
 import { UpdateSeekerDto } from './dto/update-seeker.dto';
 import { FindSeekersQueryDto } from './dto/find-seekers-query.dto';
+import { FindSeekersAdminQueryDto } from './dto/find-seekers-admin-query.dto';
+import { ModerateSeekerVideoDto } from './dto/moderate-seeker-video.dto';
 
 @ApiTags('seekers')
 @Controller('seekers')
@@ -58,6 +61,30 @@ export class SeekersController {
     return this.seekersService.findAll(query);
   }
 
+  @Get('by-user/:userId')
+  @ApiOperation({ summary: 'Get the seeker profile linked to a user id' })
+  findByUserId(@Param('userId', ParseUUIDPipe) userId: string) {
+    return this.seekersService.findByUserId(userId);
+  }
+
+  @Get('admin')
+  @ApiOperation({
+    summary:
+      'Admin listing of every seeker profile, unfiltered by certification, age, or video status',
+  })
+  findAllAdmin(@Query() query: FindSeekersAdminQueryDto) {
+    return this.seekersService.findAllAdmin(query);
+  }
+
+  @Patch('admin/:id/moderate')
+  @ApiOperation({ summary: "Approve or reject a seeker's video" })
+  moderateVideo(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: ModerateSeekerVideoDto,
+  ) {
+    return this.seekersService.moderateVideo(id, dto);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a single seeker profile' })
   @ApiResponse({
@@ -82,8 +109,13 @@ export class SeekersController {
       },
     },
   })
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.seekersService.findOne(id);
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('recruiterId', new ParseIntPipe({ optional: true }))
+    recruiterId?: number,
+    @Query('viewerId') viewerId?: string,
+  ) {
+    return this.seekersService.findOne(id, recruiterId, viewerId);
   }
 
   @Patch(':id')

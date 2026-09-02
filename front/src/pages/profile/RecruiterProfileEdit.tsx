@@ -28,7 +28,6 @@ export function RecruiterProfileEdit() {
     [recruiterId],
   );
   const [companyName, setCompanyName] = useState<string | null>(null);
-  const [localisation, setLocalisation] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [apiError, setApiError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -43,7 +42,6 @@ export function RecruiterProfileEdit() {
 
   if (companyName === null) {
     setCompanyName(recruiter.data.companyName);
-    setLocalisation(recruiter.data.localisation);
     return <LoadingState label="Chargement..." />;
   }
 
@@ -55,13 +53,7 @@ export function RecruiterProfileEdit() {
       "Le nom de l'entreprise",
       120,
     );
-    const localisationError = validateRequired(
-      localisation,
-      'La localisation',
-      200,
-    );
     if (companyError) nextErrors.companyName = companyError;
-    if (localisationError) nextErrors.localisation = localisationError;
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -70,7 +62,6 @@ export function RecruiterProfileEdit() {
     try {
       await updateRecruiter(recruiterId!, {
         companyName: companyName ?? '',
-        localisation,
       });
       announce('Entreprise mise à jour.');
       navigate('/flux');
@@ -94,13 +85,6 @@ export function RecruiterProfileEdit() {
         value={companyName ?? ''}
         onChange={(e) => setCompanyName(e.target.value)}
         error={errors.companyName}
-        required
-      />
-      <Field
-        label="Localisation"
-        value={localisation}
-        onChange={(e) => setLocalisation(e.target.value)}
-        error={errors.localisation}
         required
       />
       {apiError && (

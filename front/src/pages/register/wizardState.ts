@@ -3,6 +3,7 @@ import { createContext, useContext } from 'react';
 export interface WizardState {
   userId: string | null;
   email: string;
+  birthDate: string;
   role: 'seeker' | 'recruiter' | null;
   name: string;
   lastname: string;
@@ -11,13 +12,13 @@ export interface WizardState {
   localisationIds: number[];
   activitySectorIds: number[];
   companyName: string;
-  recruiterLocalisation: string;
   seekerId: number | null;
 }
 
 export const initialWizardState: WizardState = {
   userId: null,
   email: '',
+  birthDate: '',
   role: null,
   name: '',
   lastname: '',
@@ -26,7 +27,6 @@ export const initialWizardState: WizardState = {
   localisationIds: [],
   activitySectorIds: [],
   companyName: '',
-  recruiterLocalisation: '',
   seekerId: null,
 };
 

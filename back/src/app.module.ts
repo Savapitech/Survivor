@@ -10,6 +10,7 @@ import { ActivitySectorsModule } from './activity-sectors/activity-sectors.modul
 import { LocalisationsModule } from './localisations/localisations.module';
 import { QuestionnaireModule } from './questionnaire/questionnaire.module';
 import { InteractionsModule } from './interactions/interactions.module';
+import { MessagesModule } from './messages/messages.module';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 
@@ -33,6 +34,7 @@ import { AuthModule } from './auth/auth.module';
     LocalisationsModule,
     QuestionnaireModule,
     InteractionsModule,
+    MessagesModule,
     HealthModule,
     AuthModule,
   ],

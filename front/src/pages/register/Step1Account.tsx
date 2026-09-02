@@ -7,6 +7,7 @@ import { Button } from '../../components/ui/Button';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useAnnounce } from '../../context/AnnounceContext';
 import {
+  validateBirthDate,
   validateEmail,
   validatePassword,
   validatePasswordConfirmation,
@@ -26,6 +27,7 @@ export function Step1Account() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [birthDate, setBirthDate] = useState('');
   const [role, setRole] = useState<Role | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -41,9 +43,11 @@ export function Step1Account() {
       password,
       confirmPassword,
     );
+    const birthDateError = validateBirthDate(birthDate);
     if (emailError) nextErrors.email = emailError;
     if (passwordError) nextErrors.password = passwordError;
     if (confirmError) nextErrors.confirmPassword = confirmError;
+    if (birthDateError) nextErrors.birthDate = birthDateError;
     if (!role) nextErrors.role = 'Merci de préciser qui vous êtes.';
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0 || !role) return;
@@ -51,8 +55,8 @@ export function Step1Account() {
     setSubmitting(true);
     setApiError(null);
     try {
-      const user = await createUser({ email, password, role });
-      update({ userId: user.id, email: user.email, role });
+      const user = await createUser({ email, password, role, birthDate });
+      update({ userId: user.id, email: user.email, birthDate, role });
       navigate('/inscription/profil');
     } catch (err) {
       const message =
@@ -69,7 +73,7 @@ export function Step1Account() {
   return (
     <form onSubmit={handleSubmit} noValidate>
       <p className={styles.step}>Étape 1 sur 3 - Création de compte</p>
-      <h1>Rejoindre ProfilsActifs</h1>
+      <h1>Rejoindre JibJob</h1>
       <p>
         Inscrivez-vous gratuitement pour commencer à valoriser vos compétences.
       </p>
@@ -100,6 +104,16 @@ export function Step1Account() {
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
         error={errors.confirmPassword}
+        required
+      />
+      <Field
+        label="Date de naissance"
+        type="date"
+        autoComplete="bday"
+        hint="Vous devez avoir au moins 16 ans pour vous inscrire."
+        value={birthDate}
+        onChange={(e) => setBirthDate(e.target.value)}
+        error={errors.birthDate}
         required
       />
 

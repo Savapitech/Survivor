@@ -11,3 +11,14 @@ export function createActivitySector(activitySector: string) {
     body: { activitySector },
   });
 }
+
+export function updateActivitySector(id: number, activitySector: string) {
+  return apiFetch<ActivitySector>(`/activity-sectors/${id}`, {
+    method: 'PATCH',
+    body: { activitySector },
+  });
+}
+
+export function deleteActivitySector(id: number) {
+  return apiFetch<void>(`/activity-sectors/${id}`, { method: 'DELETE' });
+}

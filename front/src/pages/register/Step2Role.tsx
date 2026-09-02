@@ -24,9 +24,6 @@ export function Step2Role() {
   const [name, setName] = useState(state.name);
   const [lastname, setLastname] = useState(state.lastname);
   const [companyName, setCompanyName] = useState(state.companyName);
-  const [recruiterLocalisation, setRecruiterLocalisation] = useState(
-    state.recruiterLocalisation,
-  );
   const [localisationIds, setLocalisationIds] = useState(state.localisationIds);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -63,13 +60,7 @@ export function Step2Role() {
       "Le nom de l'entreprise",
       120,
     );
-    const localisationError = validateRequired(
-      recruiterLocalisation,
-      'La localisation',
-      200,
-    );
     if (companyError) nextErrors.companyName = companyError;
-    if (localisationError) nextErrors.recruiterLocalisation = localisationError;
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -79,7 +70,6 @@ export function Step2Role() {
     try {
       const recruiter = await createRecruiter({
         companyName,
-        localisation: recruiterLocalisation,
         userId: state.userId,
       });
       establishSession({
@@ -112,14 +102,6 @@ export function Step2Role() {
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
           error={errors.companyName}
-          required
-        />
-        <Field
-          label="Localisation"
-          hint="Ville."
-          value={recruiterLocalisation}
-          onChange={(e) => setRecruiterLocalisation(e.target.value)}
-          error={errors.recruiterLocalisation}
           required
         />
         {apiError && (

@@ -23,6 +23,10 @@ export function getRecruiter(id: number) {
   return apiFetch<RecruiterDetail>(`/recruiters/${id}`);
 }
 
+export function getRecruiterByUserId(userId: string) {
+  return apiFetch<RecruiterDetail>(`/recruiters/by-user/${userId}`);
+}
+
 export function updateRecruiter(id: number, dto: UpdateRecruiterDto) {
   return apiFetch<RecruiterDetail>(`/recruiters/${id}`, {
     method: 'PATCH',
