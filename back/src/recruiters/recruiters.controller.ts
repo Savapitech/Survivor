@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { RecruitersService } from './recruiters.service';
 import { CreateRecruiterDto } from './dto/create-recruiter.dto';
@@ -28,6 +29,11 @@ export class RecruitersController {
   @Get()
   findAll(@Query() query: PaginationQueryDto) {
     return this.recruitersService.findAll(query);
+  }
+
+  @Get('by-user/:userId')
+  findByUserId(@Param('userId', ParseUUIDPipe) userId: string) {
+    return this.recruitersService.findByUserId(userId);
   }
 
   @Get(':id')

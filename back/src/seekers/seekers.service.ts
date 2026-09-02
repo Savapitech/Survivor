@@ -176,6 +176,17 @@ export class SeekersService {
     return seeker;
   }
 
+  async findByUserId(userId: string) {
+    const seeker = await this.seekersRepository.findOne({
+      where: { user: { id: userId } },
+      relations: { ...SEEKER_RELATIONS, user: true },
+    });
+    if (!seeker) {
+      throw new NotFoundException('Seeker not found');
+    }
+    return seeker;
+  }
+
   async update(id: number, dto: UpdateSeekerDto) {
     const seeker = await this.seekersRepository.findOne({
       where: { id },

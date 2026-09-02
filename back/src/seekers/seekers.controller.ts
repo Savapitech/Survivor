@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SeekersService } from './seekers.service';
@@ -56,6 +57,12 @@ export class SeekersController {
   })
   findAll(@Query() query: FindSeekersQueryDto) {
     return this.seekersService.findAll(query);
+  }
+
+  @Get('by-user/:userId')
+  @ApiOperation({ summary: 'Get the seeker profile linked to a user id' })
+  findByUserId(@Param('userId', ParseUUIDPipe) userId: string) {
+    return this.seekersService.findByUserId(userId);
   }
 
   @Get(':id')

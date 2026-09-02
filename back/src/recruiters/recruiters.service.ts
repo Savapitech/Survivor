@@ -63,6 +63,17 @@ export class RecruitersService {
     return recruiter;
   }
 
+  async findByUserId(userId: string) {
+    const recruiter = await this.recruitersRepository.findOne({
+      where: { user: { id: userId } },
+      relations: { user: true },
+    });
+    if (!recruiter) {
+      throw new NotFoundException('Recruiter not found');
+    }
+    return recruiter;
+  }
+
   async update(id: number, dto: UpdateRecruiterDto) {
     await this.findOne(id);
     await this.recruitersRepository.update(id, dto);

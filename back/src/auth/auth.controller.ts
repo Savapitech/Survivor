@@ -9,13 +9,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  validateUser(@Body() user: LoginUserDto){
-    let validateUser = this.authService.validateUser(user.email, user.password);
-    if (!validateUser){
-      throw new UnauthorizedException("invalid user");
+  async login(@Body() dto: LoginUserDto) {
+    const user = await this.authService.validateUser(dto.email, dto.password);
+    if (!user) {
+      throw new UnauthorizedException('invalid user');
     }
-    return this.authService.login(validateUser);
-  };
+    return this.authService.login(user);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post('logout')

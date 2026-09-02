@@ -11,10 +11,10 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOneAll(email);
-    if (user && await bcrypt.compare(pass, user.password)) {
-        const { password, ...result } = user;
-        return result;
+    const user = await this.usersService.findByEmailWithPassword(email);
+    if (user && (await bcrypt.compare(pass, user.password))) {
+      const { password, ...result } = user;
+      return result;
     }
     return null;
   }
@@ -23,6 +23,7 @@ export class AuthService {
     const payload = { email: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
+      user,
     };
   }
 }
