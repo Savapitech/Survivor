@@ -1,4 +1,4 @@
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
 import { PaginationQueryDto } from '../../common/pagination';
 
@@ -32,4 +32,9 @@ export class FindSeekersQueryDto extends PaginationQueryDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  recruiterId?: number;
 }

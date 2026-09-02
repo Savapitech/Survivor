@@ -8,6 +8,7 @@ import { Competence } from '../competences/entities/competence.entity';
 import { Localisation } from '../localisations/entities/localisation.entity';
 import { ActivitySector } from '../activity-sectors/entities/activity-sector.entity';
 import { Interaction } from '../interactions/entities/interaction.entity';
+import { Recruiter } from '../recruiters/entities/recruiter.entity';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { Interaction } from '../interactions/entities/interaction.entity';
       Localisation,
       ActivitySector,
       Interaction,
+      Recruiter,
     ]),
   ],
   controllers: [SeekersController],
