@@ -17,12 +17,14 @@ export interface PublicUser {
   id: string;
   email: string;
   role: UserRole;
+  birthDate: string;
 }
 
 export interface CreateUserDto {
   email: string;
   password: string;
   role: 'seeker' | 'recruiter';
+  birthDate: string;
 }
 
 export type LookupEntity<K extends string> = { id: number } & Record<K, string>;
