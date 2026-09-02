@@ -38,6 +38,11 @@ export function Header() {
               </Link>
             </>
           )}
+          {!session && (
+            <Link className={styles.navLink} to="/flux">
+              Profils
+            </Link>
+          )}
           {isRecruiter && (
             <>
               <Link className={styles.navLink} to="/flux">
