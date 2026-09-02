@@ -14,6 +14,10 @@ import { User, UserRole } from '../users/entities/user.entity';
 import { Competence } from '../competences/entities/competence.entity';
 import { Localisation } from '../localisations/entities/localisation.entity';
 import { ActivitySector } from '../activity-sectors/entities/activity-sector.entity';
+import {
+  Interaction,
+  InteractionType,
+} from '../interactions/entities/interaction.entity';
 import { paginate, toSkipTake } from '../common/pagination';
 
 const SEEKER_RELATIONS = {
@@ -34,7 +38,34 @@ export class SeekersService {
     private readonly localisationsRepository: Repository<Localisation>,
     @InjectRepository(ActivitySector)
     private readonly activitySectorsRepository: Repository<ActivitySector>,
+    @InjectRepository(Interaction)
+    private readonly interactionsRepository: Repository<Interaction>,
   ) {}
+
+  private async attachLikeCounts<T extends { id: number }>(
+    seekers: T[],
+  ): Promise<(T & { likeCount: number })[]> {
+    if (seekers.length === 0) {
+      return [];
+    }
+    const rows = await this.interactionsRepository
+      .createQueryBuilder('interaction')
+      .select('seeker.id', 'seekerId')
+      .addSelect('COUNT(*)', 'count')
+      .innerJoin('interaction.seeker', 'seeker')
+      .where('interaction.type = :type', { type: InteractionType.LIKE })
+      .andWhere('seeker.id IN (:...ids)', {
+        ids: seekers.map((s) => s.id),
+      })
+      .groupBy('seeker.id')
+      .getRawMany<{ seekerId: number; count: string }>();
+
+    const counts = new Map(rows.map((r) => [r.seekerId, Number(r.count)]));
+    return seekers.map((seeker) => ({
+      ...seeker,
+      likeCount: counts.get(seeker.id) ?? 0,
+    }));
+  }
 
   private async resolveCompetences(ids?: number[]): Promise<Competence[]> {
     if (!ids || ids.length === 0) {
@@ -162,7 +193,7 @@ export class SeekersService {
       order: { id: 'ASC' },
     });
 
-    return paginate(items, total, query);
+    return paginate(await this.attachLikeCounts(items), total, query);
   }
 
   async findOne(id: number) {
@@ -173,7 +204,8 @@ export class SeekersService {
     if (!seeker) {
       throw new NotFoundException('Seeker not found');
     }
-    return seeker;
+    const [withLikeCount] = await this.attachLikeCounts([seeker]);
+    return withLikeCount;
   }
 
   async findByUserId(userId: string) {
@@ -184,7 +216,8 @@ export class SeekersService {
     if (!seeker) {
       throw new NotFoundException('Seeker not found');
     }
-    return seeker;
+    const [withLikeCount] = await this.attachLikeCounts([seeker]);
+    return withLikeCount;
   }
 
   async update(id: number, dto: UpdateSeekerDto) {

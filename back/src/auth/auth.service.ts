@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {

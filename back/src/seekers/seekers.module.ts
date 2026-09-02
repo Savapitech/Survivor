@@ -7,6 +7,7 @@ import { User } from '../users/entities/user.entity';
 import { Competence } from '../competences/entities/competence.entity';
 import { Localisation } from '../localisations/entities/localisation.entity';
 import { ActivitySector } from '../activity-sectors/entities/activity-sector.entity';
+import { Interaction } from '../interactions/entities/interaction.entity';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ActivitySector } from '../activity-sectors/entities/activity-sector.ent
       Competence,
       Localisation,
       ActivitySector,
+      Interaction,
     ]),
   ],
   controllers: [SeekersController],
