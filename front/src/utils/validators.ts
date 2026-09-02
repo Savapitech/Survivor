@@ -56,6 +56,22 @@ export function validateBirthDate(value: string): string | undefined {
   return undefined;
 }
 
+export function computeAge(birthDate: string): number {
+  const birth = new Date(birthDate);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const hasHadBirthdayThisYear =
+    today.getMonth() > birth.getMonth() ||
+    (today.getMonth() === birth.getMonth() &&
+      today.getDate() >= birth.getDate());
+  if (!hasHadBirthdayThisYear) age -= 1;
+  return age;
+}
+
+export function isMinor(birthDate: string): boolean {
+  return computeAge(birthDate) < 18;
+}
+
 export function validateVideoUrl(value: string): string | undefined {
   if (!value.trim()) return undefined;
   if (!isAllowedVideoUrl(value)) {

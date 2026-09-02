@@ -56,7 +56,7 @@ export function Step1Account() {
     setApiError(null);
     try {
       const user = await createUser({ email, password, role, birthDate });
-      update({ userId: user.id, email: user.email, role });
+      update({ userId: user.id, email: user.email, birthDate, role });
       navigate('/inscription/profil');
     } catch (err) {
       const message =

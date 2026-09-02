@@ -7,7 +7,7 @@ import { Button } from '../../components/ui/Button';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useAnnounce } from '../../context/AnnounceContext';
 import { useSession } from '../../context/SessionContext';
-import { validateVideoUrl } from '../../utils/validators';
+import { isMinor, validateVideoUrl } from '../../utils/validators';
 import { useWizard } from './wizardState';
 import styles from './RegisterWizardLayout.module.css';
 
@@ -74,9 +74,18 @@ export function Step4Video() {
       <p className={styles.step}>Dernière étape - Votre vidéo</p>
       <h1>Téléchargez une vidéo pour vous présenter</h1>
       <p>
-        Un lien YouTube ou Vimeo (fichier de moins de 100 Mo si vous l'hébergez
-        vous-même).
+        Un lien YouTube ou Vimeo. Chaque vidéo est vérifiée par notre équipe
+        avant d'être visible des recruteurs.
       </p>
+
+      {state.birthDate && isMinor(state.birthDate) && (
+        <p className={styles.minorNotice} role="note">
+          Vous êtes mineur : conformément à notre politique de protection des
+          mineurs, votre vidéo ne sera jamais rendue publique ni visible par les
+          recruteurs, quel que soit son contenu. Seul votre profil textuel
+          (compétences, secteur, localisation) pourra être consulté.
+        </p>
+      )}
 
       <Field
         label="Lien de la vidéo"

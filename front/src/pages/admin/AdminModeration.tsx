@@ -74,7 +74,9 @@ export function AdminModeration() {
       pending.refetch();
     } catch (err) {
       setFormError(
-        err instanceof ApiError ? err.details.join(' ') : 'Une erreur est survenue.',
+        err instanceof ApiError
+          ? err.details.join(' ')
+          : 'Une erreur est survenue.',
       );
     } finally {
       setSubmittingId(null);

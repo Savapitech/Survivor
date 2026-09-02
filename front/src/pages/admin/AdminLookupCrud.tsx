@@ -63,7 +63,9 @@ export function AdminLookupCrud<K extends string>({
       items.refetch();
     } catch (err) {
       setCreateError(
-        err instanceof ApiError ? err.details.join(' ') : 'Une erreur est survenue.',
+        err instanceof ApiError
+          ? err.details.join(' ')
+          : 'Une erreur est survenue.',
       );
     } finally {
       setCreating(false);
@@ -85,7 +87,9 @@ export function AdminLookupCrud<K extends string>({
       items.refetch();
     } catch (err) {
       announceError(
-        err instanceof ApiError ? err.details.join(' ') : 'Une erreur est survenue.',
+        err instanceof ApiError
+          ? err.details.join(' ')
+          : 'Une erreur est survenue.',
       );
     } finally {
       setSavingId(null);
@@ -102,7 +106,9 @@ export function AdminLookupCrud<K extends string>({
       items.refetch();
     } catch (err) {
       announceError(
-        err instanceof ApiError ? err.details.join(' ') : 'Une erreur est survenue.',
+        err instanceof ApiError
+          ? err.details.join(' ')
+          : 'Une erreur est survenue.',
       );
     } finally {
       setDeleting(false);
