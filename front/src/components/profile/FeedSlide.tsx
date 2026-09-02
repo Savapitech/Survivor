@@ -9,7 +9,6 @@ interface FeedSlideProps {
   seeker: SeekerListItem;
   interactive: boolean;
   liked: boolean;
-  likeCount: number;
   contacted: boolean;
   favorited: boolean;
   onToggleLike: () => void;
@@ -21,7 +20,6 @@ export function FeedSlide({
   seeker,
   interactive,
   liked,
-  likeCount,
   contacted,
   favorited,
   onToggleLike,
@@ -60,42 +58,28 @@ export function FeedSlide({
         )}
       </div>
 
-      <div className={styles.actions}>
-        {interactive ? (
+      {interactive && (
+        <div className={styles.actions}>
           <Button
             variant={liked ? 'primary' : 'ghost'}
             onClick={onToggleLike}
             aria-pressed={liked}
           >
-            <span aria-hidden="true">♦</span> {likeCount}
-            <span className="visually-hidden">
-              {' '}
-              recommandation{likeCount === 1 ? '' : 's'} -{' '}
-              {liked ? 'retirer' : 'recommander ce profil'}
-            </span>
+            <span aria-hidden="true">♦</span>{' '}
+            {liked ? 'Recommandé' : 'Recommander'}
           </Button>
-        ) : (
-          <p className={styles.likeCountStatic}>
-            <span aria-hidden="true">♦</span> {likeCount}
-            <span className="visually-hidden"> recommandation(s)</span>
-          </p>
-        )}
-
-        {interactive && (
-          <>
-            <Button
-              variant={favorited ? 'primary' : 'ghost'}
-              onClick={onToggleFavorite}
-              aria-pressed={favorited}
-            >
-              {favorited ? 'Favori ' : 'Favoris'}
-            </Button>
-            <Button onClick={onContact} disabled={contacted}>
-              {contacted ? 'Contacté ' : 'Contacter'}
-            </Button>
-          </>
-        )}
-      </div>
+          <Button
+            variant={favorited ? 'primary' : 'ghost'}
+            onClick={onToggleFavorite}
+            aria-pressed={favorited}
+          >
+            {favorited ? 'Favori ' : 'Favoris'}
+          </Button>
+          <Button onClick={onContact} disabled={contacted}>
+            {contacted ? 'Contacté ' : 'Contacter'}
+          </Button>
+        </div>
+      )}
     </li>
   );
 }
