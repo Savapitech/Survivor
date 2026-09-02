@@ -12,7 +12,7 @@ import { validateEmail, validatePassword } from '../utils/validators';
 
 export function Login() {
   useDocumentTitle('Connexion');
-  const { session, isRecruiter, establishSession } = useSession();
+  const { session, isRecruiter, isAdmin, establishSession } = useSession();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -24,7 +24,13 @@ export function Login() {
   if (session) {
     return (
       <Navigate
-        to={isRecruiter ? '/flux' : `/profils/${session.seekerId}`}
+        to={
+          isAdmin
+            ? '/admin'
+            : isRecruiter
+              ? '/flux'
+              : `/profils/${session.seekerId}`
+        }
         replace
       />
     );
@@ -66,8 +72,14 @@ export function Login() {
           recruiterId: recruiter.id,
         });
         navigate('/flux');
-      } else {
-        setApiError("Ce compte n'est pas pris en charge sur cette page.");
+      } else if (user.role === 'admin') {
+        establishSession({
+          v: 1,
+          userId: user.id,
+          email: user.email,
+          role: 'admin',
+        });
+        navigate('/admin');
       }
     } catch (err) {
       const message =
