@@ -75,8 +75,12 @@ export function ProfileView() {
           </h1>
           {seeker.certification ? (
             <Badge variant="success">Certifié JEB</Badge>
+          ) : isOwnProfile ? (
+            <Link to="/questionnaire" className={styles.certificationLink}>
+              <Badge variant="neutral">Non certifié - lancer la certification</Badge>
+            </Link>
           ) : (
-            <Badge variant="neutral">Certification en cours</Badge>
+            <Badge variant="neutral">Non certifié</Badge>
           )}
         </div>
       </div>

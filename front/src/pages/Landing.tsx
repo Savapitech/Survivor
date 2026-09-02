@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { listSeekers } from '../api/seekers';
+import { listSeekers, getSeeker } from '../api/seekers';
 import { listRecruiters } from '../api/recruiters';
+import { useSession } from '../context/SessionContext';
 import { Button } from '../components/ui/Button';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import styles from './Landing.module.css';
 
 export function Landing() {
   useDocumentTitle('Accueil');
+  const { session, isSeeker } = useSession();
   const [certifiedCount, setCertifiedCount] = useState<number | null>(null);
   const [recruiterCount, setRecruiterCount] = useState<number | null>(null);
+  const [certification, setCertification] = useState<boolean | null>(null);
 
   useEffect(() => {
     listSeekers({ pageSize: 1 })
@@ -19,6 +22,21 @@ export function Landing() {
       .then((res) => setRecruiterCount(res.total))
       .catch(() => setRecruiterCount(null));
   }, []);
+
+  useEffect(() => {
+    if (!isSeeker || !session?.seekerId) return;
+    getSeeker(session.seekerId)
+      .then((seeker) => setCertification(seeker.certification))
+      .catch(() => setCertification(null));
+  }, [isSeeker, session?.seekerId]);
+
+  const profileTo =
+    isSeeker && session?.seekerId ? `/profils/${session.seekerId}` : null;
+  const certificationTo = !profileTo
+    ? '/inscription/compte'
+    : certification
+      ? profileTo
+      : '/questionnaire';
 
   return (
     <>
@@ -34,10 +52,10 @@ export function Landing() {
             système officiel de certification JEB.
           </p>
           <div className={styles.ctas}>
-            <Link to="/inscription/compte">
+            <Link to={profileTo ?? '/inscription/compte'}>
               <Button variant="primary">Commencer maintenant</Button>
             </Link>
-            <Link to="/inscription/compte">
+            <Link to={certificationTo}>
               <Button variant="secondary">
                 Découvrir la certification JEB
               </Button>
