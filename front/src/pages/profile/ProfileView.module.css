@@ -17,3 +17,7 @@
 .section {
   margin-top: var(--space-6);
 }
+
+.certificationLink {
+  text-decoration: none;
+}
