@@ -82,7 +82,7 @@ export class MessagesService {
       (m) => m.seeker,
       MessageSenderRole.SEEKER,
     ).map(({ other, lastMessage, unreadCount }) => ({
-      seeker: other,
+      seeker: this.toSeekerSummary(other),
       lastMessage: this.toMessagePreview(lastMessage),
       unreadCount,
     }));
@@ -114,6 +114,11 @@ export class MessagesService {
   private toMessagePreview(message: Message) {
     const { id, senderRole, content, createdAt, seenAt } = message;
     return { id, senderRole, content, createdAt, seenAt };
+  }
+
+  private toSeekerSummary(seeker: Seeker) {
+    const { id, name, lastname, certification } = seeker;
+    return { id, name, lastname, certification };
   }
 
   private groupConversations<T extends { id: number }>(
