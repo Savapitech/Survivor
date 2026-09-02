@@ -56,7 +56,11 @@ export class MessagesService {
       skip,
       take,
     });
-    return paginate(items.map((m) => this.toMessagePreview(m)), total, query);
+    return paginate(
+      items.map((m) => this.toMessagePreview(m)),
+      total,
+      query,
+    );
   }
 
   async conversationsForRecruiter(recruiterId: number) {
@@ -135,7 +139,8 @@ export class MessagesService {
     }
 
     return Array.from(byOther.values()).sort(
-      (a, b) => b.lastMessage.createdAt.getTime() - a.lastMessage.createdAt.getTime(),
+      (a, b) =>
+        b.lastMessage.createdAt.getTime() - a.lastMessage.createdAt.getTime(),
     );
   }
 

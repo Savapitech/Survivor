@@ -98,10 +98,9 @@ export function Messaging() {
     setSelectedOtherId(otherId);
     setSendError(null);
     if (isRecruiter) {
-      setSearchParams(
-        otherId ? { seekerId: String(otherId) } : {},
-        { replace: true },
-      );
+      setSearchParams(otherId ? { seekerId: String(otherId) } : {}, {
+        replace: true,
+      });
     }
   }
 

@@ -2,6 +2,6 @@ import { useEffect } from 'react';
 
 export function useDocumentTitle(title: string) {
   useEffect(() => {
-    document.title = `${title} ProfilsActifs`;
+    document.title = `${title} JibJob`;
   }, [title]);
 }

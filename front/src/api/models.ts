@@ -42,6 +42,7 @@ interface SeekerBase {
   competences: Competence[];
   localisations: Localisation[];
   activitySectors: ActivitySector[];
+  likeCount: number;
 }
 
 export type SeekerListItem = SeekerBase;

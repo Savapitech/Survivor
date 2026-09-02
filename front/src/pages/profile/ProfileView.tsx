@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getSeeker } from '../../api/seekers';
-import { createInteraction } from '../../api/interactions';
+import {
+  createInteraction,
+  listSent,
+  removeLike,
+} from '../../api/interactions';
 import { useSession } from '../../context/SessionContext';
 import { useAnnounce } from '../../context/AnnounceContext';
 import { useAsync } from '../../hooks/useAsync';
@@ -23,6 +27,8 @@ export function ProfileView() {
   const navigate = useNavigate();
   const hasLoggedView = useRef(false);
   const [contacted, setContacted] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [likeDelta, setLikeDelta] = useState(0);
 
   const {
     data: seeker,
@@ -49,6 +55,13 @@ export function ProfileView() {
     }).catch(() => undefined);
   }, [seeker, isRecruiter, session?.recruiterId]);
 
+  useEffect(() => {
+    if (!seeker || !isRecruiter || !session?.recruiterId) return;
+    listSent(session.recruiterId, { type: 'like', pageSize: 100 })
+      .then((res) => setLiked(res.data.some((i) => i.seeker.id === seeker.id)))
+      .catch(() => undefined);
+  }, [seeker, isRecruiter, session?.recruiterId]);
+
   if (loading) return <LoadingState label="Chargement du profil..." />;
   if (error) return <ErrorState onRetry={refetch} />;
   if (!seeker) return null;
@@ -68,6 +81,25 @@ export function ProfileView() {
     navigate(`/messagerie?seekerId=${seeker!.id}`);
   }
 
+  async function handleToggleLike() {
+    if (!session?.recruiterId) return;
+    if (liked) {
+      await removeLike(session.recruiterId, seeker!.id);
+      setLiked(false);
+      setLikeDelta((d) => d - 1);
+      announce('Recommandation retirée.');
+    } else {
+      await createInteraction({
+        type: 'like',
+        recruiterId: session.recruiterId,
+        seekerId: seeker!.id,
+      });
+      setLiked(true);
+      setLikeDelta((d) => d + 1);
+      announce(`${seeker!.name} a été recommandé.`);
+    }
+  }
+
   return (
     <article>
       <div className={styles.header}>
@@ -79,11 +111,18 @@ export function ProfileView() {
             <Badge variant="success">Certifié JEB</Badge>
           ) : isOwnProfile ? (
             <Link to="/questionnaire" className={styles.certificationLink}>
-              <Badge variant="neutral">Non certifié - lancer la certification</Badge>
+              <Badge variant="neutral">
+                Non certifié - lancer la certification
+              </Badge>
             </Link>
           ) : (
             <Badge variant="neutral">Non certifié</Badge>
           )}
+          <p className={styles.likeCount}>
+            <span aria-hidden="true">♦</span> {seeker.likeCount + likeDelta}{' '}
+            recommandation
+            {seeker.likeCount + likeDelta === 1 ? '' : 's'}
+          </p>
         </div>
       </div>
 
@@ -126,6 +165,13 @@ export function ProfileView() {
         <div className={styles.actions}>
           <Button onClick={handleContact} disabled={contacted}>
             {contacted ? 'Contacté ' : `Contacter ${seeker.name}`}
+          </Button>
+          <Button
+            variant={liked ? 'primary' : 'ghost'}
+            onClick={handleToggleLike}
+            aria-pressed={liked}
+          >
+            {liked ? 'Recommandé' : 'Recommander'}
           </Button>
         </div>
       )}

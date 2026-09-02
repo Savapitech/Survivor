@@ -8,7 +8,7 @@ import {
 import type { ReactNode } from 'react';
 import type { UserRole } from '../api/models';
 
-const STORAGE_KEY = 'profilsactifs.session';
+const STORAGE_KEY = 'jibjob.session';
 
 export interface Session {
   v: 1;

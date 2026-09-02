@@ -60,6 +60,14 @@ export class InteractionsController {
     );
   }
 
+  @Delete('like')
+  removeLike(@Query() query: RemoveFavoriteQueryDto) {
+    return this.interactionsService.removeLike(
+      query.recruiterId,
+      query.seekerId,
+    );
+  }
+
   @Patch(':id/seen')
   @ApiOperation({
     summary: 'Mark an interaction as seen by its recipient seeker',

@@ -24,9 +24,12 @@ export function getThread(
 }
 
 export function listRecruiterConversations(recruiterId: number) {
-  return apiFetch<RecruiterConversation[]>('/messages/conversations/recruiter', {
-    query: { recruiterId },
-  });
+  return apiFetch<RecruiterConversation[]>(
+    '/messages/conversations/recruiter',
+    {
+      query: { recruiterId },
+    },
+  );
 }
 
 export function listSeekerConversations(seekerId: number) {

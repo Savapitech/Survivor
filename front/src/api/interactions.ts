@@ -63,3 +63,10 @@ export function removeFavorite(recruiterId: number, seekerId: number) {
     query: { recruiterId, seekerId },
   });
 }
+
+export function removeLike(recruiterId: number, seekerId: number) {
+  return apiFetch<void>('/interactions/like', {
+    method: 'DELETE',
+    query: { recruiterId, seekerId },
+  });
+}

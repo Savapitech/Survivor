@@ -141,6 +141,17 @@ export class InteractionsService {
     }
   }
 
+  async removeLike(recruiterId: number, seekerId: number) {
+    const result = await this.interactionsRepository.delete({
+      recruiter: { id: recruiterId },
+      seeker: { id: seekerId },
+      type: InteractionType.LIKE,
+    });
+    if (!result.affected) {
+      throw new NotFoundException('Like not found');
+    }
+  }
+
   async remove(id: number) {
     const result = await this.interactionsRepository.delete(id);
     if (!result.affected) {
