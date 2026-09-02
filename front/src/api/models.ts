@@ -67,7 +67,6 @@ export interface FindSeekersQuery extends PaginationQuery {
 interface RecruiterBase {
   id: number;
   companyName: string;
-  localisation: string;
 }
 
 export type RecruiterListItem = RecruiterBase;
@@ -75,7 +74,6 @@ export type RecruiterDetail = RecruiterBase & { user: PublicUser };
 
 export interface CreateRecruiterDto {
   companyName: string;
-  localisation: string;
   userId: string;
 }
 

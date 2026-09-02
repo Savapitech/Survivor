@@ -1,5 +1,4 @@
 import { useEffect, useId, useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { listSeekers } from '../api/seekers';
 import { listCompetences } from '../api/competences';
 import { listActivitySectors } from '../api/activitySectors';
@@ -67,18 +66,17 @@ export function Feed() {
       .catch(() => setContactedIds(new Set()));
   }, [session?.recruiterId]);
 
-  if (!isRecruiter || !session?.recruiterId) {
-    return <Navigate to="/" replace />;
-  }
-  const recruiterId = session.recruiterId;
+  const recruiterId = isRecruiter ? session?.recruiterId : undefined;
 
   async function handleContact(seekerId: number) {
+    if (!recruiterId) return;
     await createInteraction({ type: 'contact', recruiterId, seekerId });
     setContactedIds((prev) => new Set(prev).add(seekerId));
     announce('Le candidat a été contacté.');
   }
 
   async function handleToggleFavorite(seekerId: number) {
+    if (!recruiterId) return;
     if (favoriteIds.has(seekerId)) {
       await removeFavorite(recruiterId, seekerId);
       setFavoriteIds((prev) => {
@@ -176,25 +174,29 @@ export function Feed() {
                     key={seeker.id}
                     seeker={seeker}
                     actions={
-                      <>
-                        <Button
-                          variant="secondary"
-                          onClick={() => handleContact(seeker.id)}
-                          disabled={contactedIds.has(seeker.id)}
-                        >
-                          {contactedIds.has(seeker.id)
-                            ? 'Contacté '
-                            : 'Contacter'}
-                        </Button>
-                        <Button
-                          variant={
-                            favoriteIds.has(seeker.id) ? 'primary' : 'ghost'
-                          }
-                          onClick={() => handleToggleFavorite(seeker.id)}
-                        >
-                          {favoriteIds.has(seeker.id) ? 'Favori ' : 'Favoris'}
-                        </Button>
-                      </>
+                      recruiterId ? (
+                        <>
+                          <Button
+                            variant="secondary"
+                            onClick={() => handleContact(seeker.id)}
+                            disabled={contactedIds.has(seeker.id)}
+                          >
+                            {contactedIds.has(seeker.id)
+                              ? 'Contacté '
+                              : 'Contacter'}
+                          </Button>
+                          <Button
+                            variant={
+                              favoriteIds.has(seeker.id) ? 'primary' : 'ghost'
+                            }
+                            onClick={() => handleToggleFavorite(seeker.id)}
+                          >
+                            {favoriteIds.has(seeker.id)
+                              ? 'Favori '
+                              : 'Favoris'}
+                          </Button>
+                        </>
+                      ) : undefined
                     }
                   />
                 ))}

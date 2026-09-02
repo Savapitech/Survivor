@@ -11,7 +11,6 @@ export interface WizardState {
   localisationIds: number[];
   activitySectorIds: number[];
   companyName: string;
-  recruiterLocalisation: string;
   seekerId: number | null;
 }
 
@@ -26,7 +25,6 @@ export const initialWizardState: WizardState = {
   localisationIds: [],
   activitySectorIds: [],
   companyName: '',
-  recruiterLocalisation: '',
   seekerId: null,
 };
 
