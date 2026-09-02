@@ -29,6 +29,10 @@ export function getSeeker(id: number) {
   return apiFetch<SeekerDetail>(`/seekers/${id}`);
 }
 
+export function getSeekerByUserId(userId: string) {
+  return apiFetch<SeekerDetail>(`/seekers/by-user/${userId}`);
+}
+
 export function updateSeeker(id: number, dto: UpdateSeekerDto) {
   return apiFetch<SeekerDetail>(`/seekers/${id}`, {
     method: 'PATCH',
