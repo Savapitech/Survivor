@@ -6,11 +6,6 @@ export class CreateRecruiterDto {
   @MaxLength(120)
   companyName: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(200)
-  localisation: string;
-
   @IsUUID()
   userId: string;
 }

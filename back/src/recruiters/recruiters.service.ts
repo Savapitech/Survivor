@@ -37,7 +37,6 @@ export class RecruitersService {
 
     const recruiter = this.recruitersRepository.create({
       companyName: dto.companyName,
-      localisation: dto.localisation,
       user,
     });
     return this.recruitersRepository.save(recruiter);
