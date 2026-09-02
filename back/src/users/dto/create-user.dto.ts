@@ -9,7 +9,7 @@ export class CreateUserDto {
   @MinLength(8)
   password: string;
 
-  @IsIn([UserRole.SEEKER, UserRole.RECRUITER])
+  @IsIn([UserRole.SEEKER, UserRole.RECRUITER, UserRole.ADMIN])
   role: UserRole;
 
   @IsDateString()
