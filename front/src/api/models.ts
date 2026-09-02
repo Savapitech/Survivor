@@ -166,3 +166,13 @@ export interface SeekerConversation {
   lastMessage: MessagePreview;
   unreadCount: number;
 }
+
+export interface LoginDto {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  user: PublicUser;
+}
