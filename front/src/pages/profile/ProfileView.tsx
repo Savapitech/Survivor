@@ -28,14 +28,19 @@ export function ProfileView() {
   const hasLoggedView = useRef(false);
   const [contacted, setContacted] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [likeDelta, setLikeDelta] = useState(0);
+
+  const recruiterId = isRecruiter ? session?.recruiterId : undefined;
+  const viewerId = session?.role === 'seeker' ? session.userId : undefined;
 
   const {
     data: seeker,
     loading,
     error,
     refetch,
-  } = useAsync(() => getSeeker(id), [id]);
+  } = useAsync(
+    () => getSeeker(id, { recruiterId, viewerId }),
+    [id, recruiterId, viewerId],
+  );
 
   useDocumentTitle(seeker ? `${seeker.name} ${seeker.lastname}` : 'Profil');
 
@@ -86,7 +91,6 @@ export function ProfileView() {
     if (liked) {
       await removeLike(session.recruiterId, seeker!.id);
       setLiked(false);
-      setLikeDelta((d) => d - 1);
       announce('Recommandation retirée.');
     } else {
       await createInteraction({
@@ -95,7 +99,6 @@ export function ProfileView() {
         seekerId: seeker!.id,
       });
       setLiked(true);
-      setLikeDelta((d) => d + 1);
       announce(`${seeker!.name} a été recommandé.`);
     }
   }
@@ -118,13 +121,35 @@ export function ProfileView() {
           ) : (
             <Badge variant="neutral">Non certifié</Badge>
           )}
-          <p className={styles.likeCount}>
-            <span aria-hidden="true">♦</span> {seeker.likeCount + likeDelta}{' '}
-            recommandation
-            {seeker.likeCount + likeDelta === 1 ? '' : 's'}
-          </p>
+          {isOwnProfile && typeof seeker.likeCount === 'number' && (
+            <p className={styles.likeCount}>
+              <span aria-hidden="true">♦</span> {seeker.likeCount}{' '}
+              recommandation{seeker.likeCount === 1 ? '' : 's'}
+              <span className="visually-hidden">
+                {' '}
+                (visible uniquement par vous)
+              </span>
+            </p>
+          )}
         </div>
       </div>
+
+      {isOwnProfile && seeker.videoStatus === 'pending' && (
+        <p role="status" className={styles.moderationNotice}>
+          Votre vidéo est en cours de modération. Elle ne sera visible des
+          recruteurs et du public qu'après validation.
+        </p>
+      )}
+      {isOwnProfile && seeker.videoStatus === 'rejected' && (
+        <p role="alert" className={styles.moderationNoticeError}>
+          Votre vidéo a été refusée
+          {seeker.videoRejectionReason
+            ? ` : ${seeker.videoRejectionReason}`
+            : '.'}{' '}
+          Vous pouvez déposer un nouveau lien depuis la page de modification
+          de votre profil.
+        </p>
+      )}
 
       <ProfileVideo
         url={seeker.video}

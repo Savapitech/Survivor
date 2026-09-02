@@ -42,7 +42,6 @@ export function Feed() {
   const [favoriteIds, setFavoriteIds] = useState<Set<number>>(new Set());
   const [contactedIds, setContactedIds] = useState<Set<number>>(new Set());
   const [likedIds, setLikedIds] = useState<Set<number>>(new Set());
-  const [likeDeltas, setLikeDeltas] = useState<Record<number, number>>({});
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const [items, setItems] = useState<SeekerListItem[]>([]);
@@ -55,6 +54,8 @@ export function Feed() {
 
   const reelRef = useRef<HTMLUListElement | null>(null);
   const sentinelRef = useRef<HTMLLIElement | null>(null);
+
+  const recruiterId = isRecruiter ? session?.recruiterId : undefined;
 
   const competences = useAsync(() => listCompetences({ pageSize: 100 }), []);
   const sectors = useAsync(() => listActivitySectors({ pageSize: 100 }), []);
@@ -74,6 +75,7 @@ export function Feed() {
       competenceIds,
       localisationIds,
       activitySectorIds,
+      recruiterId,
     })
       .then((res) => {
         if (requestId.current !== id) return;
@@ -91,7 +93,7 @@ export function Feed() {
         );
         setInitialLoading(false);
       });
-  }, [search, competenceIds, localisationIds, activitySectorIds]);
+  }, [search, competenceIds, localisationIds, activitySectorIds, recruiterId]);
 
   useEffect(() => {
     loadFirstPage();
@@ -107,6 +109,7 @@ export function Feed() {
       competenceIds,
       localisationIds,
       activitySectorIds,
+      recruiterId,
     })
       .then((res) => {
         setItems((prev) => [...prev, ...res.data]);
@@ -124,6 +127,7 @@ export function Feed() {
     competenceIds,
     localisationIds,
     activitySectorIds,
+    recruiterId,
   ]);
 
   const loadMoreRef = useRef(loadMore);
@@ -162,8 +166,6 @@ export function Feed() {
       .catch(() => setLikedIds(new Set()));
   }, [session?.recruiterId]);
 
-  const recruiterId = isRecruiter ? session?.recruiterId : undefined;
-
   async function handleContact(seekerId: number) {
     if (!recruiterId) return;
     await createInteraction({ type: 'contact', recruiterId, seekerId });
@@ -198,18 +200,10 @@ export function Feed() {
         next.delete(seekerId);
         return next;
       });
-      setLikeDeltas((prev) => ({
-        ...prev,
-        [seekerId]: (prev[seekerId] ?? 0) - 1,
-      }));
       announce('Recommandation retirée.');
     } else {
       await createInteraction({ type: 'like', recruiterId, seekerId });
       setLikedIds((prev) => new Set(prev).add(seekerId));
-      setLikeDeltas((prev) => ({
-        ...prev,
-        [seekerId]: (prev[seekerId] ?? 0) + 1,
-      }));
       announce('Profil recommandé.');
     }
   }
@@ -261,7 +255,6 @@ export function Feed() {
               seeker={seeker}
               interactive={Boolean(recruiterId)}
               liked={likedIds.has(seeker.id)}
-              likeCount={seeker.likeCount + (likeDeltas[seeker.id] ?? 0)}
               contacted={contactedIds.has(seeker.id)}
               favorited={favoriteIds.has(seeker.id)}
               onToggleLike={() => handleToggleLike(seeker.id)}
