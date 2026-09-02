@@ -14,7 +14,7 @@ export interface Session {
   v: 1;
   userId: string;
   email: string;
-  role: Extract<UserRole, 'seeker' | 'recruiter'>;
+  role: UserRole;
   seekerId?: number;
   recruiterId?: number;
 }
@@ -40,6 +40,7 @@ interface SessionContextValue {
   isAuthenticated: boolean;
   isSeeker: boolean;
   isRecruiter: boolean;
+  isAdmin: boolean;
   establishSession: (session: Session) => void;
   updateSession: (patch: Partial<Session>) => void;
   logout: () => void;
@@ -86,6 +87,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     isAuthenticated: session !== null,
     isSeeker: session?.role === 'seeker',
     isRecruiter: session?.role === 'recruiter',
+    isAdmin: session?.role === 'admin',
     establishSession,
     updateSession,
     logout,

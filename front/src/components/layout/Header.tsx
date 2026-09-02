@@ -3,7 +3,7 @@ import { useSession } from '../../context/SessionContext';
 import styles from './Header.module.css';
 
 export function Header() {
-  const { session, isSeeker, isRecruiter, logout } = useSession();
+  const { session, isSeeker, isRecruiter, isAdmin, logout } = useSession();
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -61,6 +61,11 @@ export function Header() {
                 Messagerie
               </Link>
             </>
+          )}
+          {isAdmin && (
+            <Link className={styles.navLink} to="/admin">
+              Administration
+            </Link>
           )}
         </nav>
 

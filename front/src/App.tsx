@@ -20,6 +20,14 @@ import { Step2Role } from './pages/register/Step2Role';
 import { Step3Skills } from './pages/register/Step3Skills';
 import { Step4Video } from './pages/register/Step4Video';
 import { PostRegisterPrompt } from './pages/register/PostRegisterPrompt';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { AdminModeration } from './pages/admin/AdminModeration';
+import { AdminQuestionnaire } from './pages/admin/AdminQuestionnaire';
+import { AdminCompetences } from './pages/admin/AdminCompetences';
+import { AdminActivitySectors } from './pages/admin/AdminActivitySectors';
+import { AdminLocalisations } from './pages/admin/AdminLocalisations';
+import { AdminUsers } from './pages/admin/AdminUsers';
 
 export default function App() {
   return (
@@ -54,6 +62,19 @@ export default function App() {
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/candidats" element={<RecruiterDashboard />} />
               <Route path="/messagerie" element={<Messaging />} />
+
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="moderation" element={<AdminModeration />} />
+                <Route path="questionnaire" element={<AdminQuestionnaire />} />
+                <Route path="competences" element={<AdminCompetences />} />
+                <Route path="secteurs" element={<AdminActivitySectors />} />
+                <Route
+                  path="localisations"
+                  element={<AdminLocalisations />}
+                />
+                <Route path="utilisateurs" element={<AdminUsers />} />
+              </Route>
 
               <Route path="*" element={<NotFound />} />
             </Route>
