@@ -137,3 +137,32 @@ export interface CreateInteractionDto {
   recruiterId: number;
   seekerId: number;
 }
+
+export type MessageSenderRole = 'seeker' | 'recruiter';
+
+export interface MessagePreview {
+  id: number;
+  senderRole: MessageSenderRole;
+  content: string;
+  createdAt: string;
+  seenAt: string | null;
+}
+
+export interface CreateMessageDto {
+  recruiterId: number;
+  seekerId: number;
+  senderRole: MessageSenderRole;
+  content: string;
+}
+
+export interface RecruiterConversation {
+  seeker: SeekerListItem;
+  lastMessage: MessagePreview;
+  unreadCount: number;
+}
+
+export interface SeekerConversation {
+  recruiter: RecruiterListItem;
+  lastMessage: MessagePreview;
+  unreadCount: number;
+}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getSeeker } from '../../api/seekers';
 import { createInteraction } from '../../api/interactions';
 import { useSession } from '../../context/SessionContext';
@@ -20,6 +20,7 @@ export function ProfileView() {
   const id = Number(params.id);
   const { session, isRecruiter } = useSession();
   const { announce } = useAnnounce();
+  const navigate = useNavigate();
   const hasLoggedView = useRef(false);
   const [contacted, setContacted] = useState(false);
 
@@ -64,6 +65,7 @@ export function ProfileView() {
     });
     setContacted(true);
     announce(`${seeker!.name} à été contacté.`);
+    navigate(`/messagerie?seekerId=${seeker!.id}`);
   }
 
   return (

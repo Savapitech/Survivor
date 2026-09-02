@@ -1,4 +1,5 @@
 import { useEffect, useId, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { listSeekers } from '../api/seekers';
 import { listCompetences } from '../api/competences';
 import { listActivitySectors } from '../api/activitySectors';
@@ -26,6 +27,7 @@ export function Feed() {
   useDocumentTitle('Feed candidats');
   const { session, isRecruiter } = useSession();
   const { announce } = useAnnounce();
+  const navigate = useNavigate();
   const searchId = useId();
   const { page, pageSize, goToPage, resetPage } = usePagination();
 
@@ -73,6 +75,7 @@ export function Feed() {
     await createInteraction({ type: 'contact', recruiterId, seekerId });
     setContactedIds((prev) => new Set(prev).add(seekerId));
     announce('Le candidat a été contacté.');
+    navigate(`/messagerie?seekerId=${seekerId}`);
   }
 
   async function handleToggleFavorite(seekerId: number) {
