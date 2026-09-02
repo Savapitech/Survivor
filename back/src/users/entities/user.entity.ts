@@ -19,4 +19,7 @@ export class User {
 
   @Column({ type: 'enum', enum: UserRole })
   role: UserRole;
+
+  @Column({ type: 'date' })
+  birthDate: string;
 }

@@ -1,5 +1,6 @@
-import { IsEmail, IsIn, MinLength } from 'class-validator';
+import { IsDateString, IsEmail, IsIn, MinLength } from 'class-validator';
 import { UserRole } from '../entities/user.entity';
+import { MinAge } from '../../common/validators/min-age.validator';
 
 export class CreateUserDto {
   @IsEmail()
@@ -10,4 +11,8 @@ export class CreateUserDto {
 
   @IsIn([UserRole.SEEKER, UserRole.RECRUITER])
   role: UserRole;
+
+  @IsDateString()
+  @MinAge(16)
+  birthDate: string;
 }
