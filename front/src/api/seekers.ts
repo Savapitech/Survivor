@@ -1,8 +1,11 @@
 import { apiFetch } from './http';
 import type {
   CreateSeekerDto,
+  FindSeekersAdminQuery,
   FindSeekersQuery,
+  ModerateSeekerVideoDto,
   Paginated,
+  SeekerAdmin,
   SeekerDetail,
   SeekerListItem,
   UpdateSeekerDto,
@@ -21,12 +24,18 @@ export function listSeekers(query: FindSeekersQuery = {}) {
       localisationIds: query.localisationIds,
       activitySectorIds: query.activitySectorIds,
       search: query.search,
+      recruiterId: query.recruiterId,
     },
   });
 }
 
-export function getSeeker(id: number) {
-  return apiFetch<SeekerDetail>(`/seekers/${id}`);
+export function getSeeker(
+  id: number,
+  options: { recruiterId?: number; viewerId?: string } = {},
+) {
+  return apiFetch<SeekerDetail>(`/seekers/${id}`, {
+    query: { recruiterId: options.recruiterId, viewerId: options.viewerId },
+  });
 }
 
 export function getSeekerByUserId(userId: string) {
@@ -42,4 +51,15 @@ export function updateSeeker(id: number, dto: UpdateSeekerDto) {
 
 export function deleteSeeker(id: number) {
   return apiFetch<void>(`/seekers/${id}`, { method: 'DELETE' });
+}
+
+export function listSeekersAdmin(query: FindSeekersAdminQuery = {}) {
+  return apiFetch<Paginated<SeekerAdmin>>('/seekers/admin', { query });
+}
+
+export function moderateSeekerVideo(id: number, dto: ModerateSeekerVideoDto) {
+  return apiFetch<SeekerAdmin>(`/seekers/admin/${id}/moderate`, {
+    method: 'PATCH',
+    body: dto,
+  });
 }

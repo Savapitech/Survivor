@@ -12,6 +12,7 @@ export interface PaginationQuery {
 }
 
 export type UserRole = 'admin' | 'seeker' | 'recruiter';
+export type VideoStatus = 'pending' | 'approved' | 'rejected';
 
 export interface PublicUser {
   id: string;
@@ -23,7 +24,7 @@ export interface PublicUser {
 export interface CreateUserDto {
   email: string;
   password: string;
-  role: 'seeker' | 'recruiter';
+  role: 'seeker' | 'recruiter' | 'admin';
   birthDate: string;
 }
 
@@ -38,15 +39,26 @@ interface SeekerBase {
   name: string;
   lastname: string;
   video: string | null;
+  videoStatus: VideoStatus;
   certification: boolean;
   competences: Competence[];
   localisations: Localisation[];
   activitySectors: ActivitySector[];
-  likeCount: number;
 }
 
 export type SeekerListItem = SeekerBase;
-export type SeekerDetail = SeekerBase & { user: PublicUser };
+export type SeekerDetail = SeekerBase & {
+  user: PublicUser;
+  videoRejectionReason?: string | null;
+  likeCount?: number;
+};
+export type SeekerAdmin = SeekerDetail & {
+  user: PublicUser;
+  videoRejectionReason: string | null;
+  videoModeratedAt: string | null;
+  videoModeratedBy: string | null;
+  likeCount: number;
+};
 
 export interface CreateSeekerDto {
   name: string;
@@ -65,6 +77,17 @@ export interface FindSeekersQuery extends PaginationQuery {
   localisationIds?: number[];
   activitySectorIds?: number[];
   search?: string;
+  recruiterId?: number;
+}
+
+export interface FindSeekersAdminQuery extends PaginationQuery {
+  videoStatus?: VideoStatus;
+}
+
+export interface ModerateSeekerVideoDto {
+  status: 'approved' | 'rejected';
+  reason?: string;
+  adminUserId: string;
 }
 
 interface RecruiterBase {
@@ -156,8 +179,15 @@ export interface CreateMessageDto {
   content: string;
 }
 
+export interface ConversationSeekerSummary {
+  id: number;
+  name: string;
+  lastname: string;
+  certification: boolean;
+}
+
 export interface RecruiterConversation {
-  seeker: SeekerListItem;
+  seeker: ConversationSeekerSummary;
   lastMessage: MessagePreview;
   unreadCount: number;
 }
