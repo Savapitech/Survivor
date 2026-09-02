@@ -15,9 +15,6 @@ export class Recruiter {
   @Column()
   companyName: string;
 
-  @Column()
-  localisation: string;
-
   @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
