@@ -44,7 +44,7 @@ export function AdminQuestionnaire() {
   async function handleCreate(event: React.FormEvent) {
     event.preventDefault();
     if (!newLabel.trim()) {
-      setCreateError('L\'intitulé est requis.');
+      setCreateError("L'intitulé est requis.");
       return;
     }
     setCreating(true);
@@ -57,7 +57,9 @@ export function AdminQuestionnaire() {
       questions.refetch();
     } catch (err) {
       setCreateError(
-        err instanceof ApiError ? err.details.join(' ') : 'Une erreur est survenue.',
+        err instanceof ApiError
+          ? err.details.join(' ')
+          : 'Une erreur est survenue.',
       );
     } finally {
       setCreating(false);
@@ -83,7 +85,9 @@ export function AdminQuestionnaire() {
       questions.refetch();
     } catch (err) {
       announceError(
-        err instanceof ApiError ? err.details.join(' ') : 'Une erreur est survenue.',
+        err instanceof ApiError
+          ? err.details.join(' ')
+          : 'Une erreur est survenue.',
       );
     } finally {
       setSavingId(null);
@@ -100,7 +104,9 @@ export function AdminQuestionnaire() {
       questions.refetch();
     } catch (err) {
       announceError(
-        err instanceof ApiError ? err.details.join(' ') : 'Une erreur est survenue.',
+        err instanceof ApiError
+          ? err.details.join(' ')
+          : 'Une erreur est survenue.',
       );
     } finally {
       setDeleting(false);

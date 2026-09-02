@@ -146,8 +146,8 @@ export function ProfileView() {
           {seeker.videoRejectionReason
             ? ` : ${seeker.videoRejectionReason}`
             : '.'}{' '}
-          Vous pouvez déposer un nouveau lien depuis la page de modification
-          de votre profil.
+          Vous pouvez déposer un nouveau lien depuis la page de modification de
+          votre profil.
         </p>
       )}
 

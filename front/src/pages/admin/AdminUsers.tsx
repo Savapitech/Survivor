@@ -17,7 +17,7 @@ import styles from './AdminUsers.module.css';
 
 const ROLE_LABEL: Record<string, string> = {
   admin: 'Administrateur',
-  seeker: 'Demandeur d\'emploi',
+  seeker: "Demandeur d'emploi",
   recruiter: 'Recruteur',
 };
 
@@ -41,7 +41,9 @@ export function AdminUsers() {
       users.refetch();
     } catch (err) {
       announceError(
-        err instanceof ApiError ? err.details.join(' ') : 'Une erreur est survenue.',
+        err instanceof ApiError
+          ? err.details.join(' ')
+          : 'Une erreur est survenue.',
       );
     } finally {
       setDeleting(false);
@@ -80,7 +82,9 @@ export function AdminUsers() {
                   <tr key={user.id}>
                     <td>{user.email}</td>
                     <td>
-                      <Badge variant={user.role === 'admin' ? 'success' : 'neutral'}>
+                      <Badge
+                        variant={user.role === 'admin' ? 'success' : 'neutral'}
+                      >
                         {ROLE_LABEL[user.role] ?? user.role}
                       </Badge>
                     </td>

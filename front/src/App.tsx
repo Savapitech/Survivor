@@ -69,10 +69,7 @@ export default function App() {
                 <Route path="questionnaire" element={<AdminQuestionnaire />} />
                 <Route path="competences" element={<AdminCompetences />} />
                 <Route path="secteurs" element={<AdminActivitySectors />} />
-                <Route
-                  path="localisations"
-                  element={<AdminLocalisations />}
-                />
+                <Route path="localisations" element={<AdminLocalisations />} />
                 <Route path="utilisateurs" element={<AdminUsers />} />
               </Route>
 

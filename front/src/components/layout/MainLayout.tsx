@@ -20,9 +20,7 @@ export function MainLayout() {
   }, [location.pathname]);
 
   return (
-    <div
-      className={`${styles.root} ${isFullBleed ? styles.rootLocked : ''}`}
-    >
+    <div className={`${styles.root} ${isFullBleed ? styles.rootLocked : ''}`}>
       <SkipLink />
       <Header />
       <main
