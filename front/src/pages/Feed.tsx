@@ -35,6 +35,7 @@ export function Feed() {
   const [localisationIds, setLocalisationIds] = useState<number[]>([]);
   const [activitySectorIds, setActivitySectorIds] = useState<number[]>([]);
   const [favoriteIds, setFavoriteIds] = useState<Set<number>>(new Set());
+  const [contactedIds, setContactedIds] = useState<Set<number>>(new Set());
 
   const competences = useAsync(() => listCompetences({ pageSize: 100 }), []);
   const sectors = useAsync(() => listActivitySectors({ pageSize: 100 }), []);
@@ -61,6 +62,9 @@ export function Feed() {
     listSent(session.recruiterId, { type: 'favorite', pageSize: 100 })
       .then((res) => setFavoriteIds(new Set(res.data.map((i) => i.seeker.id))))
       .catch(() => setFavoriteIds(new Set()));
+    listSent(session.recruiterId, { type: 'contact', pageSize: 100 })
+      .then((res) => setContactedIds(new Set(res.data.map((i) => i.seeker.id))))
+      .catch(() => setContactedIds(new Set()));
   }, [session?.recruiterId]);
 
   if (!isRecruiter || !session?.recruiterId) {
@@ -70,6 +74,7 @@ export function Feed() {
 
   async function handleContact(seekerId: number) {
     await createInteraction({ type: 'contact', recruiterId, seekerId });
+    setContactedIds((prev) => new Set(prev).add(seekerId));
     announce('Le candidat a été contacté.');
   }
 
@@ -175,8 +180,11 @@ export function Feed() {
                         <Button
                           variant="secondary"
                           onClick={() => handleContact(seeker.id)}
+                          disabled={contactedIds.has(seeker.id)}
                         >
-                          Contacter
+                          {contactedIds.has(seeker.id)
+                            ? 'Contacté '
+                            : 'Contacter'}
                         </Button>
                         <Button
                           variant={
