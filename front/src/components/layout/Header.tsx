@@ -15,10 +15,13 @@ export function Header() {
     <header className={styles.header}>
       <div className={`container ${styles.bar}`}>
         <Link to="/" className={styles.brand}>
-          <span className={styles.ministry}>
-            Ministère du Job et du Bonheur
+          <img src="/logo.png" alt="" className={styles.logo} />
+          <span className={styles.brandText}>
+            <span className={styles.product}>Ministère du Job et Bonheur</span>
+            <span className={styles.ministry}>
+              Travailler mieux, sourire plus
+            </span>
           </span>
-          <span className={styles.product}>ProfilsActifs</span>
         </Link>
 
         <nav aria-label="Navigation principale" className={styles.nav}>
