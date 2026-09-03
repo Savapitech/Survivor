@@ -54,8 +54,60 @@ export function Feed() {
 
   const reelRef = useRef<HTMLUListElement | null>(null);
   const sentinelRef = useRef<HTMLLIElement | null>(null);
+  const slideObserverRef = useRef<IntersectionObserver | null>(null);
+  const observedIdsRef = useRef<Set<number>>(new Set());
+  const [activeSeekerId, setActiveSeekerId] = useState<number | null>(null);
 
   const recruiterId = isRecruiter ? session?.recruiterId : undefined;
+
+  useEffect(() => {
+    const observer = slideObserverRef;
+    const observedIds = observedIdsRef;
+    return () => {
+      observer.current?.disconnect();
+      observer.current = null;
+      observedIds.current.clear();
+    };
+  }, []);
+
+  useEffect(() => {
+    const root = reelRef.current;
+    if (!root) return;
+
+    if (!slideObserverRef.current) {
+      slideObserverRef.current = new IntersectionObserver(
+        (entries) => {
+          let best: { id: number; ratio: number } | null = null;
+          for (const entry of entries) {
+            const raw = (entry.target as HTMLElement).dataset.seekerId;
+            const id = raw ? Number(raw) : NaN;
+            if (Number.isNaN(id)) continue;
+            if (
+              entry.isIntersecting &&
+              (!best || entry.intersectionRatio > best.ratio)
+            ) {
+              best = { id, ratio: entry.intersectionRatio };
+            }
+          }
+          if (best) {
+            setActiveSeekerId(best.id);
+          }
+        },
+        { root, threshold: [0.6] },
+      );
+    }
+
+    const observer = slideObserverRef.current;
+    const observedIds = observedIdsRef.current;
+    const elements =
+      root.querySelectorAll<HTMLElement>('[data-seeker-id]');
+    elements.forEach((el) => {
+      const id = Number(el.dataset.seekerId);
+      if (Number.isNaN(id) || observedIds.has(id)) return;
+      observedIds.add(id);
+      observer.observe(el);
+    });
+  }, [items]);
 
   const competences = useAsync(() => listCompetences({ pageSize: 100 }), []);
   const sectors = useAsync(() => listActivitySectors({ pageSize: 100 }), []);
@@ -257,6 +309,7 @@ export function Feed() {
               liked={likedIds.has(seeker.id)}
               contacted={contactedIds.has(seeker.id)}
               favorited={favoriteIds.has(seeker.id)}
+              active={activeSeekerId === seeker.id}
               onToggleLike={() => handleToggleLike(seeker.id)}
               onContact={() => handleContact(seeker.id)}
               onToggleFavorite={() => handleToggleFavorite(seeker.id)}
