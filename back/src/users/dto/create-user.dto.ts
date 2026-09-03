@@ -1,6 +1,6 @@
 import { IsDateString, IsEmail, IsIn, MinLength } from 'class-validator';
 import { UserRole } from '../entities/user.entity';
-import { MinAge } from '../../common/validator/min-age.validator';
+import { MinAge } from '../../common/validators/min-age.validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
