@@ -380,7 +380,9 @@ CREATE TABLE public.seeker (
     "videoStatus" public.seeker_videostatus_enum DEFAULT 'pending'::public.seeker_videostatus_enum NOT NULL,
     "videoRejectionReason" text,
     "videoModeratedAt" timestamp without time zone,
-    "videoModeratedBy" uuid
+    "videoModeratedBy" uuid,
+    "videoConsentGivenAt" timestamp without time zone,
+    "videoConsentVersion" character varying
 );
 
 

@@ -50,6 +50,8 @@ export type SeekerListItem = SeekerBase;
 export type SeekerDetail = SeekerBase & {
   user: PublicUser;
   videoRejectionReason?: string | null;
+  videoConsentGivenAt?: string | null;
+  videoConsentVersion?: string | null;
   likeCount?: number;
 };
 export type SeekerAdmin = SeekerDetail & {
@@ -64,13 +66,18 @@ export interface CreateSeekerDto {
   name: string;
   lastname: string;
   video?: string;
+  videoConsent?: boolean;
   userId: string;
   competenceIds?: number[];
   localisationIds?: number[];
   activitySectorIds?: number[];
 }
 
-export type UpdateSeekerDto = Partial<Omit<CreateSeekerDto, 'userId'>>;
+export type UpdateSeekerDto = Partial<
+  Omit<CreateSeekerDto, 'userId' | 'video'>
+> & {
+  video?: string | null;
+};
 
 export interface FindSeekersQuery extends PaginationQuery {
   competenceIds?: number[];

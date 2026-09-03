@@ -8,6 +8,7 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useAnnounce } from '../../context/AnnounceContext';
 import { useSession } from '../../context/SessionContext';
 import { isMinor, validateVideoUrl } from '../../utils/validators';
+import { VIDEO_CONSENT_TEXT } from '../../utils/videoConsent';
 import { useWizard } from './wizardState';
 import styles from './RegisterWizardLayout.module.css';
 
@@ -19,7 +20,9 @@ export function Step4Video() {
   const navigate = useNavigate();
 
   const [video, setVideo] = useState(state.video);
+  const [consent, setConsent] = useState(false);
   const [error, setError] = useState<string | undefined>();
+  const [consentError, setConsentError] = useState<string | undefined>();
   const [apiError, setApiError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -37,6 +40,7 @@ export function Step4Video() {
         lastname: state.lastname,
         userId: state.userId,
         video: videoUrl,
+        videoConsent: videoUrl ? true : undefined,
         competenceIds: state.competenceIds,
         localisationIds: state.localisationIds,
         activitySectorIds: state.activitySectorIds,
@@ -63,10 +67,17 @@ export function Step4Video() {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    const trimmed = video.trim();
     const videoError = validateVideoUrl(video);
+    const needsConsent = Boolean(trimmed) && !consent;
     setError(videoError);
-    if (videoError) return;
-    finish(video.trim() || undefined);
+    setConsentError(
+      needsConsent
+        ? 'Vous devez donner votre consentement pour publier cette vidéo.'
+        : undefined,
+    );
+    if (videoError || needsConsent) return;
+    finish(trimmed || undefined);
   }
 
   return (
@@ -95,6 +106,26 @@ export function Step4Video() {
         onChange={(e) => setVideo(e.target.value)}
         error={error}
       />
+
+      {video.trim() && (
+        <div className={styles.minorNotice} role="group">
+          <label style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+            />
+            <span>
+              {VIDEO_CONSENT_TEXT}
+            </span>
+          </label>
+          {consentError && (
+            <p role="alert" style={{ color: 'var(--color-error)' }}>
+              {consentError}
+            </p>
+          )}
+        </div>
+      )}
 
       {apiError && (
         <p role="alert" style={{ color: 'var(--color-error)' }}>

@@ -24,6 +24,7 @@ import {
 import { Recruiter } from '../recruiters/entities/recruiter.entity';
 import { paginate, toSkipTake } from '../common/pagination';
 import { isMinor, toPublicSeeker } from './seeker-view.util';
+import { VIDEO_CONSENT_VERSION } from './video-consent';
 
 const SEEKER_RELATIONS = {
   competences: true,
@@ -141,11 +142,14 @@ export class SeekersService {
       this.resolveActivitySectors(dto.activitySectorIds),
     ]);
 
+    const hasVideo = Boolean(dto.video);
     const seeker = this.seekersRepository.create({
       name: dto.name,
       lastname: dto.lastname,
       video: dto.video ?? null,
       videoStatus: VideoStatus.PENDING,
+      videoConsentGivenAt: hasVideo ? new Date() : null,
+      videoConsentVersion: hasVideo ? VIDEO_CONSENT_VERSION : null,
       user,
       competences,
       localisations,
@@ -319,6 +323,10 @@ export class SeekersService {
       seeker.videoRejectionReason = null;
       seeker.videoModeratedAt = null;
       seeker.videoModeratedBy = null;
+      // La révocation (video === null) efface aussi le consentement enregistré :
+      // il ne doit pas survivre à la suppression du lien qu'il couvrait.
+      seeker.videoConsentGivenAt = dto.video ? new Date() : null;
+      seeker.videoConsentVersion = dto.video ? VIDEO_CONSENT_VERSION : null;
     }
     if (dto.competenceIds !== undefined) {
       seeker.competences = await this.resolveCompetences(dto.competenceIds);

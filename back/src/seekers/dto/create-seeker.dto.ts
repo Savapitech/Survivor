@@ -1,4 +1,5 @@
 import {
+  Equals,
   IsArray,
   IsInt,
   IsNotEmpty,
@@ -7,6 +8,7 @@ import {
   IsUUID,
   IsUrl,
   MaxLength,
+  ValidateIf,
 } from 'class-validator';
 
 const VIDEO_HOST_WHITELIST = [
@@ -31,6 +33,13 @@ export class CreateSeekerDto {
   @IsOptional()
   @IsUrl({ host_whitelist: VIDEO_HOST_WHITELIST })
   video?: string;
+
+  @ValidateIf((o: CreateSeekerDto) => Boolean(o.video))
+  @Equals(true, {
+    message:
+      'Le consentement à la publication de la vidéo (image et voix) est requis.',
+  })
+  videoConsent?: boolean;
 
   @IsUUID()
   userId: string;
