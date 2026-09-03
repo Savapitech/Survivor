@@ -3,8 +3,8 @@
   --color-primary: #1b3a6b;
   --color-primary-dark: #143351;
   --color-primary-light: #e8f0f7;
-  --color-accent: #d94f2b;
-  --color-accent-dark: #b23e1f;
+  --color-accent: #b8860b;
+  --color-accent-dark: #8a660a;
 
   --color-success: #1e7a3e;
   --color-success-bg: #e6f4ea;
@@ -17,7 +17,7 @@
   --color-text-muted: #4b5157;
   --color-bg: #ffffff;
   --color-bg-elevated: #f5f7f9;
-  --color-border: #d3d8dd;
+  --color-border: #868c96;
   --color-focus-ring: #1e4a72;
 
   --space-1: 0.25rem;

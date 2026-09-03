@@ -52,7 +52,7 @@
 
 .unreadBadge {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-text);
   border-radius: 999px;
   font-size: var(--font-size-sm);
   line-height: 1;
