@@ -22,9 +22,9 @@
 }
 
 .current {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #fff;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text);
   font-weight: 700;
 }
 

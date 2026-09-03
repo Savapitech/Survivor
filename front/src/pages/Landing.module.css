@@ -10,7 +10,7 @@
 }
 
 .tagline {
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;

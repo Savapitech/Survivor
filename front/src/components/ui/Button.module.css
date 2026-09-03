@@ -18,12 +18,13 @@
 }
 
 .primary {
-  background: var(--color-primary);
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-text);
 }
 
 .primary:hover:not(:disabled) {
-  background: var(--color-primary-dark);
+  background: var(--color-accent-dark);
+  color: #fff;
 }
 
 .secondary {
