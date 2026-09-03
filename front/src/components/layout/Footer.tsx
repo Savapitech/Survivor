@@ -24,7 +24,7 @@ export function Footer() {
           <p className={styles.columnTitle}>Légal</p>
           <ul className={styles.links}>
             <li>
-              <Link to="/accessibilite">Accessibilité : conforme RGAA AA</Link>
+              <Link to="/accessibilite">Accessibilité : non conforme</Link>
             </li>
             <li>Mentions légales</li>
             <li>Données personnelles</li>
