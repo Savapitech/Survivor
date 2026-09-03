@@ -25,6 +25,8 @@ import { AuthModule } from './auth/auth.module';
       database: process.env.DB_NAME ?? 'profilsactifs',
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV !== 'production',
+      retryAttempts: 10,
+      retryDelay: 3000,
     }),
     UsersModule,
     SeekersModule,
