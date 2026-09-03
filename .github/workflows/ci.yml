@@ -109,3 +109,17 @@ jobs:
           name: configured-workspace
           path: .
           include-hidden-files: true
+
+      - name: Archive workspace for Release
+        if: success() && github.event_name == 'push'
+        run: zip -r configured-workspace.zip .
+
+      - name: Create GitHub Release
+        if: success() && github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Build ${{ github.run_number }}
+          files: configured-workspace.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
