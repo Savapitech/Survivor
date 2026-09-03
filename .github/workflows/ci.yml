@@ -52,56 +52,6 @@ jobs:
   #
   #         exit $status
 
-  # build:
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       include:
-  #         - os: ubuntu-latest
-  #           name: ubuntu-x86_64
-  #         - os: ubuntu-24.04-arm
-  #           name: ubuntu-arm64
-  #         - os: macos-latest
-  #           name: macos-arm64
-  #         # - os: macos-13
-  #         #   name: macos-x86_64
-  #
-  #   runs-on: ${{ matrix.os }}
-  #
-  #   steps:
-  #     - uses: actions/checkout@v6
-  #
-  #     - name: Install system dependencies (Linux)
-  #       if: runner.os == 'Linux'
-  #       run: |
-  #         sudo apt-get update
-  #         sudo apt-get install -y ninja-build ccache libgl1-mesa-dev libx11-dev libglu1-mesa-dev libglew-dev
-  #
-  #     - name: Install system dependencies (macOS)
-  #       if: runner.os == 'macOS'
-  #       env:
-  #         HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
-  #       run: |
-  #         for pkg in ninja ccache; do
-  #           brew list "$pkg" &>/dev/null || brew install "$pkg"
-  #         done
-  #
-  #     - name: Setup ccache
-  #       uses: hendrikmuhs/ccache-action@v1.2.23
-  #       with:
-  #         key: ${{ matrix.name }}-ccache
-  #
-  #     - name: Setup vcpkg (with GitHub Actions binary cache)
-  #       uses: lukka/run-vcpkg@v11
-  #       with:
-  #         vcpkgJsonGlob: 'gui/vcpkg.json'
-  #
-  #     - name: Build server
-  #       run: make zappy_server
-  #
-  #     - name: Build gui
-  #       run: make zappy_gui
-
   sync_repository:
     needs: [ check_the_repository_state ]
     if: ${{ (!github.event.pull_request) && (github.ref_name == 'main') && (vars.GH_TARGET_REPO) }}
@@ -128,3 +78,34 @@ jobs:
         run: |
               git checkout -b main || git checkout main
               git push --set-upstream target main --force
+
+  docker_integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare environment configuration
+        run: |
+          cp back/.env.example back/.env
+          sed -i 's/DB_HOST=localhost/DB_HOST=db/' back/.env
+          cp front/.env.example front/.env
+
+      - name: Start services with Docker Compose
+        run: docker compose up --build -d
+
+      - name: Verify health endpoint
+        run: |
+          echo "Waiting for the backend to be healthy"
+          timeout 60 bash -c 'while [[ "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health)" != "200" ]]; do sleep 5; done' || (echo "Healthcheck failed or timed out" && docker compose logs && exit 1)
+
+      - name: Clean up repository metadata
+        run: rm -rf .git
+
+      - name: Upload configured workspace artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: configured-workspace
+          path: .
+          include-hidden-files: true
