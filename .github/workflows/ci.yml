@@ -15,6 +15,9 @@ env:
   GH_BOT_ACC_NAME:
     github-actions[bot]
 
+permissions:
+  contents: write
+
 jobs:
   check_the_repository_state:
     runs-on: ubuntu-latest
