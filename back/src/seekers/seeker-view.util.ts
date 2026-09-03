@@ -27,5 +27,7 @@ export function toPublicSeeker(seeker: Seeker, viewerUserId?: string): Seeker {
     videoRejectionReason: null,
     videoModeratedAt: null,
     videoModeratedBy: null,
+    videoConsentGivenAt: null,
+    videoConsentVersion: null,
   };
 }

@@ -47,6 +47,12 @@ export class Seeker {
   @Column({ type: 'uuid', nullable: true })
   videoModeratedBy: string | null;
 
+  @Column({ type: 'timestamp', nullable: true })
+  videoConsentGivenAt: Date | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  videoConsentVersion: string | null;
+
   @ManyToMany(() => Localisation, (localisation) => localisation.seekers)
   @JoinTable()
   localisations: Localisation[];

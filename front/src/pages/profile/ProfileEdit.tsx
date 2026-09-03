@@ -15,6 +15,7 @@ import { ChipSelector } from '../../components/ui/ChipSelector';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { validateRequired, validateVideoUrl } from '../../utils/validators';
+import { VIDEO_CONSENT_TEXT } from '../../utils/videoConsent';
 
 export function ProfileEdit() {
   useDocumentTitle('Modifier mon profil');
@@ -44,6 +45,7 @@ export function ProfileEdit() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [apiError, setApiError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [videoConsent, setVideoConsent] = useState(false);
 
   if (session?.role !== 'seeker' || session.seekerId !== id) {
     return <Navigate to="/" replace />;
@@ -76,6 +78,8 @@ export function ProfileEdit() {
     event.preventDefault();
     if (!form) return;
 
+    const trimmedVideo = form.video.trim();
+    const videoChanged = trimmedVideo !== (seeker.data?.video ?? '');
     const nextErrors: Record<string, string> = {};
     const nameError = validateRequired(form.name, 'Le prénom', 80);
     const lastnameError = validateRequired(form.lastname, 'Le nom', 80);
@@ -83,6 +87,10 @@ export function ProfileEdit() {
     if (nameError) nextErrors.name = nameError;
     if (lastnameError) nextErrors.lastname = lastnameError;
     if (videoError) nextErrors.video = videoError;
+    if (videoChanged && trimmedVideo && !videoConsent) {
+      nextErrors.videoConsent =
+        'Vous devez donner votre consentement pour publier cette vidéo.';
+    }
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -92,7 +100,12 @@ export function ProfileEdit() {
       await updateSeeker(id, {
         name: form.name,
         lastname: form.lastname,
-        video: form.video.trim() || undefined,
+        ...(videoChanged
+          ? {
+              video: trimmedVideo || null,
+              videoConsent: trimmedVideo ? true : undefined,
+            }
+          : {}),
         competenceIds: form.competenceIds,
         localisationIds: form.localisationIds,
         activitySectorIds: form.activitySectorIds,
@@ -136,7 +149,42 @@ export function ProfileEdit() {
         value={form.video}
         onChange={(e) => setForm({ ...form, video: e.target.value })}
         error={errors.video}
+        hint={
+          form.video.trim()
+            ? 'Videz ce champ et enregistrez pour retirer votre vidéo : le lien enregistré sur JibJob sera supprimé immédiatement.'
+            : undefined
+        }
       />
+
+      {seeker.data?.videoConsentGivenAt && form.video.trim() === seeker.data.video && (
+        <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>
+          Consentement donné le{' '}
+          {new Date(seeker.data.videoConsentGivenAt).toLocaleString('fr-FR')}
+          {seeker.data.videoConsentVersion
+            ? ` (texte version ${seeker.data.videoConsentVersion})`
+            : ''}
+          .
+        </p>
+      )}
+
+      {form.video.trim() &&
+        form.video.trim() !== (seeker.data?.video ?? '') && (
+          <div role="group">
+            <label style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
+              <input
+                type="checkbox"
+                checked={videoConsent}
+                onChange={(e) => setVideoConsent(e.target.checked)}
+              />
+              <span>{VIDEO_CONSENT_TEXT}</span>
+            </label>
+            {errors.videoConsent && (
+              <p role="alert" style={{ color: 'var(--color-error)' }}>
+                {errors.videoConsent}
+              </p>
+            )}
+          </div>
+        )}
 
       {competences.data && (
         <ChipSelector
