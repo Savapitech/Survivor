@@ -16,6 +16,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    networks:
+     - db-net
 
   back:
     build:
@@ -27,6 +29,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    networks:
+     - db-net
 
   front:
     build:
@@ -40,3 +44,6 @@ services:
 
 volumes:
   db_data:
+
+networks:
+  db-net:
