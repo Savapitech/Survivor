@@ -11,6 +11,7 @@ interface FeedSlideProps {
   liked: boolean;
   contacted: boolean;
   favorited: boolean;
+  active: boolean;
   onToggleLike: () => void;
   onContact: () => void;
   onToggleFavorite: () => void;
@@ -22,6 +23,7 @@ export function FeedSlide({
   liked,
   contacted,
   favorited,
+  active,
   onToggleLike,
   onContact,
   onToggleFavorite,
@@ -30,12 +32,13 @@ export function FeedSlide({
   const hiddenCount = seeker.competences.length - visibleCompetences.length;
 
   return (
-    <li className={styles.slide}>
+    <li className={styles.slide} data-seeker-id={seeker.id}>
       <div className={styles.videoBox}>
         <ProfileVideo
           url={seeker.video}
           name={seeker.name}
           lastname={seeker.lastname}
+          autoplay={active}
         />
       </div>
 

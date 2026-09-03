@@ -10,7 +10,10 @@ export function isAllowedVideoUrl(value: string): boolean {
   }
 }
 
-export function toEmbedUrl(value: string): string | null {
+export function toEmbedUrl(
+  value: string,
+  options: { autoplay?: boolean } = {},
+): string | null {
   try {
     const url = new URL(value);
 
@@ -19,13 +22,23 @@ export function toEmbedUrl(value: string): string | null {
         url.hostname === 'youtu.be'
           ? url.pathname.slice(1)
           : url.searchParams.get('v');
-      return id ? `https://www.youtube.com/embed/${id}` : null;
+      if (!id) return null;
+      const params = options.autoplay ? '?autoplay=1&mute=1' : '';
+      return `https://www.youtube.com/embed/${id}${params}`;
     }
 
     if (VIMEO_HOSTS.includes(url.hostname)) {
-      if (url.hostname === 'player.vimeo.com') return value;
-      const id = url.pathname.split('/').filter(Boolean)[0];
-      return id ? `https://player.vimeo.com/video/${id}` : null;
+      const base =
+        url.hostname === 'player.vimeo.com'
+          ? value
+          : (() => {
+              const id = url.pathname.split('/').filter(Boolean)[0];
+              return id ? `https://player.vimeo.com/video/${id}` : null;
+            })();
+      if (!base) return null;
+      if (!options.autoplay) return base;
+      const separator = base.includes('?') ? '&' : '?';
+      return `${base}${separator}autoplay=1&muted=1`;
     }
 
     return null;
