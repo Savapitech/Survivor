@@ -17,10 +17,8 @@ export function Header() {
         <Link to="/" className={styles.brand}>
           <img src="/logo.png" alt="" className={styles.logo} />
           <span className={styles.brandText}>
-            <span className={styles.product}>Ministère du Job et Bonheur</span>
-            <span className={styles.ministry}>
-              Travailler mieux, sourire plus
-            </span>
+            <span className={styles.ministry}>Ministère du Job et Bonheur</span>
+            <span className={styles.product}>JibJob</span>
           </span>
         </Link>
 
