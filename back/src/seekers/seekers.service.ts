@@ -32,6 +32,17 @@ const SEEKER_RELATIONS = {
   activitySectors: true,
 } as const;
 
+interface Requester {
+  userId?: string;
+  role?: UserRole;
+}
+
+function assertOwnerOrAdmin(requester: Requester | undefined, ownerUserId: string) {
+  if (requester?.role === UserRole.ADMIN) return;
+  if (requester?.userId === ownerUserId) return;
+  throw new ForbiddenException('This profile does not belong to you');
+}
+
 function adultCutoffDate(): string {
   const cutoff = new Date();
   cutoff.setFullYear(cutoff.getFullYear() - 18);
@@ -121,7 +132,8 @@ export class SeekersService {
     return this.recruitersRepository.existsBy({ id: recruiterId });
   }
 
-  async create(dto: CreateSeekerDto) {
+  async create(dto: CreateSeekerDto, requester?: Requester) {
+    assertOwnerOrAdmin(requester, dto.userId);
     const user = await this.usersRepository.findOneBy({ id: dto.userId });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -302,14 +314,15 @@ export class SeekersService {
     return this.seekersRepository.save(seeker);
   }
 
-  async update(id: number, dto: UpdateSeekerDto) {
+  async update(id: number, dto: UpdateSeekerDto, requester?: Requester) {
     const seeker = await this.seekersRepository.findOne({
       where: { id },
-      relations: SEEKER_RELATIONS,
+      relations: { ...SEEKER_RELATIONS, user: true },
     });
     if (!seeker) {
       throw new NotFoundException('Seeker not found');
     }
+    assertOwnerOrAdmin(requester, seeker.user.id);
 
     if (dto.name !== undefined) {
       seeker.name = dto.name;
@@ -345,10 +358,16 @@ export class SeekersService {
     return this.seekersRepository.save(seeker);
   }
 
-  async remove(id: number) {
-    const result = await this.seekersRepository.delete(id);
-    if (!result.affected) {
+  async remove(id: number, requester?: Requester) {
+    const seeker = await this.seekersRepository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
+    if (!seeker) {
       throw new NotFoundException('Seeker not found');
     }
+    assertOwnerOrAdmin(requester, seeker.user.id);
+
+    await this.seekersRepository.delete(id);
   }
 }

@@ -1,3 +1,5 @@
+import { getStoredToken } from './token';
+
 export class ApiError extends Error {
   status: number;
   details: string[];
@@ -12,7 +14,7 @@ export class ApiError extends Error {
 
 type QueryValue = string | number | boolean | number[] | string[] | undefined;
 
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+const API_URL = 'http://' + window.location.host + '/api';
 
 export interface RequestOptions {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
@@ -43,10 +45,14 @@ export async function apiFetch<T>(
   options: RequestOptions = {},
 ): Promise<T> {
   const { method = 'GET', body, query } = options;
+  const token = getStoredToken();
+  const headers: Record<string, string> = {};
+  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
   const response = await fetch(`${API_URL}${path}${buildQueryString(query)}`, {
     method,
-    headers:
-      body !== undefined ? { 'Content-Type': 'application/json' } : undefined,
+    headers: Object.keys(headers).length > 0 ? headers : undefined,
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 

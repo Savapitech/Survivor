@@ -7,14 +7,16 @@ import {
 } from 'react';
 import type { ReactNode } from 'react';
 import type { UserRole } from '../api/models';
+import { SESSION_STORAGE_KEY } from '../api/token';
 
-const STORAGE_KEY = 'jibjob.session';
+const STORAGE_KEY = SESSION_STORAGE_KEY;
 
 export interface Session {
   v: 1;
   userId: string;
   email: string;
   role: UserRole;
+  token: string;
   seekerId?: number;
   recruiterId?: number;
 }
@@ -24,7 +26,13 @@ function readStoredSession(): Session | null {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<Session>;
-    if (parsed.v !== 1 || !parsed.userId || !parsed.email || !parsed.role) {
+    if (
+      parsed.v !== 1 ||
+      !parsed.userId ||
+      !parsed.email ||
+      !parsed.role ||
+      !parsed.token
+    ) {
       window.localStorage.removeItem(STORAGE_KEY);
       return null;
     }

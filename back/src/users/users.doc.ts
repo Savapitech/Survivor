@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiQuery, ApiParam, ApiHeader } from '@nestjs/swagger';
 
 export function docUsersPost() {
     return applyDecorators(
@@ -73,9 +73,24 @@ export function docUsersGetAll() {
             description: 'Number of users per page.',
             example: 5,
         }),
+        ApiHeader({
+            name: 'Authorization',
+            description: 'JWT',
+        }),
         ApiResponse({
             status: 200,
             description: 'Users successfully retrieved.',
+        }),
+        ApiResponse({
+            status: 401,
+            description: 'Error: Unauthorized',
+            schema: {
+                example: {
+                    statusCode: 401,
+                    message: 'Unauthorized',
+                    error: 'Unauthorized',
+                },
+            },
         }),
         ApiResponse({
             status: 422,
@@ -109,6 +124,10 @@ export function docUsersGetById() {
             description: "target user's id.",
             example: 'cfb217ad-f297-4502-a6a1-890425af5d45',
         }),
+        ApiHeader({
+            name: 'Authorization',
+            description: 'JWT',
+        }),
         ApiResponse({
             status: 200,
             description: 'Users successfully retrieved.',
@@ -123,6 +142,17 @@ export function docUsersGetById() {
                     error: 'Bad Request'
                 }
             }
+        }),
+        ApiResponse({
+            status: 401,
+            description: 'Error: Unauthorized',
+            schema: {
+                example: {
+                    statusCode: 401,
+                    message: 'Unauthorized',
+                    error: 'Unauthorized',
+                },
+            },
         }),
         ApiResponse({
             status: 404,
@@ -151,9 +181,24 @@ export function docUsersPatchById() {
             description: "target user's id.",
             example: 'cfb217ad-f297-4502-a6a1-890425af5d45',
         }),
+        ApiHeader({
+            name: 'Authorization',
+            description: 'JWT',
+        }),
         ApiResponse({
             status: 200,
             description: 'Users successfully retrieved.',
+        }),
+        ApiResponse({
+            status: 401,
+            description: 'Error: Unauthorized',
+            schema: {
+                example: {
+                    statusCode: 401,
+                    message: 'Unauthorized',
+                    error: 'Unauthorized',
+                },
+            },
         }),
         ApiResponse({
             status: 404,

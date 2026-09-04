@@ -1,17 +1,29 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationQueryDto, paginate, toSkipTake } from '../common/pagination';
 
 const SALT_ROUNDS = 10;
+
+interface Requester {
+  userId?: string;
+  role?: UserRole;
+}
+
+function assertSelfOrAdmin(requester: Requester | undefined, targetId: string) {
+  if (requester?.role === UserRole.ADMIN) return;
+  if (requester?.userId === targetId) return;
+  throw new ForbiddenException('This account does not belong to you');
+}
 
 @Injectable()
 export class UsersService {
@@ -24,7 +36,13 @@ export class UsersService {
     return publicUser;
   }
 
-  async create(dto: CreateUserDto) {
+  async create(dto: CreateUserDto, requester?: Requester) {
+    if (dto.role === UserRole.ADMIN && requester?.role !== UserRole.ADMIN) {
+      throw new ForbiddenException(
+        'Creating an admin account requires being authenticated as an admin',
+      );
+    }
+
     const existing = await this.usersRepository.findOne({
       where: { email: dto.email },
     });
@@ -53,7 +71,10 @@ export class UsersService {
     );
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, requester?: Requester) {
+    if (requester !== undefined) {
+      assertSelfOrAdmin(requester, id);
+    }
     const user = await this.usersRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -69,7 +90,13 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, dto: UpdateUserDto) {
+  async update(id: string, dto: UpdateUserDto, requester?: Requester) {
+    assertSelfOrAdmin(requester, id);
+    if (dto.role !== undefined && requester?.role !== UserRole.ADMIN) {
+      throw new ForbiddenException(
+        'Changing an account role requires being authenticated as an admin',
+      );
+    }
     const user = await this.usersRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -93,7 +120,8 @@ export class UsersService {
     return this.findOne(id);
   }
 
-  async remove(id: string) {
+  async remove(id: string, requester?: Requester) {
+    assertSelfOrAdmin(requester, id);
     const result = await this.usersRepository.delete(id);
     if (!result.affected) {
       throw new NotFoundException('User not found');

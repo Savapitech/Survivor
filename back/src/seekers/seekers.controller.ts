@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  Request,
   ParseIntPipe,
   ParseUUIDPipe,
 } from '@nestjs/common';
@@ -17,6 +18,9 @@ import { UpdateSeekerDto } from './dto/update-seeker.dto';
 import { FindSeekersQueryDto } from './dto/find-seekers-query.dto';
 import { FindSeekersAdminQueryDto } from './dto/find-seekers-admin-query.dto';
 import { ModerateSeekerVideoDto } from './dto/moderate-seeker-video.dto';
+import { Public } from '../auth/public.decorateur';
+import { Roles } from '../auth/roles.decorator';
+import { UserRole } from '../users/entities/user.entity';
 
 @ApiTags('seekers')
 @Controller('seekers')
@@ -49,10 +53,11 @@ export class SeekersController {
       },
     },
   })
-  create(@Body() createSeekerDto: CreateSeekerDto) {
-    return this.seekersService.create(createSeekerDto);
+  create(@Body() createSeekerDto: CreateSeekerDto, @Request() req: any) {
+    return this.seekersService.create(createSeekerDto, req.user);
   }
 
+  @Public()
   @Get()
   @ApiOperation({
     summary: 'Paginated, filterable public feed of seeker profiles',
@@ -61,12 +66,14 @@ export class SeekersController {
     return this.seekersService.findAll(query);
   }
 
+  @Public()
   @Get('by-user/:userId')
   @ApiOperation({ summary: 'Get the seeker profile linked to a user id' })
   findByUserId(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.seekersService.findByUserId(userId);
   }
 
+  @Roles(UserRole.ADMIN)
   @Get('admin')
   @ApiOperation({
     summary:
@@ -76,6 +83,7 @@ export class SeekersController {
     return this.seekersService.findAllAdmin(query);
   }
 
+  @Roles(UserRole.ADMIN)
   @Patch('admin/:id/moderate')
   @ApiOperation({ summary: "Approve or reject a seeker's video" })
   moderateVideo(
@@ -109,6 +117,7 @@ export class SeekersController {
       },
     },
   })
+  @Public()
   findOne(
     @Param('id', ParseIntPipe) id: number,
     @Query('recruiterId', new ParseIntPipe({ optional: true }))
@@ -122,12 +131,13 @@ export class SeekersController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateSeekerDto: UpdateSeekerDto,
+    @Request() req: any,
   ) {
-    return this.seekersService.update(id, updateSeekerDto);
+    return this.seekersService.update(id, updateSeekerDto, req.user);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.seekersService.remove(id);
+  remove(@Param('id', ParseIntPipe) id: number, @Request() req: any) {
+    return this.seekersService.remove(id, req.user);
   }
 }

@@ -14,6 +14,9 @@ import { CreateActivitySectorDto } from './dto/create-activity-sector.dto';
 import { UpdateActivitySectorDto } from './dto/update-activity-sector.dto';
 import { PaginationQueryDto } from '../common/pagination';
 import { ApiTags } from '@nestjs/swagger';
+import { Public } from '../auth/public.decorateur';
+import { Roles } from '../auth/roles.decorator';
+import { UserRole } from '../users/entities/user.entity';
 
 @ApiTags('activity-sectors')
 @Controller('activity-sectors')
@@ -22,21 +25,25 @@ export class ActivitySectorsController {
     private readonly activitySectorsService: ActivitySectorsService,
   ) {}
 
+  @Roles(UserRole.ADMIN)
   @Post()
   create(@Body() createActivitySectorDto: CreateActivitySectorDto) {
     return this.activitySectorsService.create(createActivitySectorDto);
   }
 
+  @Public()
   @Get()
   findAll(@Query() query: PaginationQueryDto) {
     return this.activitySectorsService.findAll(query);
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.activitySectorsService.findOne(id);
   }
 
+  @Roles(UserRole.ADMIN)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -45,6 +52,7 @@ export class ActivitySectorsController {
     return this.activitySectorsService.update(id, updateActivitySectorDto);
   }
 
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.activitySectorsService.remove(id);
