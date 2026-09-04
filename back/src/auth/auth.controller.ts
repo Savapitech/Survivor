@@ -4,23 +4,25 @@ import {
   Body,
   UseGuards,
   Request,
-  UnauthorizedException,
-  Get,
+  NotFoundException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { Public } from './public.decorateur';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Body() dto: LoginUserDto) {
     const user = await this.authService.validateUser(dto.email, dto.password);
     if (!user) {
-      throw new UnauthorizedException('invalid user');
+      throw new NotFoundException('invalid user');
     }
     return this.authService.login(user);
   }
