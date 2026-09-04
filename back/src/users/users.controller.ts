@@ -15,6 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationQueryDto } from '../common/pagination';
 import { ApiTags } from '@nestjs/swagger';
 import { docUsersGetAll, docUsersGetById, docUsersPatchById, docUsersPost } from './users.doc';
+import { Public } from '../auth/public.decorateur';
 
 @ApiTags('users')
 @Controller('users')
@@ -22,6 +23,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @Public()
   @docUsersPost()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
