@@ -9,7 +9,6 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { LoginUserDto } from './dto/login-user.dto';
-import { JwtAuthGuard } from './jwt-auth.guard';
 import { Public } from './public.decorateur';
 
 @Controller('auth')
@@ -27,9 +26,4 @@ export class AuthController {
     return this.authService.login(user);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('logout')
-  async logout(@Request() req: any) {
-    return req.logout();
-  }
 }
