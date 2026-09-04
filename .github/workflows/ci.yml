@@ -92,7 +92,6 @@ jobs:
         run: |
           cp back/.env.example back/.env
           sed -i 's/DB_HOST=localhost/DB_HOST=db/' back/.env
-          cp front/.env.example front/.env
 
       - name: Start services with Docker Compose
         run: docker compose up --build -d
