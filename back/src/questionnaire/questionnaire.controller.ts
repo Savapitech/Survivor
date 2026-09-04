@@ -17,12 +17,15 @@ import { FindQuestionsQueryDto } from './dto/find-questions-query.dto';
 import { AttemptQueryDto } from './dto/attempt-query.dto';
 import { SaveAnswersDto } from './dto/save-answers.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Roles } from '../auth/roles.decorator';
+import { UserRole } from '../users/entities/user.entity';
 
 @ApiTags('questionnaire')
 @Controller('questionnaire')
 export class QuestionnaireController {
   constructor(private readonly questionnaireService: QuestionnaireService) {}
 
+  @Roles(UserRole.ADMIN)
   @Post('questions')
   createQuestion(@Body() createQuestionDto: CreateQuestionDto) {
     return this.questionnaireService.createQuestion(createQuestionDto);
@@ -38,6 +41,7 @@ export class QuestionnaireController {
     return this.questionnaireService.findQuestion(id);
   }
 
+  @Roles(UserRole.ADMIN)
   @Patch('questions/:id')
   updateQuestion(
     @Param('id', ParseIntPipe) id: number,
@@ -46,6 +50,7 @@ export class QuestionnaireController {
     return this.questionnaireService.updateQuestion(id, updateQuestionDto);
   }
 
+  @Roles(UserRole.ADMIN)
   @Delete('questions/:id')
   deactivateQuestion(@Param('id', ParseIntPipe) id: number) {
     return this.questionnaireService.deactivateQuestion(id);
