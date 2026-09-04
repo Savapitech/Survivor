@@ -31,6 +31,15 @@ async function bootstrap() {
       .setTitle('JibJob API')
       .setDescription('Ministère du Job et du Bonheur')
       .setVersion(version)
+      .addBearerAuth({
+        description: `Please enter token in following format: Bearer (JWT)`,
+        name: 'Authorization',
+        bearerFormat: 'Bearer',
+        scheme: 'Bearer',
+        type: 'http',
+        in: 'Header'
+      },
+      'JWT',)
       .build(),
   );
   SwaggerModule.setup('docs', app, document);

@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiQuery, ApiParam, ApiHeader } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiQuery, ApiParam, ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
 
 export function docUsersPost() {
     return applyDecorators(
@@ -55,6 +55,7 @@ export function docUsersPost() {
 
 export function docUsersGetAll() {
     return applyDecorators(
+        ApiBearerAuth('JWT'),
         ApiOperation({
             summary: 'Get all users',
             description: 'Returns a paginated list of users.',
@@ -72,10 +73,6 @@ export function docUsersGetAll() {
             type: Number,
             description: 'Number of users per page.',
             example: 5,
-        }),
-        ApiHeader({
-            name: 'Authorization',
-            description: 'JWT',
         }),
         ApiResponse({
             status: 200,
@@ -113,6 +110,7 @@ export function docUsersGetAll() {
 
 export function docUsersGetById() {
     return applyDecorators(
+        ApiBearerAuth('JWT'),
         ApiOperation({
             summary: 'Get user by id',
             description: 'Returns the target user.',
@@ -123,10 +121,6 @@ export function docUsersGetById() {
             type: String,
             description: "target user's id.",
             example: 'cfb217ad-f297-4502-a6a1-890425af5d45',
-        }),
-        ApiHeader({
-            name: 'Authorization',
-            description: 'JWT',
         }),
         ApiResponse({
             status: 200,
@@ -170,6 +164,7 @@ export function docUsersGetById() {
 
 export function docUsersPatchById() {
     return applyDecorators(
+        ApiBearerAuth('JWT'),
         ApiOperation({
             summary: "Update user's data",
             description: 'Returns the new user with all news data.',
@@ -181,9 +176,52 @@ export function docUsersPatchById() {
             description: "target user's id.",
             example: 'cfb217ad-f297-4502-a6a1-890425af5d45',
         }),
-        ApiHeader({
-            name: 'Authorization',
-            description: 'JWT',
+        ApiResponse({
+            status: 200,
+            description: 'Users successfully retrieved.',
+        }),
+        ApiResponse({
+            status: 401,
+            description: 'Error: Unauthorized',
+            schema: {
+                example: {
+                    statusCode: 401,
+                    message: 'Unauthorized',
+                    error: 'Unauthorized',
+                },
+            },
+        }),
+        ApiResponse({
+            status: 404,
+            description: 'Error: Not Found',
+            schema: {
+                example: {
+                    statusCode: 404,
+                    message: 'User not found',
+                    error: 'Not Found',
+                }
+            }
+        }),
+        ApiResponse({
+            status: 422,
+            description: 'Error: Unprocessable Entity',
+        })
+    );
+}
+
+export function docUsersDeleteById() {
+    return applyDecorators(
+        ApiBearerAuth('JWT'),
+        ApiOperation({
+            summary: "Delete the user",
+            description: 'Delete the user.',
+        }),
+        ApiParam({
+            name: 'id',
+            required: true,
+            type: String,
+            description: "target user's id.",
+            example: 'cfb217ad-f297-4502-a6a1-890425af5d45',
         }),
         ApiResponse({
             status: 200,
