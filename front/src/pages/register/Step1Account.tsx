@@ -1,11 +1,13 @@
 import { useId, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUser } from '../../api/users';
+import { login } from '../../api/auth';
 import { ApiError } from '../../api/http';
 import { Field } from '../../components/ui/Field';
 import { Button } from '../../components/ui/Button';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useAnnounce } from '../../context/AnnounceContext';
+import { useSession } from '../../context/SessionContext';
 import {
   validateBirthDate,
   validateEmail,
@@ -21,6 +23,7 @@ export function Step1Account() {
   useDocumentTitle('Inscription');
   const navigate = useNavigate();
   const { update } = useWizard();
+  const { establishSession } = useSession();
   const { announceError } = useAnnounce();
   const roleGroupId = useId();
 
@@ -56,6 +59,14 @@ export function Step1Account() {
     setApiError(null);
     try {
       const user = await createUser({ email, password, role, birthDate });
+      const { access_token } = await login({ email, password });
+      establishSession({
+        v: 1,
+        userId: user.id,
+        email: user.email,
+        role,
+        token: access_token,
+      });
       update({ userId: user.id, email: user.email, birthDate, role });
       navigate('/inscription/profil');
     } catch (err) {

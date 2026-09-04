@@ -50,25 +50,41 @@ export function Login() {
     setSubmitting(true);
     setApiError(null);
     try {
-      const { user } = await login({ email, password });
+      const { user, access_token } = await login({ email, password });
 
       if (user.role === 'seeker') {
+        establishSession({
+          v: 1,
+          userId: user.id,
+          email: user.email,
+          role: 'seeker',
+          token: access_token,
+        });
         const seeker = await getSeekerByUserId(user.id);
         establishSession({
           v: 1,
           userId: user.id,
           email: user.email,
           role: 'seeker',
+          token: access_token,
           seekerId: seeker.id,
         });
         navigate(`/profils/${seeker.id}`);
       } else if (user.role === 'recruiter') {
+        establishSession({
+          v: 1,
+          userId: user.id,
+          email: user.email,
+          role: 'recruiter',
+          token: access_token,
+        });
         const recruiter = await getRecruiterByUserId(user.id);
         establishSession({
           v: 1,
           userId: user.id,
           email: user.email,
           role: 'recruiter',
+          token: access_token,
           recruiterId: recruiter.id,
         });
         navigate('/flux');
@@ -78,6 +94,7 @@ export function Login() {
           userId: user.id,
           email: user.email,
           role: 'admin',
+          token: access_token,
         });
         navigate('/admin');
       }

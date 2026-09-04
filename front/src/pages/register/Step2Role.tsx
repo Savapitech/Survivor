@@ -17,7 +17,7 @@ import styles from './RegisterWizardLayout.module.css';
 export function Step2Role() {
   useDocumentTitle('Inscription');
   const { state, update } = useWizard();
-  const { establishSession } = useSession();
+  const { updateSession } = useSession();
   const { announceError } = useAnnounce();
   const navigate = useNavigate();
 
@@ -72,13 +72,7 @@ export function Step2Role() {
         companyName,
         userId: state.userId,
       });
-      establishSession({
-        v: 1,
-        userId: state.userId,
-        email: state.email,
-        role: 'recruiter',
-        recruiterId: recruiter.id,
-      });
+      updateSession({ recruiterId: recruiter.id });
       navigate('/flux');
     } catch (err) {
       const message =

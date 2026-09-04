@@ -15,7 +15,7 @@ import styles from './RegisterWizardLayout.module.css';
 export function Step4Video() {
   useDocumentTitle('Inscription');
   const { state } = useWizard();
-  const { establishSession } = useSession();
+  const { updateSession } = useSession();
   const { announceError } = useAnnounce();
   const navigate = useNavigate();
 
@@ -45,13 +45,7 @@ export function Step4Video() {
         localisationIds: state.localisationIds,
         activitySectorIds: state.activitySectorIds,
       });
-      establishSession({
-        v: 1,
-        userId: state.userId,
-        email: state.email,
-        role: 'seeker',
-        seekerId: seeker.id,
-      });
+      updateSession({ seekerId: seeker.id });
       navigate('/inscription/certification-prompt');
     } catch (err) {
       const message =
