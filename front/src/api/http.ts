@@ -14,7 +14,7 @@ export class ApiError extends Error {
 
 type QueryValue = string | number | boolean | number[] | string[] | undefined;
 
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL ?? window.location.href + 'api';
 
 export interface RequestOptions {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';

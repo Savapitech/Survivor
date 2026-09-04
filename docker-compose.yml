@@ -31,6 +31,7 @@ services:
         condition: service_healthy
     networks:
      - db-net
+     - db-front
 
   front:
     build:
@@ -41,9 +42,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    networks:
+        - db-front
 
 volumes:
   db_data:
 
 networks:
   db-net:
+  db-front:
