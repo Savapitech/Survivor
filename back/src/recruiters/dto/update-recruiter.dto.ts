@@ -1,4 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { CreateRecruiterDto } from './create-recruiter.dto';
 
 export class UpdateRecruiterDto extends PartialType(
