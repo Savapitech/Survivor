@@ -1,5 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiQuery, ApiParam, ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiQuery, ApiParam, ApiBearerAuth, OmitType, getSchemaPath } from '@nestjs/swagger';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+
+class publicUser extends OmitType(User, ['password'] as const) { }
 
 export function docUsersPost() {
     return applyDecorators(
@@ -7,8 +12,14 @@ export function docUsersPost() {
             summary: 'Create a user',
             description: 'Creates a new user with the provided information.',
         }),
+        ApiParam({
+            name: "User's data",
+            type: CreateUserDto,
+            description: "All data of the new user"
+        }),
         ApiResponse({
             status: 201,
+            type: publicUser,
             description: 'User successfully created.',
         }),
         ApiResponse({
@@ -19,6 +30,17 @@ export function docUsersPost() {
                     statusCode: 400,
                     message: 'name should not be empty',
                     error: 'Invalid user data',
+                },
+            },
+        }),
+        ApiResponse({
+            status: 403,
+            description: 'Forbiden',
+            schema: {
+                example: {
+                    statusCode: 403,
+                    message: 'Creating an admin account requires being authenticated as an admin',
+                    error: 'Forbiden',
                 },
             },
         }),
@@ -77,6 +99,33 @@ export function docUsersGetAll() {
         ApiResponse({
             status: 200,
             description: 'Users successfully retrieved.',
+            schema: {
+                type: 'object',
+                properties: {
+                    data: {
+                        type: 'array',
+                        items: {
+                            $ref: getSchemaPath(publicUser),
+                        },
+                    },
+                    total: {
+                        type: 'number',
+                        example: 1,
+                    },
+                    page: {
+                        type: 'number',
+                        example: 1,
+                    },
+                    pageSize: {
+                        type: 'number',
+                        example: 10,
+                    },
+                    totalPages: {
+                        type: 'number',
+                        example: 1,
+                    },
+                },
+            }
         }),
         ApiResponse({
             status: 401,
@@ -120,10 +169,11 @@ export function docUsersGetById() {
             required: true,
             type: String,
             description: "target user's id.",
-            example: 'cfb217ad-f297-4502-a6a1-890425af5d45',
+            example: '93d5728f-165a-4526-a6d2-00a595dd1e12',
         }),
         ApiResponse({
             status: 200,
+            type: publicUser,
             description: 'Users successfully retrieved.',
         }),
         ApiResponse({
@@ -174,10 +224,16 @@ export function docUsersPatchById() {
             required: true,
             type: String,
             description: "target user's id.",
-            example: 'cfb217ad-f297-4502-a6a1-890425af5d45',
+            example: '93d5728f-165a-4526-a6d2-00a595dd1e12',
+        }),
+        ApiParam({
+            name: "News user's data",
+            type: UpdateUserDto,
+            description: "Define all news user's data"
         }),
         ApiResponse({
             status: 200,
+            type: publicUser,
             description: 'Users successfully retrieved.',
         }),
         ApiResponse({
@@ -221,7 +277,7 @@ export function docUsersDeleteById() {
             required: true,
             type: String,
             description: "target user's id.",
-            example: 'cfb217ad-f297-4502-a6a1-890425af5d45',
+            example: '93d5728f-165a-4526-a6d2-00a595dd1e12',
         }),
         ApiResponse({
             status: 200,
