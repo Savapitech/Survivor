@@ -4,6 +4,11 @@ import {
   Post,
   Patch,
   Delete,
+  Body,
+  Param,
+  Query,
+  ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { RecruitersService } from './recruiters.service';
 import { CreateRecruiterDto } from './dto/create-recruiter.dto';
@@ -19,37 +24,40 @@ export class RecruitersController {
 
   @Post()
   @docRecruitersPost()
-  create(createRecruiterDto: CreateRecruiterDto) {
+  create(@Body() createRecruiterDto: CreateRecruiterDto) {
     return this.recruitersService.create(createRecruiterDto);
   }
 
   @Get()
   @docRecruitersGet()
-  findAll(query: PaginationQueryDto) {
+  findAll(@Query() query: PaginationQueryDto) {
     return this.recruitersService.findAll(query);
   }
 
   @Get('by-user/:userId')
   @docRecruitersGetByUserId()
-  findByUserId(userId: string) {
+  findByUserId(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.recruitersService.findByUserId(userId);
   }
 
   @Get(':id')
   @docRecruitersGetById()
-  findOne(id: number) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.recruitersService.findOne(id);
   }
 
   @Patch(':id')
   @docRecruitersPatch()
-  update(id: number, updateRecruiterDto: UpdateRecruiterDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateRecruiterDto: UpdateRecruiterDto,
+  ) {
     return this.recruitersService.update(id, updateRecruiterDto);
   }
 
   @Delete(':id')
   @docRecruitersDelete()
-  remove(id: number) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.recruitersService.remove(id);
   }
 }
