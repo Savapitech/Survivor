@@ -3,6 +3,7 @@ import type { Response } from 'express';
 import { HealthService } from './health.service';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/public.decorateur';
+import { docHealthGet } from './health.doc';
 
 @ApiTags('health')
 @Controller('health')
@@ -11,6 +12,7 @@ export class HealthController {
 
   @Public()
   @Get()
+  @docHealthGet()
   async check(@Res() res: Response) {
     const result = await this.healthService.check();
     res.status(result.status === 'ok' ? 200 : 503).json(result);

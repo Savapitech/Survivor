@@ -21,7 +21,8 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: "assigne the role of the user",
-    enum: [UserRole.SEEKER, UserRole.RECRUITER, UserRole.ADMIN],
+    enum: UserRole,
+    example: UserRole.SEEKER
     })
   @IsIn([UserRole.SEEKER, UserRole.RECRUITER, UserRole.ADMIN])
   role: UserRole;

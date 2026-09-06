@@ -17,6 +17,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/public.decorateur';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
+import { docLocalisationsDelete, docLocalisationsGet, docLocalisationsGetById, docLocalisationsPatch, docLocalisationsPost } from './localisation.doc';
 
 @ApiTags('localisations')
 @Controller('localisations')
@@ -25,24 +26,28 @@ export class LocalisationsController {
 
   @Roles(UserRole.ADMIN)
   @Post()
+  @docLocalisationsPost()
   create(@Body() createLocalisationDto: CreateLocalisationDto) {
     return this.localisationsService.create(createLocalisationDto);
   }
 
   @Public()
   @Get()
+  @docLocalisationsGet()
   findAll(@Query() query: PaginationQueryDto) {
     return this.localisationsService.findAll(query);
   }
 
   @Public()
   @Get(':id')
+  @docLocalisationsGetById()
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.localisationsService.findOne(id);
   }
 
   @Roles(UserRole.ADMIN)
   @Patch(':id')
+  @docLocalisationsPatch()
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateLocalisationDto: UpdateLocalisationDto,
@@ -52,6 +57,7 @@ export class LocalisationsController {
 
   @Roles(UserRole.ADMIN)
   @Delete(':id')
+  @docLocalisationsDelete()
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.localisationsService.remove(id);
   }
