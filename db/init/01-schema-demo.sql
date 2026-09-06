@@ -376,6 +376,8 @@ CREATE TABLE public.seeker (
     lastname character varying NOT NULL,
     certification boolean DEFAULT false NOT NULL,
     video character varying,
+    "videoProvider" character varying,
+    "videoExternalId" character varying,
     "userId" uuid,
     "videoStatus" public.seeker_videostatus_enum DEFAULT 'pending'::public.seeker_videostatus_enum NOT NULL,
     "videoRejectionReason" text,
@@ -1630,6 +1632,31 @@ ALTER TABLE ONLY public.answer
 ALTER TABLE ONLY public.seeker_activity_sectors_activity_sector
     ADD CONSTRAINT "FK_fbf4bd024586a328d270739f214" FOREIGN KEY ("seekerId") REFERENCES public.seeker(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
+
+CREATE TABLE public.migrations (
+    id integer NOT NULL,
+    "timestamp" bigint NOT NULL,
+    name character varying NOT NULL
+);
+
+CREATE SEQUENCE public.migrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.migrations_id_seq OWNED BY public.migrations.id;
+
+ALTER TABLE ONLY public.migrations ALTER COLUMN id SET DEFAULT nextval('public.migrations_id_seq'::regclass);
+
+ALTER TABLE ONLY public.migrations
+    ADD CONSTRAINT "PK_8c82d7f526340ab734260ea46be" PRIMARY KEY (id);
+
+INSERT INTO public.migrations (id, "timestamp", name) VALUES (1, 1788702983491, 'Init1788702983491');
+
+SELECT pg_catalog.setval('public.migrations_id_seq', 1, true);
 
 --
 -- PostgreSQL database dump complete
