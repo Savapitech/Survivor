@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { createSeeker } from '../../api/seekers';
+import { createSeeker, uploadSeekerVideo } from '../../api/seekers';
 import { ApiError } from '../../api/http';
-import { Field } from '../../components/ui/Field';
 import { Button } from '../../components/ui/Button';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useAnnounce } from '../../context/AnnounceContext';
 import { useSession } from '../../context/SessionContext';
-import { isMinor, validateVideoUrl } from '../../utils/validators';
+import { isMinor } from '../../utils/validators';
 import { VIDEO_CONSENT_TEXT } from '../../utils/videoConsent';
 import { useWizard } from './wizardState';
 import styles from './RegisterWizardLayout.module.css';
+
+const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
 
 export function Step4Video() {
   useDocumentTitle('Inscription');
@@ -19,7 +20,7 @@ export function Step4Video() {
   const { announceError } = useAnnounce();
   const navigate = useNavigate();
 
-  const [video, setVideo] = useState(state.video);
+  const [file, setFile] = useState<File | null>(null);
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const [consentError, setConsentError] = useState<string | undefined>();
@@ -30,7 +31,18 @@ export function Step4Video() {
     return <Navigate to="/inscription/compte" replace />;
   }
 
-  async function finish(videoUrl?: string) {
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const selected = event.target.files?.[0] ?? null;
+    if (selected && selected.size > MAX_VIDEO_BYTES) {
+      setError('Le fichier dépasse la taille maximale autorisée (100 Mo).');
+      setFile(null);
+      return;
+    }
+    setError(undefined);
+    setFile(selected);
+  }
+
+  async function finish(uploadFile: File | null) {
     if (!state.userId) return;
     setSubmitting(true);
     setApiError(null);
@@ -39,12 +51,13 @@ export function Step4Video() {
         name: state.name,
         lastname: state.lastname,
         userId: state.userId,
-        video: videoUrl,
-        videoConsent: videoUrl ? true : undefined,
         competenceIds: state.competenceIds,
         localisationIds: state.localisationIds,
         activitySectorIds: state.activitySectorIds,
       });
+      if (uploadFile) {
+        await uploadSeekerVideo(seeker.id, uploadFile, true);
+      }
       updateSession({ seekerId: seeker.id });
       navigate('/inscription/certification-prompt');
     } catch (err) {
@@ -61,17 +74,14 @@ export function Step4Video() {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const trimmed = video.trim();
-    const videoError = validateVideoUrl(video);
-    const needsConsent = Boolean(trimmed) && !consent;
-    setError(videoError);
+    const needsConsent = Boolean(file) && !consent;
     setConsentError(
       needsConsent
         ? 'Vous devez donner votre consentement pour publier cette vidéo.'
         : undefined,
     );
-    if (videoError || needsConsent) return;
-    finish(trimmed || undefined);
+    if (needsConsent) return;
+    finish(file);
   }
 
   return (
@@ -79,8 +89,8 @@ export function Step4Video() {
       <p className={styles.step}>Dernière étape - Votre vidéo</p>
       <h1>Téléchargez une vidéo pour vous présenter</h1>
       <p>
-        Un lien YouTube ou Vimeo. Chaque vidéo est vérifiée par notre équipe
-        avant d'être visible des recruteurs.
+        Un fichier vidéo (MP4, WebM ou MOV, 100 Mo maximum). Chaque vidéo est
+        vérifiée par notre équipe avant d'être visible des recruteurs.
       </p>
 
       {state.birthDate && isMinor(state.birthDate) && (
@@ -92,16 +102,22 @@ export function Step4Video() {
         </p>
       )}
 
-      <Field
-        label="Lien de la vidéo"
-        type="url"
-        placeholder="https://www.youtube.com/watch?v=..."
-        value={video}
-        onChange={(e) => setVideo(e.target.value)}
-        error={error}
-      />
+      <div>
+        <label htmlFor="video-file">Fichier vidéo</label>
+        <input
+          id="video-file"
+          type="file"
+          accept="video/mp4,video/webm,video/quicktime"
+          onChange={handleFileChange}
+        />
+        {error && (
+          <p role="alert" style={{ color: 'var(--color-error)' }}>
+            {error}
+          </p>
+        )}
+      </div>
 
-      {video.trim() && (
+      {file && (
         <div className={styles.minorNotice} role="group">
           <label style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
             <input
@@ -131,7 +147,7 @@ export function Step4Video() {
         <Button
           type="button"
           variant="secondary"
-          onClick={() => finish(undefined)}
+          onClick={() => finish(null)}
           disabled={submitting}
         >
           Continuer sans télécharger de vidéo

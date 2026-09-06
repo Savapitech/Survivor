@@ -146,15 +146,16 @@ export function ProfileView() {
           {seeker.videoRejectionReason
             ? ` : ${seeker.videoRejectionReason}`
             : '.'}{' '}
-          Vous pouvez déposer un nouveau lien depuis la page de modification de
-          votre profil.
+          Vous pouvez déposer une nouvelle vidéo depuis la page de modification
+          de votre profil.
         </p>
       )}
 
       <ProfileVideo
-        url={seeker.video}
+        videoView={seeker.videoView}
         name={seeker.name}
         lastname={seeker.lastname}
+        viewerId={viewerId}
       />
 
       <SkillTags

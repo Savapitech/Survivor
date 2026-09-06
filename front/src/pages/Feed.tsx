@@ -310,6 +310,7 @@ export function Feed() {
               contacted={contactedIds.has(seeker.id)}
               favorited={favoriteIds.has(seeker.id)}
               active={activeSeekerId === seeker.id}
+              viewerId={session?.userId}
               onToggleLike={() => handleToggleLike(seeker.id)}
               onContact={() => handleContact(seeker.id)}
               onToggleFavorite={() => handleToggleFavorite(seeker.id)}

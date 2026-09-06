@@ -1,4 +1,4 @@
-import { apiFetch } from './http';
+import { apiFetch, apiUpload } from './http';
 import type {
   CreateSeekerDto,
   FindSeekersAdminQuery,
@@ -62,4 +62,19 @@ export function moderateSeekerVideo(id: number, dto: ModerateSeekerVideoDto) {
     method: 'PATCH',
     body: dto,
   });
+}
+
+export function uploadSeekerVideo(
+  id: number,
+  file: File,
+  consentGiven: boolean,
+) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('videoConsent', String(consentGiven));
+  return apiUpload<SeekerDetail>(`/seekers/${id}/video`, formData);
+}
+
+export function deleteSeekerVideo(id: number) {
+  return apiFetch<SeekerDetail>(`/seekers/${id}/video`, { method: 'DELETE' });
 }

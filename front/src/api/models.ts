@@ -34,11 +34,19 @@ export type Competence = LookupEntity<'competence'>;
 export type ActivitySector = LookupEntity<'activitySector'>;
 export type Localisation = LookupEntity<'localisation'>;
 
+export type VideoViewStatus = 'none' | 'processing' | 'ready' | 'unavailable';
+
+export interface VideoView {
+  status: VideoViewStatus;
+  playbackUrl: string | null;
+}
+
 interface SeekerBase {
   id: number;
   name: string;
   lastname: string;
   video: string | null;
+  videoView: VideoView;
   videoStatus: VideoStatus;
   certification: boolean;
   competences: Competence[];

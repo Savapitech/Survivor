@@ -12,6 +12,7 @@ interface FeedSlideProps {
   contacted: boolean;
   favorited: boolean;
   active: boolean;
+  viewerId?: string;
   onToggleLike: () => void;
   onContact: () => void;
   onToggleFavorite: () => void;
@@ -24,6 +25,7 @@ export function FeedSlide({
   contacted,
   favorited,
   active,
+  viewerId,
   onToggleLike,
   onContact,
   onToggleFavorite,
@@ -35,10 +37,11 @@ export function FeedSlide({
     <li className={styles.slide} data-seeker-id={seeker.id}>
       <div className={styles.videoBox}>
         <ProfileVideo
-          url={seeker.video}
+          videoView={seeker.videoView}
           name={seeker.name}
           lastname={seeker.lastname}
           autoplay={active}
+          viewerId={viewerId}
         />
       </div>
 

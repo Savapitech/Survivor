@@ -11,7 +11,7 @@ import { Modal } from '../../components/ui/Modal';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { toEmbedUrl } from '../../utils/video';
+import { ProfileVideo } from '../../components/profile/ProfileVideo';
 import styles from './AdminModeration.module.css';
 
 export function AdminModeration() {
@@ -100,27 +100,24 @@ export function AdminModeration() {
       {pending.data && pending.data.data.length > 0 && (
         <ul className={styles.list}>
           {pending.data.data.map((seeker) => {
-            const embedUrl = seeker.video ? toEmbedUrl(seeker.video) : null;
             return (
               <li key={seeker.id} className={styles.card}>
                 <div className={styles.videoWrapper}>
-                  {embedUrl ? (
-                    <iframe
-                      className={styles.iframe}
-                      src={embedUrl}
-                      title={`Vidéo de présentation de ${seeker.name} ${seeker.lastname}`}
-                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    />
-                  ) : (
-                    <p className={styles.noVideo}>Lien vidéo invalide.</p>
-                  )}
+                  <ProfileVideo
+                    videoView={seeker.videoView}
+                    name={seeker.name}
+                    lastname={seeker.lastname}
+                    viewerId={session?.userId}
+                  />
                 </div>
                 <div className={styles.meta}>
                   <h2 className={styles.name}>
                     {seeker.name} {seeker.lastname}
                   </h2>
                   <p className={styles.email}>{seeker.user.email}</p>
-                  <p className={styles.rawUrl}>{seeker.video}</p>
+                  {seeker.video && (
+                    <p className={styles.rawUrl}>{seeker.video}</p>
+                  )}
                 </div>
                 <div className={styles.actions}>
                   <Button

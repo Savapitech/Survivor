@@ -40,6 +40,43 @@ function buildQueryString(query?: object): string {
   return qs ? `?${qs}` : '';
 }
 
+export const API_ORIGIN = API_URL;
+
+export async function apiUpload<T>(
+  path: string,
+  formData: FormData,
+  method: 'POST' | 'PATCH' = 'POST',
+): Promise<T> {
+  const token = getStoredToken();
+  const headers: Record<string, string> = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const response = await fetch(`${API_URL}${path}`, {
+    method,
+    headers,
+    body: formData,
+  });
+
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  const isJson = response.headers
+    .get('content-type')
+    ?.includes('application/json');
+  const payload = isJson ? await response.json() : undefined;
+
+  if (!response.ok) {
+    const message =
+      payload && typeof payload === 'object' && 'message' in payload
+        ? (payload as { message: string | string[] }).message
+        : `Erreur ${response.status}`;
+    throw new ApiError(response.status, message);
+  }
+
+  return payload as T;
+}
+
 export async function apiFetch<T>(
   path: string,
   options: RequestOptions = {},
