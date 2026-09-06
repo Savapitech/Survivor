@@ -25,6 +25,13 @@ import { Recruiter } from '../recruiters/entities/recruiter.entity';
 import { paginate, toSkipTake } from '../common/pagination';
 import { isMinor, toPublicSeeker } from './seeker-view.util';
 import { VIDEO_CONSENT_VERSION } from './video-consent';
+import { VideoProviderRegistry } from '../video-providers/video-provider.registry';
+import {
+  StoredVideoFile,
+  VideoProviderName,
+} from '../video-providers/video-provider.interface';
+import { VideoProviderUnavailableError } from '../video-providers/video-provider.errors';
+import { NO_VIDEO_VIEW, VideoView } from './video-view';
 
 const SEEKER_RELATIONS = {
   competences: true,
@@ -65,7 +72,54 @@ export class SeekersService {
     private readonly interactionsRepository: Repository<Interaction>,
     @InjectRepository(Recruiter)
     private readonly recruitersRepository: Repository<Recruiter>,
+    private readonly videoProviders: VideoProviderRegistry,
   ) {}
+
+  private async resolveVideoView(seeker: {
+    id: number;
+    videoProvider: string | null;
+    videoExternalId: string | null;
+  }): Promise<VideoView> {
+    if (!seeker.videoProvider || !seeker.videoExternalId) {
+      return NO_VIDEO_VIEW;
+    }
+    const provider = this.videoProviders.get(
+      seeker.videoProvider as VideoProviderName,
+    );
+    try {
+      const technical = await provider.status(seeker.videoExternalId);
+      if (technical === 'processing') {
+        return { status: 'processing', playbackUrl: null };
+      }
+      if (technical === 'error') {
+        return { status: 'unavailable', playbackUrl: null };
+      }
+      if (provider.name === 'local') {
+        return {
+          status: 'ready',
+          playbackUrl: `/seekers/${seeker.id}/video/stream`,
+        };
+      }
+      const url = await provider.playbackUrl(seeker.videoExternalId);
+      return url ? { status: 'ready', playbackUrl: url } : { status: 'unavailable', playbackUrl: null };
+    } catch (err) {
+      if (err instanceof VideoProviderUnavailableError) {
+        return { status: 'unavailable', playbackUrl: null };
+      }
+      throw err;
+    }
+  }
+
+  private async attachVideoView<
+    T extends { id: number; videoProvider: string | null; videoExternalId: string | null },
+  >(items: T[]): Promise<(T & { videoView: VideoView })[]> {
+    return Promise.all(
+      items.map(async (item) => ({
+        ...item,
+        videoView: await this.resolveVideoView(item),
+      })),
+    );
+  }
 
   private async attachLikeCounts<T extends { id: number }>(
     seekers: T[],
@@ -155,10 +209,17 @@ export class SeekersService {
     ]);
 
     const hasVideo = Boolean(dto.video);
+    if (hasVideo && !this.videoProviders.isLinkProviderEnabled()) {
+      throw new ForbiddenException(
+        'The link video provider is disabled; upload a file via POST /seekers/:id/video instead',
+      );
+    }
     const seeker = this.seekersRepository.create({
       name: dto.name,
       lastname: dto.lastname,
       video: dto.video ?? null,
+      videoProvider: hasVideo ? 'link' : null,
+      videoExternalId: hasVideo ? (dto.video ?? null) : null,
       videoStatus: VideoStatus.PENDING,
       videoConsentGivenAt: hasVideo ? new Date() : null,
       videoConsentVersion: hasVideo ? VIDEO_CONSENT_VERSION : null,
@@ -235,11 +296,10 @@ export class SeekersService {
       order: { id: 'ASC' },
     });
 
-    return paginate(
+    const withVideoViews = await this.attachVideoView(
       items.map((item) => toPublicSeeker(item)),
-      total,
-      query,
     );
+    return paginate(withVideoViews, total, query);
   }
 
   async findOne(id: number, recruiterId?: number, viewerId?: string) {
@@ -260,11 +320,12 @@ export class SeekersService {
     }
 
     const publicSeeker = toPublicSeeker(seeker, viewerId);
+    const [withVideoView] = await this.attachVideoView([publicSeeker]);
     if (isOwner) {
-      const [withLikeCount] = await this.attachLikeCounts([publicSeeker]);
+      const [withLikeCount] = await this.attachLikeCounts([withVideoView]);
       return withLikeCount;
     }
-    return publicSeeker;
+    return withVideoView;
   }
 
   async findByUserId(userId: string) {
@@ -275,7 +336,8 @@ export class SeekersService {
     if (!seeker) {
       throw new NotFoundException('Seeker not found');
     }
-    const [withLikeCount] = await this.attachLikeCounts([seeker]);
+    const [withVideoView] = await this.attachVideoView([seeker]);
+    const [withLikeCount] = await this.attachLikeCounts([withVideoView]);
     return withLikeCount;
   }
 
@@ -288,7 +350,8 @@ export class SeekersService {
       skip,
       take,
     });
-    return paginate(await this.attachLikeCounts(items), total, query);
+    const withLikeCounts = await this.attachLikeCounts(items);
+    return paginate(await this.attachVideoView(withLikeCounts), total, query);
   }
 
   async moderateVideo(id: number, dto: ModerateSeekerVideoDto) {
@@ -330,17 +393,6 @@ export class SeekersService {
     if (dto.lastname !== undefined) {
       seeker.lastname = dto.lastname;
     }
-    if (dto.video !== undefined && dto.video !== seeker.video) {
-      seeker.video = dto.video;
-      seeker.videoStatus = VideoStatus.PENDING;
-      seeker.videoRejectionReason = null;
-      seeker.videoModeratedAt = null;
-      seeker.videoModeratedBy = null;
-      // La révocation (video === null) efface aussi le consentement enregistré :
-      // il ne doit pas survivre à la suppression du lien qu'il couvrait.
-      seeker.videoConsentGivenAt = dto.video ? new Date() : null;
-      seeker.videoConsentVersion = dto.video ? VIDEO_CONSENT_VERSION : null;
-    }
     if (dto.competenceIds !== undefined) {
       seeker.competences = await this.resolveCompetences(dto.competenceIds);
     }
@@ -368,6 +420,105 @@ export class SeekersService {
     }
     assertOwnerOrAdmin(requester, seeker.user.id);
 
+    await this.deleteStoredVideo(seeker);
     await this.seekersRepository.delete(id);
+  }
+
+  private async deleteStoredVideo(seeker: {
+    videoProvider: string | null;
+    videoExternalId: string | null;
+  }): Promise<void> {
+    if (!seeker.videoProvider || !seeker.videoExternalId) return;
+    const provider = this.videoProviders.get(
+      seeker.videoProvider as VideoProviderName,
+    );
+    await provider.delete(seeker.videoExternalId);
+  }
+
+  async uploadVideo(
+    id: number,
+    file: StoredVideoFile,
+    consentGiven: boolean,
+    requester?: Requester,
+  ) {
+    const seeker = await this.seekersRepository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
+    if (!seeker) {
+      throw new NotFoundException('Seeker not found');
+    }
+    assertOwnerOrAdmin(requester, seeker.user.id);
+    if (!consentGiven) {
+      throw new BadRequestException(
+        'Le consentement à la publication de la vidéo (image et voix) est requis.',
+      );
+    }
+
+    await this.deleteStoredVideo(seeker);
+
+    const provider = this.videoProviders.getDefault();
+    const { externalId } = await provider.store(file);
+
+    seeker.video = null;
+    seeker.videoProvider = provider.name;
+    seeker.videoExternalId = externalId;
+    seeker.videoStatus = VideoStatus.PENDING;
+    seeker.videoRejectionReason = null;
+    seeker.videoModeratedAt = null;
+    seeker.videoModeratedBy = null;
+    seeker.videoConsentGivenAt = new Date();
+    seeker.videoConsentVersion = VIDEO_CONSENT_VERSION;
+
+    return this.seekersRepository.save(seeker);
+  }
+
+  async deleteVideo(id: number, requester?: Requester) {
+    const seeker = await this.seekersRepository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
+    if (!seeker) {
+      throw new NotFoundException('Seeker not found');
+    }
+    assertOwnerOrAdmin(requester, seeker.user.id);
+
+    await this.deleteStoredVideo(seeker);
+
+    seeker.video = null;
+    seeker.videoProvider = null;
+    seeker.videoExternalId = null;
+    seeker.videoStatus = VideoStatus.PENDING;
+    seeker.videoRejectionReason = null;
+    seeker.videoModeratedAt = null;
+    seeker.videoModeratedBy = null;
+    seeker.videoConsentGivenAt = null;
+    seeker.videoConsentVersion = null;
+
+    return this.seekersRepository.save(seeker);
+  }
+
+  async resolveLocalVideoFileAccess(
+    id: number,
+    viewerId?: string,
+  ): Promise<{ seeker: Seeker } | null> {
+    const seeker = await this.seekersRepository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
+    if (!seeker || seeker.videoProvider !== 'local' || !seeker.videoExternalId) {
+      return null;
+    }
+    const isOwner = Boolean(viewerId) && seeker.user.id === viewerId;
+    if (isOwner) return { seeker };
+
+    if (viewerId) {
+      const viewer = await this.usersRepository.findOneBy({ id: viewerId });
+      if (viewer?.role === UserRole.ADMIN) return { seeker };
+    }
+
+    const minor = seeker.user.birthDate ? isMinor(seeker.user.birthDate) : false;
+    const allowed = !minor && seeker.videoStatus === VideoStatus.APPROVED;
+    return allowed ? { seeker } : null;
   }
 }

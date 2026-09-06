@@ -9,6 +9,7 @@ import { Localisation } from '../localisations/entities/localisation.entity';
 import { ActivitySector } from '../activity-sectors/entities/activity-sector.entity';
 import { Interaction } from '../interactions/entities/interaction.entity';
 import { Recruiter } from '../recruiters/entities/recruiter.entity';
+import { VideoProvidersModule } from '../video-providers/video-providers.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { Recruiter } from '../recruiters/entities/recruiter.entity';
       Interaction,
       Recruiter,
     ]),
+    VideoProvidersModule,
   ],
   controllers: [SeekersController],
   providers: [SeekersService],

@@ -24,6 +24,8 @@ export function toPublicSeeker(seeker: Seeker, viewerUserId?: string): Seeker {
   return {
     ...seeker,
     video: videoAllowed ? seeker.video : null,
+    videoProvider: videoAllowed ? seeker.videoProvider : null,
+    videoExternalId: videoAllowed ? seeker.videoExternalId : null,
     videoRejectionReason: null,
     videoModeratedAt: null,
     videoModeratedBy: null,
