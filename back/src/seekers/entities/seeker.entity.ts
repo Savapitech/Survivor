@@ -50,12 +50,22 @@ export class Seeker {
   @Column({ default: false })
   certification: boolean;
 
-  @ApiProperty({
-    description: "Video's link",
-    example: "youtube.com/watch?v=dQw4w9WgXcQ"
-  })
   @Column({ type: 'varchar', nullable: true })
   video: string | null;
+
+  @ApiProperty({
+    description: "Name of the video provider currently holding this seeker's video",
+    example: 'local',
+  })
+  @Column({ type: 'varchar', nullable: true })
+  videoProvider: string | null;
+
+  @ApiProperty({
+    description: "Opaque id of the video within its provider (a file id for local/ministry, the URL itself for link)",
+    example: 'b3b1a7b0-0000-4000-8000-000000000000',
+  })
+  @Column({ type: 'varchar', nullable: true })
+  videoExternalId: string | null;
 
   @ApiProperty({
     description: "Video's status",
