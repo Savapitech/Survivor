@@ -49,7 +49,7 @@ export class Attempt {
   submittedAt: Date | null;
 
   @ApiProperty({
-    description: "version of the questions file this attempt was taken on",
+    description: 'version of the questions file this attempt was taken on',
     type: String,
     example: 'v1',
   })

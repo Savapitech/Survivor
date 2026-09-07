@@ -13,7 +13,7 @@ const { version } = JSON.parse(
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new ConsoleLogger({
-      prefix: 'JibJob',
+      prefix: 'ProfilsActifs',
     }),
   });
   app.enableCors();
@@ -28,8 +28,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(
     app,
     new DocumentBuilder()
-      .setTitle('JibJob API')
-      .setDescription('Démonstrateur technique, ne constitue pas un service public en exploitation.')
+      .setTitle('ProfilsActifs API')
+      .setDescription(
+        'Démonstrateur technique, ne constitue pas un service public en exploitation.',
+      )
       .setVersion(version)
       .addBearerAuth(
         {

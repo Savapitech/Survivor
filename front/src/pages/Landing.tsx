@@ -10,14 +10,14 @@ import styles from './Landing.module.css';
 export function Landing() {
   useDocumentTitle('Accueil');
   const { session, isSeeker } = useSession();
-  const [certifiedCount, setCertifiedCount] = useState<number | null>(null);
+  const [publishedCount, setPublishedCount] = useState<number | null>(null);
   const [recruiterCount, setRecruiterCount] = useState<number | null>(null);
   const [certification, setCertification] = useState<boolean | null>(null);
 
   useEffect(() => {
     listSeekers({ pageSize: 1 })
-      .then((res) => setCertifiedCount(res.total))
-      .catch(() => setCertifiedCount(null));
+      .then((res) => setPublishedCount(res.total))
+      .catch(() => setPublishedCount(null));
     listRecruiters({ pageSize: 1 })
       .then((res) => setRecruiterCount(res.total))
       .catch(() => setRecruiterCount(null));
@@ -42,14 +42,14 @@ export function Landing() {
     <>
       <section className={styles.hero}>
         <div className={styles.heroText}>
-          <p className={styles.tagline}>JibJob</p>
+          <p className={styles.tagline}>ProfilsActifs</p>
           <h1 className={styles.title}>
             Valorisez vos compétences au-delà du CV
           </h1>
           <p>
             Faites la différence auprès des recruteurs publics et privés grâce à
             une courte vidéo de présentation et valorisez votre parcours via le
-            système officiel de certification JibJob.
+            système officiel de certification ProfilsActifs.
           </p>
           <div className={styles.ctas}>
             <Link to={profileTo ?? '/inscription/compte'}>
@@ -57,7 +57,7 @@ export function Landing() {
             </Link>
             <Link to={certificationTo}>
               <Button variant="secondary">
-                Découvrir la certification JibJob
+                Découvrir la certification ProfilsActifs
               </Button>
             </Link>
           </div>
@@ -96,12 +96,12 @@ export function Landing() {
         </div>
       </section>
 
-      {(certifiedCount !== null || recruiterCount !== null) && (
+      {(publishedCount !== null || recruiterCount !== null) && (
         <section aria-label="Chiffres clés" className={styles.stats}>
-          {certifiedCount !== null && (
+          {publishedCount !== null && (
             <div>
-              <span className={styles.statValue}>{certifiedCount}</span>
-              Profils certifiés JibJob
+              <span className={styles.statValue}>{publishedCount}</span>
+              Profils publiés sur ProfilsActifs
             </div>
           )}
           {recruiterCount !== null && (

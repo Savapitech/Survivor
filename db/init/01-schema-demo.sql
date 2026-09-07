@@ -1217,12 +1217,12 @@ COPY public.seeker_localisations_localisation ("seekerId", "localisationId") FRO
 
 COPY public."user" (id, email, password, role, "birthDate") FROM stdin;
 db44cb77-c1d3-4afa-bd84-f1cd69169c2c	admin@job-et-bonheur.fr	$2b$10$Nero2pxoGw/5mEvOQRUQb.8lSxZ2SZ2zbtodeP.QM.9gjrcFXFP5.	admin	1985-01-01
-109ba1c5-54b8-4e0c-8755-b5f4d06c1294	etienne.delafontaine@jibjob-demo.fr	$2b$10$kxjzSGUgayMo8gPI.U8Vuurm2I/67bcu8f6dLeK3CMfNBnB7WrUNW	seeker	1996-03-12
-680bbc07-055b-4f30-b1ab-7c23187b6c4d	tanguy.brague@jibjob-demo.fr	$2b$10$3kNE.CxkoRLuxtOUwl83L.S0CsUlvIa5yDqFQRd.6ao03zyKQdGKG	seeker	1994-07-22
-f4fa1b10-15df-4a5e-9ef5-9313552df325	georges.ansquer@jibjob-demo.fr	$2b$10$r6/6Wnj5nIxEIhV6oMI85.ilGS4Ds37ohVwui3PE71kPX0cAXfDNu	seeker	1990-11-05
-749d510b-6248-4a8e-9cfb-0deb9c74b4f6	jeremie.moulin@jibjob-demo.fr	$2b$10$wwKxdm3bTeTd3y8s1J/GjucXpMN.E7wzgujt1dP6mkvxMwrnM4.aK	seeker	1998-01-30
+109ba1c5-54b8-4e0c-8755-b5f4d06c1294	etienne.delafontaine@profilsactifs-demo.fr	$2b$10$kxjzSGUgayMo8gPI.U8Vuurm2I/67bcu8f6dLeK3CMfNBnB7WrUNW	seeker	1996-03-12
+680bbc07-055b-4f30-b1ab-7c23187b6c4d	tanguy.brague@profilsactifs-demo.fr	$2b$10$3kNE.CxkoRLuxtOUwl83L.S0CsUlvIa5yDqFQRd.6ao03zyKQdGKG	seeker	1994-07-22
+f4fa1b10-15df-4a5e-9ef5-9313552df325	georges.ansquer@profilsactifs-demo.fr	$2b$10$r6/6Wnj5nIxEIhV6oMI85.ilGS4Ds37ohVwui3PE71kPX0cAXfDNu	seeker	1990-11-05
+749d510b-6248-4a8e-9cfb-0deb9c74b4f6	jeremie.moulin@profilsactifs-demo.fr	$2b$10$wwKxdm3bTeTd3y8s1J/GjucXpMN.E7wzgujt1dP6mkvxMwrnM4.aK	seeker	1998-01-30
 4b3da8b3-d5b9-46f8-8565-ca604cdea3ef	contact@ouesttech-recrutement.fr	$2b$10$Z8rB5lgUtRhrT0F7dwzPhurHyxE16UwODms3icHkA7y8Iywewk4Um	recruiter	1985-05-14
-97ee1332-00e0-407f-99e9-0f9246f160fa	benjamin.croizet@jibjob-demo.fr	$2b$10$UXcMK9EhzXNynUpexAv7W.u3TUAMn/ZfeYKkMVDekTckTJRXSzomG	seeker	1993-09-18
+97ee1332-00e0-407f-99e9-0f9246f160fa	benjamin.croizet@profilsactifs-demo.fr	$2b$10$UXcMK9EhzXNynUpexAv7W.u3TUAMn/ZfeYKkMVDekTckTJRXSzomG	seeker	1993-09-18
 \.
 
 

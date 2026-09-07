@@ -20,7 +20,7 @@ import styles from './Questionnaire.module.css';
 const BATCH_SIZE = 10;
 
 export function Questionnaire() {
-  useDocumentTitle('Certification JibJob');
+  useDocumentTitle('Certification ProfilsActifs');
   const { session, isSeeker } = useSession();
   const { announceError } = useAnnounce();
   const hasFetched = useRef(false);

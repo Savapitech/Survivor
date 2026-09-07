@@ -13,7 +13,12 @@ function describeQuestion(entry: unknown, index: number): string {
     : `question at index ${index}`;
 }
 
-function validateQuestion(entry: unknown, index: number, errors: string[], seenIds: Set<number>) {
+function validateQuestion(
+  entry: unknown,
+  index: number,
+  errors: string[],
+  seenIds: Set<number>,
+) {
   if (typeof entry !== 'object' || entry === null) {
     errors.push(`${describeQuestion(entry, index)}: is not an object`);
     return;
@@ -44,7 +49,8 @@ function validateQuestion(entry: unknown, index: number, errors: string[], seenI
     q.options === null ||
     typeof (q.options as Record<string, unknown>).min !== 'number' ||
     typeof (q.options as Record<string, unknown>).max !== 'number' ||
-    (q.options as Record<string, number>).min >= (q.options as Record<string, number>).max
+    (q.options as Record<string, number>).min >=
+      (q.options as Record<string, number>).max
   ) {
     errors.push(`${label}: options must be an object with numeric min < max`);
   }
@@ -78,20 +84,28 @@ export function loadQuestionsFile(filePath: string): QuestionsFile {
   }
 
   if (typeof parsed !== 'object' || parsed === null) {
-    throw new QuestionsFileValidationError('Questions file must contain a JSON object');
+    throw new QuestionsFileValidationError(
+      'Questions file must contain a JSON object',
+    );
   }
   const file = parsed as Record<string, unknown>;
 
   if (typeof file.version !== 'string' || file.version.trim().length === 0) {
-    throw new QuestionsFileValidationError('Questions file: "version" must be a non-empty string');
+    throw new QuestionsFileValidationError(
+      'Questions file: "version" must be a non-empty string',
+    );
   }
   if (!Array.isArray(file.questions) || file.questions.length === 0) {
-    throw new QuestionsFileValidationError('Questions file: "questions" must be a non-empty array');
+    throw new QuestionsFileValidationError(
+      'Questions file: "questions" must be a non-empty array',
+    );
   }
 
   const errors: string[] = [];
   const seenIds = new Set<number>();
-  file.questions.forEach((entry, index) => validateQuestion(entry, index, errors, seenIds));
+  file.questions.forEach((entry, index) =>
+    validateQuestion(entry, index, errors, seenIds),
+  );
 
   if (errors.length > 0) {
     throw new QuestionsFileValidationError(

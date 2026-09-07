@@ -39,7 +39,9 @@ export class QuestionsFileService implements OnModuleInit {
 
   private async syncToDatabase(questions: QuestionFileEntry[]): Promise<void> {
     for (const question of questions) {
-      const existing = await this.questionsRepository.findOneBy({ id: question.id });
+      const existing = await this.questionsRepository.findOneBy({
+        id: question.id,
+      });
       if (existing) {
         existing.label = question.label;
         existing.weight = question.weight;

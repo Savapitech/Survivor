@@ -1,4 +1,4 @@
-export const SESSION_STORAGE_KEY = 'jibjob.session';
+export const SESSION_STORAGE_KEY = 'profilsactifs.session';
 
 export function getStoredToken(): string | null {
   try {
