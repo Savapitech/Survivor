@@ -12,9 +12,8 @@ interface ProfileVideoProps {
 }
 
 function buildLocalStreamUrl(playbackUrl: string, viewerId?: string): string {
-  const url = new URL(playbackUrl, API_ORIGIN);
-  if (viewerId) url.searchParams.set('viewerId', viewerId);
-  return url.toString();
+  const query = viewerId ? `?viewerId=${encodeURIComponent(viewerId)}` : '';
+  return `${API_ORIGIN}${playbackUrl}${query}`;
 }
 
 export function ProfileVideo({
