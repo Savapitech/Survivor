@@ -4,25 +4,3 @@
   min-height: 100vh;
   min-height: 100dvh;
 }
-
-.rootLocked {
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-}
-
-.mainFull {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.fullBleedDisclaimer {
-  text-align: center;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  background: var(--color-bg);
-  padding: var(--space-2);
-  margin: 0;
-}

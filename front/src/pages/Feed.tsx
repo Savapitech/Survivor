@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listSeekers } from '../api/seekers';
 import { listCompetences } from '../api/competences';
@@ -20,15 +20,16 @@ import { ChipSelector } from '../components/ui/ChipSelector';
 import { FeedSlide } from '../components/profile/FeedSlide';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
+import { Pagination } from '../components/ui/Pagination';
 import { LoadingState } from '../components/ui/LoadingState';
 import { ErrorState } from '../components/ui/ErrorState';
 import { EmptyState } from '../components/ui/EmptyState';
 import styles from './Feed.module.css';
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 20;
 
 export function Feed() {
-  useDocumentTitle('Feed candidats');
+  useDocumentTitle('Catalogue candidats');
   const { session, isRecruiter } = useSession();
   const { announce } = useAnnounce();
   const navigate = useNavigate();
@@ -46,67 +47,12 @@ export function Feed() {
 
   const [items, setItems] = useState<SeekerListItem[]>([]);
   const [total, setTotal] = useState(0);
-  const [nextPage, setNextPage] = useState(2);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const requestId = useRef(0);
-
-  const reelRef = useRef<HTMLUListElement | null>(null);
-  const sentinelRef = useRef<HTMLLIElement | null>(null);
-  const slideObserverRef = useRef<IntersectionObserver | null>(null);
-  const observedIdsRef = useRef<Set<number>>(new Set());
-  const [activeSeekerId, setActiveSeekerId] = useState<number | null>(null);
 
   const recruiterId = isRecruiter ? session?.recruiterId : undefined;
-
-  useEffect(() => {
-    const observer = slideObserverRef;
-    const observedIds = observedIdsRef;
-    return () => {
-      observer.current?.disconnect();
-      observer.current = null;
-      observedIds.current.clear();
-    };
-  }, []);
-
-  useEffect(() => {
-    const root = reelRef.current;
-    if (!root) return;
-
-    if (!slideObserverRef.current) {
-      slideObserverRef.current = new IntersectionObserver(
-        (entries) => {
-          let best: { id: number; ratio: number } | null = null;
-          for (const entry of entries) {
-            const raw = (entry.target as HTMLElement).dataset.seekerId;
-            const id = raw ? Number(raw) : NaN;
-            if (Number.isNaN(id)) continue;
-            if (
-              entry.isIntersecting &&
-              (!best || entry.intersectionRatio > best.ratio)
-            ) {
-              best = { id, ratio: entry.intersectionRatio };
-            }
-          }
-          if (best) {
-            setActiveSeekerId(best.id);
-          }
-        },
-        { root, threshold: [0.6] },
-      );
-    }
-
-    const observer = slideObserverRef.current;
-    const observedIds = observedIdsRef.current;
-    const elements = root.querySelectorAll<HTMLElement>('[data-seeker-id]');
-    elements.forEach((el) => {
-      const id = Number(el.dataset.seekerId);
-      if (Number.isNaN(id) || observedIds.has(id)) return;
-      observedIds.add(id);
-      observer.observe(el);
-    });
-  }, [items]);
 
   const competences = useAsync(() => listCompetences({ pageSize: 100 }), []);
   const sectors = useAsync(() => listActivitySectors({ pageSize: 100 }), []);
@@ -115,94 +61,41 @@ export function Feed() {
     [],
   );
 
-  const loadFirstPage = useCallback(() => {
-    const id = ++requestId.current;
-    setInitialLoading(true);
-    setLoadError(null);
-    listSeekers({
-      page: 1,
-      pageSize: PAGE_SIZE,
-      search: search || undefined,
-      competenceIds,
-      localisationIds,
-      activitySectorIds,
-      recruiterId,
-    })
-      .then((res) => {
-        if (requestId.current !== id) return;
-        setItems(res.data);
-        setTotal(res.total);
-        setNextPage(2);
-        setInitialLoading(false);
+  const loadPage = useCallback(
+    (targetPage: number) => {
+      setLoading(true);
+      setLoadError(null);
+      listSeekers({
+        page: targetPage,
+        pageSize: PAGE_SIZE,
+        search: search || undefined,
+        competenceIds,
+        localisationIds,
+        activitySectorIds,
+        recruiterId,
       })
-      .catch((err: unknown) => {
-        if (requestId.current !== id) return;
-        setLoadError(
-          err instanceof ApiError
-            ? err.details.join(' ')
-            : 'Une erreur est survenue.',
-        );
-        setInitialLoading(false);
-      });
-  }, [search, competenceIds, localisationIds, activitySectorIds, recruiterId]);
+        .then((res) => {
+          setItems(res.data);
+          setTotal(res.total);
+          setTotalPages(Math.max(1, res.totalPages));
+          setPage(res.page);
+          setLoading(false);
+        })
+        .catch((err: unknown) => {
+          setLoadError(
+            err instanceof ApiError
+              ? err.details.join(' ')
+              : 'Une erreur est survenue.',
+          );
+          setLoading(false);
+        });
+    },
+    [search, competenceIds, localisationIds, activitySectorIds, recruiterId],
+  );
 
   useEffect(() => {
-    loadFirstPage();
-  }, [loadFirstPage]);
-
-  const loadMore = useCallback(() => {
-    if (loadingMore || initialLoading || items.length >= total) return;
-    setLoadingMore(true);
-    listSeekers({
-      page: nextPage,
-      pageSize: PAGE_SIZE,
-      search: search || undefined,
-      competenceIds,
-      localisationIds,
-      activitySectorIds,
-      recruiterId,
-    })
-      .then((res) => {
-        setItems((prev) => [...prev, ...res.data]);
-        setNextPage((p) => p + 1);
-        setLoadingMore(false);
-      })
-      .catch(() => setLoadingMore(false));
-  }, [
-    loadingMore,
-    initialLoading,
-    items.length,
-    total,
-    nextPage,
-    search,
-    competenceIds,
-    localisationIds,
-    activitySectorIds,
-    recruiterId,
-  ]);
-
-  const loadMoreRef = useRef(loadMore);
-  useEffect(() => {
-    loadMoreRef.current = loadMore;
-  }, [loadMore]);
-
-  const hasItems = items.length > 0;
-  useEffect(() => {
-    if (!hasItems) return;
-    const target = sentinelRef.current;
-    const root = reelRef.current;
-    if (!target || !root) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          loadMoreRef.current();
-        }
-      },
-      { root, threshold: 0.1 },
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, [hasItems]);
+    loadPage(1);
+  }, [loadPage]);
 
   useEffect(() => {
     if (!session?.recruiterId) return;
@@ -275,56 +168,44 @@ export function Feed() {
         </Button>
       </div>
 
-      {initialLoading && (
+      {loading && (
         <div className={styles.centerState}>
           <LoadingState label="Chargement des profils..." />
         </div>
       )}
 
-      {!initialLoading && loadError && (
+      {!loading && loadError && (
         <div className={styles.centerState}>
-          <ErrorState onRetry={loadFirstPage} />
+          <ErrorState onRetry={() => loadPage(page)} />
         </div>
       )}
 
-      {!initialLoading && !loadError && items.length === 0 && (
+      {!loading && !loadError && items.length === 0 && (
         <div className={styles.centerState}>
           <EmptyState>Aucun profil ne correspond à ces critères.</EmptyState>
         </div>
       )}
 
-      {!initialLoading && !loadError && items.length > 0 && (
-        <ul
-          className={styles.reel}
-          ref={reelRef}
-          tabIndex={0}
-          aria-label="Profils de candidats. Utilisez les flèches du clavier pour faire défiler."
-        >
-          {items.map((seeker) => (
-            <FeedSlide
-              key={seeker.id}
-              seeker={seeker}
-              interactive={Boolean(recruiterId)}
-              liked={likedIds.has(seeker.id)}
-              contacted={contactedIds.has(seeker.id)}
-              favorited={favoriteIds.has(seeker.id)}
-              active={activeSeekerId === seeker.id}
-              viewerId={session?.userId}
-              onToggleLike={() => handleToggleLike(seeker.id)}
-              onContact={() => handleContact(seeker.id)}
-              onToggleFavorite={() => handleToggleFavorite(seeker.id)}
-            />
-          ))}
-          <li ref={sentinelRef} className={styles.endSlide}>
-            {loadingMore ? (
-              <LoadingState label="Chargement de profils supplémentaires..." />
-            ) : items.length >= total ? (
-              <p className={styles.endMessage}>
-                Vous avez vu tous les profils disponibles.
-              </p>
-            ) : null}
-          </li>
-        </ul>
+      {!loading && !loadError && items.length > 0 && (
+        <>
+          <ul className={styles.grid} aria-label="Profils de candidats">
+            {items.map((seeker) => (
+              <FeedSlide
+                key={seeker.id}
+                seeker={seeker}
+                interactive={Boolean(recruiterId)}
+                liked={likedIds.has(seeker.id)}
+                contacted={contactedIds.has(seeker.id)}
+                favorited={favoriteIds.has(seeker.id)}
+                viewerId={session?.userId}
+                onToggleLike={() => handleToggleLike(seeker.id)}
+                onContact={() => handleContact(seeker.id)}
+                onToggleFavorite={() => handleToggleFavorite(seeker.id)}
+              />
+            ))}
+          </ul>
+          <Pagination page={page} totalPages={totalPages} onChange={loadPage} />
+        </>
       )}
 
       {filtersOpen && (
