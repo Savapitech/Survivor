@@ -8,17 +8,9 @@ export function Footer() {
         <div>
           <p className={styles.columnTitle}>JibJob</p>
           <p>
-            La plateforme publique de valorisation des compétences par la vidéo
-            et la certification d'État, éditée par le Ministère du Job et du
-            Bonheur.
+            Plateforme de valorisation des compétences par la vidéo et la
+            certification.
           </p>
-        </div>
-        <div>
-          <p className={styles.columnTitle}>Institutionnel</p>
-          <ul className={styles.links}>
-            <li>Ministère du Job et du Bonheur</li>
-            <li>La certification JEB</li>
-          </ul>
         </div>
         <div>
           <p className={styles.columnTitle}>Légal</p>
@@ -32,7 +24,11 @@ export function Footer() {
         </div>
       </div>
       <div className={`container ${styles.bottom}`}>
-        <p>© 2026 JibJob - Service public gratuit pour l'emploi.</p>
+        <p>© 2026 JibJob</p>
+        <p className={styles.disclaimer}>
+          Démonstrateur technique, ne constitue pas un service public en
+          exploitation.
+        </p>
       </div>
     </footer>
   );

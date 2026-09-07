@@ -31,7 +31,14 @@ export function MainLayout() {
       >
         <Outlet />
       </main>
-      {!isFullBleed && <Footer />}
+      {isFullBleed ? (
+        <p className={styles.fullBleedDisclaimer}>
+          Démonstrateur technique, ne constitue pas un service public en
+          exploitation.
+        </p>
+      ) : (
+        <Footer />
+      )}
     </div>
   );
 }

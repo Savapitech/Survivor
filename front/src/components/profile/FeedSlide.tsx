@@ -51,7 +51,7 @@ export function FeedSlide({
             {seeker.name} {seeker.lastname}
           </Link>
         </h3>
-        {seeker.certification && <Badge variant="success">Certifié JEB</Badge>}
+        {seeker.certification && <Badge variant="success">Certifié JibJob</Badge>}
         {visibleCompetences.length > 0 && (
           <ul className={styles.tags} aria-label="Compétences">
             {visibleCompetences.map((c) => (

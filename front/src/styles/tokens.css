@@ -1,7 +1,6 @@
 :root {
-  /* Couleurs bleu institutionnel distinct du bleu officiel Marianne */
-  --color-primary: #1b3a6b;
-  --color-primary-dark: #143351;
+  --color-primary: #193A6E;
+  --color-primary-dark: #0D2B5B;
   --color-primary-light: #e8f0f7;
   --color-accent: #b8860b;
   --color-accent-dark: #8a660a;
@@ -30,10 +29,9 @@
   --space-8: 4rem;
 
   /* Typo */
-  --font-heading:
-    'Marianne', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+  --font-heading: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
     sans-serif;
-  --font-body: 'Spectral', Georgia, 'Times New Roman', serif;
+  --font-body: Georgia, 'Times New Roman', serif;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.125rem;

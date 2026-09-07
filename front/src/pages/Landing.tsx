@@ -42,14 +42,14 @@ export function Landing() {
     <>
       <section className={styles.hero}>
         <div className={styles.heroText}>
-          <p className={styles.tagline}>Plateforme d'État</p>
+          <p className={styles.tagline}>JibJob</p>
           <h1 className={styles.title}>
             Valorisez vos compétences au-delà du CV
           </h1>
           <p>
             Faites la différence auprès des recruteurs publics et privés grâce à
             une courte vidéo de présentation et valorisez votre parcours via le
-            système officiel de certification JEB.
+            système officiel de certification JibJob.
           </p>
           <div className={styles.ctas}>
             <Link to={profileTo ?? '/inscription/compte'}>
@@ -57,7 +57,7 @@ export function Landing() {
             </Link>
             <Link to={certificationTo}>
               <Button variant="secondary">
-                Découvrir la certification JEB
+                Découvrir la certification JibJob
               </Button>
             </Link>
           </div>
@@ -79,11 +79,10 @@ export function Landing() {
             </p>
           </article>
           <article className={styles.featureCard}>
-            <h3 className={styles.featureTitle}>Certification JEB</h3>
+            <h3 className={styles.featureTitle}>Certification JibJob</h3>
             <p>
               Faites certifier vos compétences clés via le badge de
-              labellisation Ministère du Job et Bonheur, une marque de confiance
-              et d'excellence.
+              certification JibJob, une marque de confiance et d'excellence.
             </p>
           </article>
           <article className={styles.featureCard}>
@@ -101,7 +100,7 @@ export function Landing() {
           {certifiedCount !== null && (
             <div>
               <span className={styles.statValue}>{certifiedCount}</span>
-              Profils certifiés JEB
+              Profils certifiés JibJob
             </div>
           )}
           {recruiterCount !== null && (

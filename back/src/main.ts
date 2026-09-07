@@ -29,7 +29,7 @@ async function bootstrap() {
     app,
     new DocumentBuilder()
       .setTitle('JibJob API')
-      .setDescription('Ministère du Job et du Bonheur')
+      .setDescription('Démonstrateur technique, ne constitue pas un service public en exploitation.')
       .setVersion(version)
       .addBearerAuth(
         {
