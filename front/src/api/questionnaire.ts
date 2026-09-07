@@ -16,29 +16,6 @@ export function listQuestions(
   });
 }
 
-export function createQuestion(label: string, weight?: number) {
-  return apiFetch<Question>('/questionnaire/questions', {
-    method: 'POST',
-    body: { label, weight },
-  });
-}
-
-export function updateQuestion(
-  id: number,
-  dto: { label?: string; weight?: number },
-) {
-  return apiFetch<Question>(`/questionnaire/questions/${id}`, {
-    method: 'PATCH',
-    body: dto,
-  });
-}
-
-export function deleteQuestion(id: number) {
-  return apiFetch<void>(`/questionnaire/questions/${id}`, {
-    method: 'DELETE',
-  });
-}
-
 export function getCurrentAttempt(seekerId: number) {
   return apiFetch<AttemptView>('/questionnaire/attempts/current', {
     query: { seekerId },
