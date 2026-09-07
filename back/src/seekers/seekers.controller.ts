@@ -30,7 +30,16 @@ import { ModerateSeekerVideoDto } from './dto/moderate-seeker-video.dto';
 import { Public } from '../auth/public.decorateur';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
-import { docSeekersDeleteById, docSeekersGet, docSeekersGetAdmin, docSeekersGetById, docSeekersGetByUserId, docSeekersPatch, docSeekersPatchById, docSeekersPost } from './seekers.doc';
+import {
+  docSeekersDeleteById,
+  docSeekersGet,
+  docSeekersGetAdmin,
+  docSeekersGetById,
+  docSeekersGetByUserId,
+  docSeekersPatch,
+  docSeekersPatchById,
+  docSeekersPost,
+} from './seekers.doc';
 
 @ApiTags('seekers')
 @Controller('seekers')

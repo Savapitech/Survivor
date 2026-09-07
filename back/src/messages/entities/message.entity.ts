@@ -18,29 +18,29 @@ export enum MessageSenderRole {
 export class Message {
   @ApiProperty({
     description: "message's id",
-    example: "1"
+    example: '1',
   })
   @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty({
-    description: "recuiter in the conversation",
-    type: Recruiter
+    description: 'recuiter in the conversation',
+    type: Recruiter,
   })
   @ManyToOne(() => Recruiter, { onDelete: 'CASCADE' })
   recruiter: Recruiter;
 
   @ApiProperty({
-    description: "seeker in the conversation",
-    type: Seeker
+    description: 'seeker in the conversation',
+    type: Seeker,
   })
   @ManyToOne(() => Seeker, { onDelete: 'CASCADE' })
   seeker: Seeker;
 
   @ApiProperty({
-    description: "who send the message",
+    description: 'who send the message',
     enum: MessageSenderRole,
-    example: MessageSenderRole.RECRUITER
+    example: MessageSenderRole.RECRUITER,
   })
   @Column({ type: 'enum', enum: MessageSenderRole })
   senderRole: MessageSenderRole;
@@ -48,7 +48,7 @@ export class Message {
   @ApiProperty({
     description: "message's content",
     type: String,
-    example: 'Hello, I would like to discuss your profile.'
+    example: 'Hello, I would like to discuss your profile.',
   })
   @Column({ type: 'text' })
   content: string;
@@ -63,7 +63,7 @@ export class Message {
   @ApiProperty({
     description: "message's date seen",
     type: Date,
-    nullable: true
+    nullable: true,
   })
   @Column({ type: 'timestamp', nullable: true })
   seenAt: Date | null;

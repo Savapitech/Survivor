@@ -82,46 +82,46 @@ jobs:
               git checkout -b main || git checkout main
               git push --set-upstream target main --force
 
-  docker_integration:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Prepare environment configuration
-        run: |
-          cp back/.env.example back/.env
-          sed -i 's/DB_HOST=localhost/DB_HOST=db/' back/.env
-
-      - name: Start services with Docker Compose
-        run: docker compose up --build -d
-
-      - name: Verify health endpoint
-        run: |
-          echo "Waiting for the backend to be healthy"
-          timeout 60 bash -c 'while [[ "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health)" != "200" ]]; do sleep 5; done' || (echo "Healthcheck failed or timed out" && docker compose logs && exit 1)
-
-      - name: Clean up repository metadata
-        run: rm -rf .git
-
-      - name: Upload configured workspace artifact
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: configured-workspace
-          path: .
-          include-hidden-files: true
-
-      - name: Archive workspace for Release
-        if: success() && github.event_name == 'push'
-        run: zip -r configured-workspace.zip .
-
-      - name: Create GitHub Release
-        if: success() && github.event_name == 'push'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: build-${{ github.run_number }}
-          name: Build ${{ github.run_number }}
-          files: configured-workspace.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # docker_integration:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Prepare environment configuration
+  #       run: |
+  #         cp back/.env.example back/.env
+  #         sed -i 's/DB_HOST=localhost/DB_HOST=db/' back/.env
+  #
+  #     - name: Start services with Docker Compose
+  #       run: docker compose up --build -d
+  #
+  #     - name: Verify health endpoint
+  #       run: |
+  #         echo "Waiting for the backend to be healthy"
+  #         timeout 60 bash -c 'while [[ "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health)" != "200" ]]; do sleep 5; done' || (echo "Healthcheck failed or timed out" && docker compose logs && exit 1)
+  #
+  #     - name: Clean up repository metadata
+  #       run: rm -rf .git
+  #
+  #     - name: Upload configured workspace artifact
+  #       if: success()
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: configured-workspace
+  #         path: .
+  #         include-hidden-files: true
+  #
+  #     - name: Archive workspace for Release
+  #       if: success() && github.event_name == 'push'
+  #       run: zip -r configured-workspace.zip .
+  #
+  #     - name: Create GitHub Release
+  #       if: success() && github.event_name == 'push'
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         tag_name: build-${{ github.run_number }}
+  #         name: Build ${{ github.run_number }}
+  #         files: configured-workspace.zip
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

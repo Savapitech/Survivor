@@ -119,15 +119,19 @@ export function Step4Video() {
 
       {file && (
         <div className={styles.minorNotice} role="group">
-          <label style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
+          <label
+            style={{
+              display: 'flex',
+              gap: 'var(--space-2)',
+              alignItems: 'flex-start',
+            }}
+          >
             <input
               type="checkbox"
               checked={consent}
               onChange={(e) => setConsent(e.target.checked)}
             />
-            <span>
-              {VIDEO_CONSENT_TEXT}
-            </span>
+            <span>{VIDEO_CONSENT_TEXT}</span>
           </label>
           {consentError && (
             <p role="alert" style={{ color: 'var(--color-error)' }}>

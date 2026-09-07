@@ -6,7 +6,7 @@ export class MarkAllSeenDto {
     description: "seeker's id",
     type: Number,
     example: 1,
-    required: true
+    required: true,
   })
   @IsInt()
   seekerId: number;

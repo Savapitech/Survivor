@@ -15,7 +15,7 @@ export class FindQuestionsQueryDto extends PaginationQueryDto {
     description: "question's status",
     type: Boolean,
     example: true,
-    required: false
+    required: false,
   })
   @IsOptional()
   @Transform(toBoolean)

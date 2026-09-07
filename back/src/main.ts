@@ -29,17 +29,19 @@ async function bootstrap() {
     app,
     new DocumentBuilder()
       .setTitle('JibJob API')
-      .setDescription('Ministère du Job et du Bonheur')
+      .setDescription('Démonstrateur technique, ne constitue pas un service public en exploitation.')
       .setVersion(version)
-      .addBearerAuth({
-        description: `Please enter token in following format: Bearer (JWT)`,
-        name: 'Authorization',
-        bearerFormat: 'Bearer',
-        scheme: 'Bearer',
-        type: 'http',
-        in: 'Header'
-      },
-      'JWT',)
+      .addBearerAuth(
+        {
+          description: `Please enter token in following format: Bearer (JWT)`,
+          name: 'Authorization',
+          bearerFormat: 'Bearer',
+          scheme: 'Bearer',
+          type: 'http',
+          in: 'Header',
+        },
+        'JWT',
+      )
       .build(),
   );
   SwaggerModule.setup('docs', app, document);

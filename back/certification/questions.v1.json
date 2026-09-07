@@ -1,0 +1,1105 @@
+{
+  "version": "v1",
+  "questions": [
+    {
+      "id": 1,
+      "label": "Je maîtrise les bases de mon métier au quotidien.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 2,
+      "label": "Je sais m'adapter rapidement à un nouvel environnement de travail.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 3,
+      "label": "Je communique clairement avec mes collègues et supérieurs.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 4,
+      "label": "Je suis capable de gérer plusieurs tâches en autonomie.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 5,
+      "label": "Je sais résoudre des problèmes imprévus dans mon domaine.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 6,
+      "label": "Je respecte les délais fixés pour mes missions.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 7,
+      "label": "Je sais organiser ma journée de travail efficacement.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 8,
+      "label": "Je m'adapte facilement à un changement de dernière minute.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 9,
+      "label": "Je sais prioriser mes tâches selon leur urgence.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 10,
+      "label": "Je garde mon calme face à une situation stressante.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 11,
+      "label": "Je sais demander de l'aide quand j'en ai besoin.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 12,
+      "label": "J'écoute activement les remarques de mes collègues.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 13,
+      "label": "Je sais argumenter un point de vue avec des faits.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 14,
+      "label": "Je propose des solutions plutôt que de me limiter à constater un problème.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 15,
+      "label": "Je sais rédiger un compte-rendu clair et structuré.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 16,
+      "label": "Je respecte les consignes de sécurité sur mon poste de travail.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 17,
+      "label": "Je sais utiliser un tableur pour organiser des données.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 18,
+      "label": "Je sais mener une réunion en respectant l'ordre du jour.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 19,
+      "label": "Je sais former une nouvelle personne sur une tâche.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 20,
+      "label": "Je sais gérer un désaccord avec un collègue de manière constructive.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 21,
+      "label": "Je sais m'exprimer clairement à l'oral devant un groupe.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 22,
+      "label": "Je sais anticiper les besoins de mon équipe.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 23,
+      "label": "Je sais recevoir une critique sans me braquer.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 24,
+      "label": "Je vérifie mon travail avant de le rendre.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 25,
+      "label": "Je sais fixer des objectifs réalistes.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 26,
+      "label": "Je sais m'organiser pour travailler à distance.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 27,
+      "label": "Je sais gérer plusieurs projets en parallèle.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 28,
+      "label": "Je sais respecter la confidentialité des informations sensibles.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 29,
+      "label": "Je sais m'informer sur les nouveautés de mon secteur.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 30,
+      "label": "Je sais utiliser les outils numériques courants (mails, agenda, visioconférence).",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 31,
+      "label": "Je sais planifier les étapes d'un projet avant de commencer.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 32,
+      "label": "Je sais m'exprimer par écrit sans fautes majeures.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 33,
+      "label": "Je sais évaluer objectivement la qualité de mon propre travail.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 34,
+      "label": "Je sais m'intégrer rapidement dans une nouvelle équipe.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 35,
+      "label": "Je sais dire non lorsque c'est nécessaire.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 36,
+      "label": "Je sais motiver les autres autour d'un objectif commun.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 37,
+      "label": "Je sais rester concentré sur une tâche longue.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 38,
+      "label": "Je sais utiliser un logiciel de gestion de projet.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 39,
+      "label": "Je sais accueillir un client ou un usager avec courtoisie.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 40,
+      "label": "Je sais gérer une caisse ou des transactions financières simples.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 41,
+      "label": "Je sais lire et interpréter un cahier des charges.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 42,
+      "label": "Je sais respecter une procédure qualité.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 43,
+      "label": "Je sais entretenir et nettoyer mon poste de travail.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 44,
+      "label": "Je sais manipuler un outil ou une machine en toute sécurité.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 45,
+      "label": "Je sais effectuer un diagnostic simple en cas de panne.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 46,
+      "label": "Je sais lire un plan ou un schéma technique.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 47,
+      "label": "Je sais calculer une quantité ou un dosage avec précision.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 48,
+      "label": "Je sais respecter les normes d'hygiène dans mon métier.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 49,
+      "label": "Je sais conduire un véhicule utilitaire si nécessaire.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 50,
+      "label": "Je sais porter des charges en respectant les gestes et postures.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 51,
+      "label": "Je sais utiliser un logiciel de comptabilité de base.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 52,
+      "label": "Je sais préparer un devis ou une facture.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 53,
+      "label": "Je sais négocier un prix ou des conditions commerciales.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 54,
+      "label": "Je sais fidéliser une clientèle.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 55,
+      "label": "Je sais analyser les besoins d'un client.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 56,
+      "label": "Je sais présenter un produit ou un service de façon convaincante.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 57,
+      "label": "Je sais gérer les réclamations d'un client avec diplomatie.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 58,
+      "label": "Je sais utiliser les réseaux sociaux dans un cadre professionnel.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 59,
+      "label": "Je sais rédiger un contenu pour le web.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 60,
+      "label": "Je sais analyser des statistiques simples.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 61,
+      "label": "Je sais utiliser un logiciel de traitement de texte avancé.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 62,
+      "label": "Je sais programmer dans au moins un langage informatique.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 63,
+      "label": "Je sais déboguer un problème technique simple.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 64,
+      "label": "Je sais sécuriser mes mots de passe et mes accès numériques.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 65,
+      "label": "Je sais sauvegarder mes données régulièrement.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 66,
+      "label": "Je sais administrer un site web simple.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 67,
+      "label": "Je sais concevoir une maquette ou un visuel simple.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 68,
+      "label": "Je sais utiliser un logiciel de retouche d'image.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 69,
+      "label": "Je sais monter une courte vidéo.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 70,
+      "label": "Je sais m'exprimer dans une langue étrangère à l'oral.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 71,
+      "label": "Je sais traduire un document simple dans une langue étrangère.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 72,
+      "label": "Je sais m'adapter à un public international.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 73,
+      "label": "Je sais travailler en horaires décalés si nécessaire.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 74,
+      "label": "Je sais garder ma motivation sur le long terme.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 75,
+      "label": "Je sais apprendre une nouvelle compétence en autonomie.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 76,
+      "label": "Je sais transmettre mon savoir-faire à un collègue.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 77,
+      "label": "Je sais respecter la hiérarchie tout en donnant mon avis.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 78,
+      "label": "Je sais m'auto-évaluer pour progresser.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 79,
+      "label": "Je sais gérer mon stress avant un entretien ou une échéance.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 80,
+      "label": "Je sais m'adapter à un rythme de travail soutenu.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 81,
+      "label": "Je sais improviser face à un imprévu.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 82,
+      "label": "Je sais coordonner les actions de plusieurs personnes.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 83,
+      "label": "Je sais déléguer une tâche efficacement.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 84,
+      "label": "Je sais respecter un budget alloué.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 85,
+      "label": "Je sais évaluer les risques d'une décision avant de la prendre.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 86,
+      "label": "Je sais utiliser les outils de suivi de stock.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 87,
+      "label": "Je sais entretenir du matériel professionnel.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 88,
+      "label": "Je sais respecter les délais de livraison.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 89,
+      "label": "Je sais organiser le transport ou la logistique d'un événement.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 90,
+      "label": "Je sais accueillir et encadrer un stagiaire.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 91,
+      "label": "Je sais rédiger une offre d'emploi ou une fiche de poste.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 92,
+      "label": "Je sais mener un entretien de recrutement.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 93,
+      "label": "Je sais évaluer les compétences d'un candidat.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 94,
+      "label": "Je sais gérer un conflit au sein d'une équipe.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 95,
+      "label": "Je sais construire un planning d'équipe.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 96,
+      "label": "Je sais préparer une présentation avec des supports visuels clairs.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 97,
+      "label": "Je sais synthétiser une information complexe pour la rendre accessible.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 98,
+      "label": "Je sais respecter l'environnement dans mes pratiques professionnelles.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 99,
+      "label": "Je sais proposer des idées innovantes pour améliorer un processus.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 100,
+      "label": "Je sais m'adapter à une nouvelle réglementation dans mon secteur.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    }
+  ]
+}

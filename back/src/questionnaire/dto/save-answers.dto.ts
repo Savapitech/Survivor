@@ -15,7 +15,7 @@ export class AnswerInputDto {
     description: "question's id",
     type: Number,
     example: 1,
-    required: true
+    required: true,
   })
   @IsInt()
   questionId: number;
@@ -23,7 +23,7 @@ export class AnswerInputDto {
   @ApiProperty({
     description: "question's content",
     type: String,
-    example: "êtes vous a l'aise de travailler en autonomie ?"
+    example: "êtes vous a l'aise de travailler en autonomie ?",
   })
   @IsNumber()
   @Min(0)
@@ -35,7 +35,7 @@ export class SaveAnswersDto {
   @ApiProperty({
     description: "question's content",
     type: [AnswerInputDto],
-    required: true
+    required: true,
   })
   @IsArray()
   @ArrayNotEmpty()

@@ -6,10 +6,11 @@ import { Question } from './entities/question.entity';
 import { Attempt } from './entities/attempt.entity';
 import { Answer } from './entities/answer.entity';
 import { Seeker } from '../seekers/entities/seeker.entity';
+import { QuestionsFileService } from './questions-file.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Question, Attempt, Answer, Seeker])],
   controllers: [QuestionnaireController],
-  providers: [QuestionnaireService],
+  providers: [QuestionnaireService, QuestionsFileService],
 })
 export class QuestionnaireModule {}

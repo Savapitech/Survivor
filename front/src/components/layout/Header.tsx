@@ -15,9 +15,7 @@ export function Header() {
     <header className={styles.header}>
       <div className={`container ${styles.bar}`}>
         <Link to="/" className={styles.brand}>
-          <img src="/logo.png" alt="" className={styles.logo} />
           <span className={styles.brandText}>
-            <span className={styles.ministry}>Ministère du Job et Bonheur</span>
             <span className={styles.product}>JibJob</span>
           </span>
         </Link>

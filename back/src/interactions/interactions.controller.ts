@@ -15,7 +15,18 @@ import { CreateInteractionDto } from './dto/create-interaction.dto';
 import { FindInteractionsQueryDto } from './dto/find-interactions-query.dto';
 import { MarkAllSeenDto } from './dto/mark-all-seen.dto';
 import { RemoveFavoriteQueryDto } from './dto/remove-favorite-query.dto';
-import { docInteractionsDeleteById, docInteractionsDeleteFavorite, docInteractionsDeleteLike, docInteractionsGetById, docInteractionsGetRecuiter, docInteractionsGetSeeker, docInteractionsGetUnread, docInteractionsPatchSeen, docInteractionsPost, docInteractionsPostSeen } from './interactions.doc';
+import {
+  docInteractionsDeleteById,
+  docInteractionsDeleteFavorite,
+  docInteractionsDeleteLike,
+  docInteractionsGetById,
+  docInteractionsGetRecuiter,
+  docInteractionsGetSeeker,
+  docInteractionsGetUnread,
+  docInteractionsPatchSeen,
+  docInteractionsPost,
+  docInteractionsPostSeen,
+} from './interactions.doc';
 
 @ApiTags('interactions')
 @Controller('interactions')

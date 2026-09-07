@@ -17,7 +17,13 @@ import { ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/public.decorateur';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
-import { docCompetencesDelete, docCompetencesGet, docCompetencesGetById, docCompetencesPatch, docCompetencesPost } from './competences.doc';
+import {
+  docCompetencesDelete,
+  docCompetencesGet,
+  docCompetencesGetById,
+  docCompetencesPatch,
+  docCompetencesPost,
+} from './competences.doc';
 
 @ApiTags('competences')
 @Controller('competences')

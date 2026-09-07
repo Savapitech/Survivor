@@ -13,7 +13,7 @@ export class CreateMessageDto {
     description: "message's recuiter's id",
     type: Number,
     example: 1,
-    required: true
+    required: true,
   })
   @IsInt()
   recruiterId: number;
@@ -22,7 +22,7 @@ export class CreateMessageDto {
     description: "message's seeker's id",
     type: Number,
     example: 2,
-    required: true
+    required: true,
   })
   @IsInt()
   seekerId: number;
@@ -31,7 +31,7 @@ export class CreateMessageDto {
     description: "message's sender's role",
     enum: MessageSenderRole,
     example: MessageSenderRole.RECRUITER,
-    required: true
+    required: true,
   })
   @IsEnum(MessageSenderRole)
   senderRole: MessageSenderRole;
@@ -41,7 +41,7 @@ export class CreateMessageDto {
     type: String,
     maxLength: 2000,
     example: 'Hello, I would like to discuss your profile.',
-    required: true
+    required: true,
   })
   @IsString()
   @IsNotEmpty()

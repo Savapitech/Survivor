@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { toEmbedUrl } from '../../utils/video';
 import { API_ORIGIN } from '../../api/http';
 import type { VideoView } from '../../api/models';
@@ -12,9 +13,8 @@ interface ProfileVideoProps {
 }
 
 function buildLocalStreamUrl(playbackUrl: string, viewerId?: string): string {
-  const url = new URL(playbackUrl, API_ORIGIN);
-  if (viewerId) url.searchParams.set('viewerId', viewerId);
-  return url.toString();
+  const query = viewerId ? `?viewerId=${encodeURIComponent(viewerId)}` : '';
+  return `${API_ORIGIN}${playbackUrl}${query}`;
 }
 
 export function ProfileVideo({
@@ -24,6 +24,20 @@ export function ProfileVideo({
   autoplay,
   viewerId,
 }: ProfileVideoProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (autoplay) {
+      el.muted = true;
+      el.currentTime = 0;
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+    }
+  }, [autoplay, videoView.playbackUrl]);
+
   if (videoView.status === 'processing') {
     return (
       <div className={styles.wrapper}>
@@ -62,12 +76,11 @@ export function ProfileVideo({
     <div className={styles.wrapper}>
       {isAppRoute ? (
         <video
+          ref={videoRef}
           key={videoView.playbackUrl}
           className={styles.iframe}
           src={buildLocalStreamUrl(videoView.playbackUrl, viewerId)}
           controls
-          autoPlay={autoplay}
-          muted={autoplay}
           playsInline
         >
           <track kind="captions" />

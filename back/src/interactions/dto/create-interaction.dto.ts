@@ -7,7 +7,7 @@ export class CreateInteractionDto {
     description: "interaction's type",
     enum: InteractionType,
     example: InteractionType.LIKE,
-    required: true
+    required: true,
   })
   @IsEnum(InteractionType)
   type: InteractionType;
@@ -16,7 +16,7 @@ export class CreateInteractionDto {
     description: "recuiter's id",
     enum: Number,
     example: 1,
-    required: true
+    required: true,
   })
   @IsInt()
   recruiterId: number;
@@ -25,7 +25,7 @@ export class CreateInteractionDto {
     description: "seeker's id",
     enum: Number,
     example: 1,
-    required: true
+    required: true,
   })
   @IsInt()
   seekerId: number;

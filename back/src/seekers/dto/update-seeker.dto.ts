@@ -15,10 +15,10 @@ export class UpdateSeekerDto extends PartialType(
   OmitType(CreateSeekerDto, ['userId', 'video'] as const),
 ) {
   @ApiProperty({
-    description: "video",
+    description: 'video',
     enum: VIDEO_HOST_WHITELIST,
-    example: "youtube.com/watch?v=dQw4w9WgXcQ",
-    required: false
+    example: 'youtube.com/watch?v=dQw4w9WgXcQ',
+    required: false,
   })
   @IsOptional()
   @IsUrl({ host_whitelist: VIDEO_HOST_WHITELIST })

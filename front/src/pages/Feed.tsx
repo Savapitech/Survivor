@@ -99,8 +99,7 @@ export function Feed() {
 
     const observer = slideObserverRef.current;
     const observedIds = observedIdsRef.current;
-    const elements =
-      root.querySelectorAll<HTMLElement>('[data-seeker-id]');
+    const elements = root.querySelectorAll<HTMLElement>('[data-seeker-id]');
     elements.forEach((el) => {
       const id = Number(el.dataset.seekerId);
       if (Number.isNaN(id) || observedIds.has(id)) return;

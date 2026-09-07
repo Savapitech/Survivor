@@ -16,7 +16,7 @@ export class FindInteractionsQueryDto extends PaginationQueryDto {
     description: "Interaction's type",
     enum: InteractionType,
     example: InteractionType.LIKE,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsEnum(InteractionType)
@@ -26,7 +26,7 @@ export class FindInteractionsQueryDto extends PaginationQueryDto {
     description: "Interaction's unread ?",
     type: Boolean,
     example: true,
-    required: false
+    required: false,
   })
   @IsOptional()
   @Transform(toBoolean)

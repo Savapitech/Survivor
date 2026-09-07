@@ -44,7 +44,10 @@ interface Requester {
   role?: UserRole;
 }
 
-function assertOwnerOrAdmin(requester: Requester | undefined, ownerUserId: string) {
+function assertOwnerOrAdmin(
+  requester: Requester | undefined,
+  ownerUserId: string,
+) {
   if (requester?.role === UserRole.ADMIN) return;
   if (requester?.userId === ownerUserId) return;
   throw new ForbiddenException('This profile does not belong to you');
@@ -101,7 +104,9 @@ export class SeekersService {
         };
       }
       const url = await provider.playbackUrl(seeker.videoExternalId);
-      return url ? { status: 'ready', playbackUrl: url } : { status: 'unavailable', playbackUrl: null };
+      return url
+        ? { status: 'ready', playbackUrl: url }
+        : { status: 'unavailable', playbackUrl: null };
     } catch (err) {
       if (err instanceof VideoProviderUnavailableError) {
         return { status: 'unavailable', playbackUrl: null };
@@ -111,7 +116,11 @@ export class SeekersService {
   }
 
   private async attachVideoView<
-    T extends { id: number; videoProvider: string | null; videoExternalId: string | null },
+    T extends {
+      id: number;
+      videoProvider: string | null;
+      videoExternalId: string | null;
+    },
   >(items: T[]): Promise<(T & { videoView: VideoView })[]> {
     return Promise.all(
       items.map(async (item) => ({
@@ -506,7 +515,11 @@ export class SeekersService {
       where: { id },
       relations: { user: true },
     });
-    if (!seeker || seeker.videoProvider !== 'local' || !seeker.videoExternalId) {
+    if (
+      !seeker ||
+      seeker.videoProvider !== 'local' ||
+      !seeker.videoExternalId
+    ) {
       return null;
     }
     const isOwner = Boolean(viewerId) && seeker.user.id === viewerId;
@@ -517,7 +530,9 @@ export class SeekersService {
       if (viewer?.role === UserRole.ADMIN) return { seeker };
     }
 
-    const minor = seeker.user.birthDate ? isMinor(seeker.user.birthDate) : false;
+    const minor = seeker.user.birthDate
+      ? isMinor(seeker.user.birthDate)
+      : false;
     const allowed = !minor && seeker.videoStatus === VideoStatus.APPROVED;
     return allowed ? { seeker } : null;
   }

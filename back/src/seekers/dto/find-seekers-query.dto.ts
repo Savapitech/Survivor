@@ -15,7 +15,7 @@ export class FindSeekersQueryDto extends PaginationQueryDto {
   @ApiProperty({
     description: "List of competence's id",
     type: [Number],
-    required: false
+    required: false,
   })
   @IsOptional()
   @Transform(toIntArray)
@@ -26,7 +26,7 @@ export class FindSeekersQueryDto extends PaginationQueryDto {
   @ApiProperty({
     description: "List of localisation's id",
     type: [Number],
-    required: false
+    required: false,
   })
   @IsOptional()
   @Transform(toIntArray)
@@ -37,7 +37,7 @@ export class FindSeekersQueryDto extends PaginationQueryDto {
   @ApiProperty({
     description: "List of activity sector's id",
     type: [Number],
-    required: false
+    required: false,
   })
   @IsOptional()
   @Transform(toIntArray)
@@ -46,9 +46,9 @@ export class FindSeekersQueryDto extends PaginationQueryDto {
   activitySectorIds?: number[];
 
   @ApiProperty({
-    description: "other filter",
+    description: 'other filter',
     type: String,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -57,7 +57,7 @@ export class FindSeekersQueryDto extends PaginationQueryDto {
   @ApiProperty({
     description: "recruiter's id",
     type: Number,
-    required: false
+    required: false,
   })
   @IsOptional()
   @Type(() => Number)

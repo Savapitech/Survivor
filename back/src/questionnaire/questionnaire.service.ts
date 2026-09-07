@@ -9,12 +9,11 @@ import { DataSource, In, QueryFailedError, Repository } from 'typeorm';
 import { Question } from './entities/question.entity';
 import { Attempt } from './entities/attempt.entity';
 import { Answer } from './entities/answer.entity';
-import { CreateQuestionDto } from './dto/create-question.dto';
-import { UpdateQuestionDto } from './dto/update-question.dto';
 import { FindQuestionsQueryDto } from './dto/find-questions-query.dto';
 import { SaveAnswersDto } from './dto/save-answers.dto';
 import { Seeker } from '../seekers/entities/seeker.entity';
 import { paginate, toSkipTake } from '../common/pagination';
+import { QuestionsFileService } from './questions-file.service';
 
 const PASS_THRESHOLD = 60;
 const ANSWER_MAX_VALUE = 5;
@@ -40,11 +39,8 @@ export class QuestionnaireService {
     @InjectRepository(Seeker)
     private readonly seekersRepository: Repository<Seeker>,
     @InjectDataSource() private readonly dataSource: DataSource,
+    private readonly questionsFileService: QuestionsFileService,
   ) {}
-
-  async createQuestion(dto: CreateQuestionDto) {
-    return this.questionsRepository.save(this.questionsRepository.create(dto));
-  }
 
   async findQuestions(query: FindQuestionsQueryDto) {
     const { skip, take } = toSkipTake(query);
@@ -63,26 +59,6 @@ export class QuestionnaireService {
       throw new NotFoundException('Question not found');
     }
     return question;
-  }
-
-  async updateQuestion(id: number, dto: UpdateQuestionDto) {
-    await this.findQuestion(id);
-    const hasAnswers = await this.answersRepository.existsBy({
-      question: { id },
-    });
-    if (hasAnswers) {
-      throw new ConflictException(
-        'Question already answered; deactivate it and create a new one',
-      );
-    }
-    await this.questionsRepository.update(id, dto);
-    return this.findQuestion(id);
-  }
-
-  async deactivateQuestion(id: number) {
-    const question = await this.findQuestion(id);
-    question.active = false;
-    return this.questionsRepository.save(question);
   }
 
   private async buildAttemptView(attempt: Attempt): Promise<AttemptView> {
@@ -132,6 +108,7 @@ export class QuestionnaireService {
         questionIds: activeQuestions.map((question) => question.id),
         score: null,
         submittedAt: null,
+        questionnaireVersion: this.questionsFileService.getVersion(),
       });
       try {
         attempt = await this.attemptsRepository.save(draft);

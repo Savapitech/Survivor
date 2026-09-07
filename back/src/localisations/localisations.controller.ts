@@ -17,7 +17,13 @@ import { ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/public.decorateur';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
-import { docLocalisationsDelete, docLocalisationsGet, docLocalisationsGetById, docLocalisationsPatch, docLocalisationsPost } from './localisation.doc';
+import {
+  docLocalisationsDelete,
+  docLocalisationsGet,
+  docLocalisationsGetById,
+  docLocalisationsPatch,
+  docLocalisationsPost,
+} from './localisation.doc';
 
 @ApiTags('localisations')
 @Controller('localisations')

@@ -24,7 +24,7 @@ export function QuestionnaireResult({
         </p>
       )}
       {certified ? (
-        <Badge variant="success">Permis de Travailler JEB obtenu</Badge>
+        <Badge variant="success">Certification JibJob obtenue</Badge>
       ) : (
         <Badge variant="warning">
           Certification non obtenue (seuil : 60 %)

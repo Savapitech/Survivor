@@ -22,9 +22,9 @@ const VIDEO_HOST_WHITELIST = [
 
 export class CreateSeekerDto {
   @ApiProperty({
-    description: "name",
-    example: "Jean-Charle",
-    required: true
+    description: 'name',
+    example: 'Jean-Charle',
+    required: true,
   })
   @IsString()
   @IsNotEmpty()
@@ -32,9 +32,9 @@ export class CreateSeekerDto {
   name: string;
 
   @ApiProperty({
-    description: "lastname",
-    example: "Fontaine",
-    required: true
+    description: 'lastname',
+    example: 'Fontaine',
+    required: true,
   })
   @IsString()
   @IsNotEmpty()
@@ -44,8 +44,8 @@ export class CreateSeekerDto {
   @ApiProperty({
     description: "video's URL",
     enum: VIDEO_HOST_WHITELIST,
-    example: VIDEO_HOST_WHITELIST[0] + "/watch?v=dQw4w9WgXcQ",
-    required: false
+    example: VIDEO_HOST_WHITELIST[0] + '/watch?v=dQw4w9WgXcQ',
+    required: false,
   })
   @IsOptional()
   @IsUrl({ host_whitelist: VIDEO_HOST_WHITELIST })
@@ -55,7 +55,7 @@ export class CreateSeekerDto {
     description: "user's consent",
     type: Boolean,
     example: true,
-    required: true
+    required: true,
   })
   @ValidateIf((o: CreateSeekerDto) => Boolean(o.video))
   @Equals(true, {
@@ -67,7 +67,7 @@ export class CreateSeekerDto {
   @ApiProperty({
     description: "user's id",
     example: '93d5728f-165a-4526-a6d2-00a595dd1e12',
-    required: true
+    required: true,
   })
   @IsUUID()
   userId: string;
@@ -76,7 +76,7 @@ export class CreateSeekerDto {
     description: "user's competences",
     type: [Number],
     examples: [1, 2, 3],
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsArray()
@@ -87,7 +87,7 @@ export class CreateSeekerDto {
     description: "user's localisations",
     type: [Number],
     examples: [1, 2, 3],
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsArray()
@@ -98,7 +98,7 @@ export class CreateSeekerDto {
     description: "user's activitySectors",
     type: [Number],
     examples: [1, 2, 3],
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsArray()

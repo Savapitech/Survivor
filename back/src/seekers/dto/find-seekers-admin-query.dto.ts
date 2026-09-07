@@ -5,10 +5,10 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class FindSeekersAdminQueryDto extends PaginationQueryDto {
   @ApiProperty({
-    description: "videoStatus",
+    description: 'videoStatus',
     enum: VideoStatus,
     example: VideoStatus.PENDING,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsEnum(VideoStatus)
