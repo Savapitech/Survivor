@@ -17,10 +17,6 @@ import { User, UserRole } from '../users/entities/user.entity';
 import { Competence } from '../competences/entities/competence.entity';
 import { Localisation } from '../localisations/entities/localisation.entity';
 import { ActivitySector } from '../activity-sectors/entities/activity-sector.entity';
-import {
-  Interaction,
-  InteractionType,
-} from '../interactions/entities/interaction.entity';
 import { Recruiter } from '../recruiters/entities/recruiter.entity';
 import { paginate, toSkipTake } from '../common/pagination';
 import { isMinor, toPublicSeeker } from './seeker-view.util';
@@ -71,8 +67,6 @@ export class SeekersService {
     private readonly localisationsRepository: Repository<Localisation>,
     @InjectRepository(ActivitySector)
     private readonly activitySectorsRepository: Repository<ActivitySector>,
-    @InjectRepository(Interaction)
-    private readonly interactionsRepository: Repository<Interaction>,
     @InjectRepository(Recruiter)
     private readonly recruitersRepository: Repository<Recruiter>,
     private readonly videoProviders: VideoProviderRegistry,
@@ -128,31 +122,6 @@ export class SeekersService {
         videoView: await this.resolveVideoView(item),
       })),
     );
-  }
-
-  private async attachLikeCounts<T extends { id: number }>(
-    seekers: T[],
-  ): Promise<(T & { likeCount: number })[]> {
-    if (seekers.length === 0) {
-      return [];
-    }
-    const rows = await this.interactionsRepository
-      .createQueryBuilder('interaction')
-      .select('seeker.id', 'seekerId')
-      .addSelect('COUNT(*)', 'count')
-      .innerJoin('interaction.seeker', 'seeker')
-      .where('interaction.type = :type', { type: InteractionType.LIKE })
-      .andWhere('seeker.id IN (:...ids)', {
-        ids: seekers.map((s) => s.id),
-      })
-      .groupBy('seeker.id')
-      .getRawMany<{ seekerId: number; count: string }>();
-
-    const counts = new Map(rows.map((r) => [r.seekerId, Number(r.count)]));
-    return seekers.map((seeker) => ({
-      ...seeker,
-      likeCount: counts.get(seeker.id) ?? 0,
-    }));
   }
 
   private async resolveCompetences(ids?: number[]): Promise<Competence[]> {
@@ -330,10 +299,6 @@ export class SeekersService {
 
     const publicSeeker = toPublicSeeker(seeker, viewerId);
     const [withVideoView] = await this.attachVideoView([publicSeeker]);
-    if (isOwner) {
-      const [withLikeCount] = await this.attachLikeCounts([withVideoView]);
-      return withLikeCount;
-    }
     return withVideoView;
   }
 
@@ -346,8 +311,7 @@ export class SeekersService {
       throw new NotFoundException('Seeker not found');
     }
     const [withVideoView] = await this.attachVideoView([seeker]);
-    const [withLikeCount] = await this.attachLikeCounts([withVideoView]);
-    return withLikeCount;
+    return withVideoView;
   }
 
   async findAllAdmin(query: FindSeekersAdminQueryDto) {
@@ -359,8 +323,7 @@ export class SeekersService {
       skip,
       take,
     });
-    const withLikeCounts = await this.attachLikeCounts(items);
-    return paginate(await this.attachVideoView(withLikeCounts), total, query);
+    return paginate(await this.attachVideoView(items), total, query);
   }
 
   async moderateVideo(id: number, dto: ModerateSeekerVideoDto) {

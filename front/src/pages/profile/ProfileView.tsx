@@ -121,16 +121,6 @@ export function ProfileView() {
           ) : (
             <Badge variant="neutral">Non certifié</Badge>
           )}
-          {isOwnProfile && typeof seeker.likeCount === 'number' && (
-            <p className={styles.likeCount}>
-              <span aria-hidden="true">♦</span> {seeker.likeCount}{' '}
-              recommandation{seeker.likeCount === 1 ? '' : 's'}
-              <span className="visually-hidden">
-                {' '}
-                (visible uniquement par vous)
-              </span>
-            </p>
-          )}
         </div>
       </div>
 

@@ -7,7 +7,6 @@ import {
   ApiBearerAuth,
   getSchemaPath,
   ApiBody,
-  ApiProperty,
 } from '@nestjs/swagger';
 import { Seeker } from './entities/seeker.entity';
 import { CreateSeekerDto } from './dto/create-seeker.dto';
@@ -15,14 +14,6 @@ import { FindSeekersQueryDto } from './dto/find-seekers-query.dto';
 import { ModerateSeekerVideoDto } from './dto/moderate-seeker-video.dto';
 import { FindSeekersAdminQueryDto } from './dto/find-seekers-admin-query.dto';
 import { UpdateSeekerDto } from './dto/update-seeker.dto';
-
-class SeekerWithLikeCount extends Seeker {
-  @ApiProperty({
-    example: 0,
-    description: 'Number of likes received by the seeker.',
-  })
-  likeCount: number;
-}
 
 export function docSeekersPost() {
   return applyDecorators(
@@ -173,7 +164,7 @@ export function docSeekersGetByUserId() {
     }),
     ApiResponse({
       status: 200,
-      type: SeekerWithLikeCount,
+      type: Seeker,
       description: 'Seeker successfully retrieved.',
     }),
     ApiResponse({

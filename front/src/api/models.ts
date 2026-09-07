@@ -60,14 +60,12 @@ export type SeekerDetail = SeekerBase & {
   videoRejectionReason?: string | null;
   videoConsentGivenAt?: string | null;
   videoConsentVersion?: string | null;
-  likeCount?: number;
 };
 export type SeekerAdmin = SeekerDetail & {
   user: PublicUser;
   videoRejectionReason: string | null;
   videoModeratedAt: string | null;
   videoModeratedBy: string | null;
-  likeCount: number;
 };
 
 export interface CreateSeekerDto {
