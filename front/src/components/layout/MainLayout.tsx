@@ -21,6 +21,10 @@ export function MainLayout() {
   return (
     <div className={styles.root}>
       <SkipLink />
+      <p className={styles.rightsNotice} role="note">
+        Aucune donnée de ce service n'est utilisée pour déterminer vos droits ni
+        le montant de vos allocations.
+      </p>
       <Header />
       <main id="main-content" tabIndex={-1} ref={mainRef} className="container">
         <Outlet />
