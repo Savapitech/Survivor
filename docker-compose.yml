@@ -17,7 +17,7 @@ services:
       timeout: 5s
       retries: 10
     networks:
-     - db-net
+     - net-db
 
   back:
     build:
@@ -30,8 +30,8 @@ services:
       db:
         condition: service_healthy
     networks:
-     - db-net
-     - db-front
+     - net-db
+     - net-front
     volumes:
       - back_data:/usr/src/app/storage/videos
 
@@ -45,12 +45,12 @@ services:
       db:
         condition: service_healthy
     networks:
-        - db-front
+        - net-front
 
 volumes:
   db_data:
   back_data:
 
 networks:
-  db-net:
-  db-front:
+  net-db:
+  net-front:
