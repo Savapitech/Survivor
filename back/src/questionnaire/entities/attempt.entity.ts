@@ -47,4 +47,12 @@ export class Attempt {
   })
   @Column({ type: 'timestamp', nullable: true })
   submittedAt: Date | null;
+
+  @ApiProperty({
+    description: "version of the questions file this attempt was taken on",
+    type: String,
+    example: 'v1',
+  })
+  @Column({ type: 'varchar', nullable: true })
+  questionnaireVersion: string | null;
 }

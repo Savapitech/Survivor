@@ -150,7 +150,8 @@ CREATE TABLE public.attempt (
     "questionIds" integer[] DEFAULT '{}'::integer[] NOT NULL,
     score double precision,
     "submittedAt" timestamp without time zone,
-    "seekerId" integer
+    "seekerId" integer,
+    "questionnaireVersion" character varying
 );
 
 
@@ -1655,8 +1656,9 @@ ALTER TABLE ONLY public.migrations
     ADD CONSTRAINT "PK_8c82d7f526340ab734260ea46be" PRIMARY KEY (id);
 
 INSERT INTO public.migrations (id, "timestamp", name) VALUES (1, 1788702983491, 'Init1788702983491');
+INSERT INTO public.migrations (id, "timestamp", name) VALUES (2, 1788769079931, 'AddQuestionnaireVersion1788769079931');
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 1, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 2, true);
 
 --
 -- PostgreSQL database dump complete
