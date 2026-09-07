@@ -24,7 +24,8 @@
     "migration:create": "typeorm-ts-node-commonjs migration:create",
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
-    "migrate:videos": "ts-node -r tsconfig-paths/register scripts/migrate-video-storage.ts"
+    "migrate:videos": "ts-node -r tsconfig-paths/register scripts/migrate-video-storage.ts",
+    "recalculate:certification-v2": "ts-node -r tsconfig-paths/register scripts/recalculate-certification-v2.ts"
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",

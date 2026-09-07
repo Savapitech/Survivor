@@ -243,7 +243,6 @@ export class SeekersService {
       );
     }
     idQb.innerJoin('seeker.user', 'seekerUser');
-    idQb.andWhere('seeker.certification = true');
     if (!canSeeMinors) {
       idQb.andWhere('seekerUser.birthDate <= :adultCutoff', {
         adultCutoff: adultCutoffDate(),

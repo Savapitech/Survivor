@@ -1,0 +1,225 @@
+{
+  "version": "v2",
+  "questions": [
+    {
+      "id": 1,
+      "label": "Je maîtrise les bases de mon métier au quotidien.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 2,
+      "label": "Je sais m'adapter rapidement à un nouvel environnement de travail.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 3,
+      "label": "Je communique clairement avec mes collègues et supérieurs.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 4,
+      "label": "Je suis capable de gérer plusieurs tâches en autonomie.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 5,
+      "label": "Je sais résoudre des problèmes imprévus dans mon domaine.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 6,
+      "label": "Je respecte les délais fixés pour mes missions.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 7,
+      "label": "Je sais organiser ma journée de travail efficacement.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 8,
+      "label": "Je m'adapte facilement à un changement de dernière minute.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 9,
+      "label": "Je sais prioriser mes tâches selon leur urgence.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 10,
+      "label": "Je garde mon calme face à une situation stressante.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 11,
+      "label": "Je sais demander de l'aide quand j'en ai besoin.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 12,
+      "label": "J'écoute activement les remarques de mes collègues.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 20,
+      "label": "Je sais gérer un désaccord avec un collègue de manière constructive.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 23,
+      "label": "Je sais recevoir une critique sans me braquer.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 24,
+      "label": "Je vérifie mon travail avant de le rendre.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 28,
+      "label": "Je sais respecter la confidentialité des informations sensibles.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 33,
+      "label": "Je sais évaluer objectivement la qualité de mon propre travail.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 74,
+      "label": "Je sais garder ma motivation sur le long terme.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 75,
+      "label": "Je sais apprendre une nouvelle compétence en autonomie.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    },
+    {
+      "id": 79,
+      "label": "Je sais gérer mon stress avant un entretien ou une échéance.",
+      "type": "scale",
+      "options": {
+        "min": 0,
+        "max": 5
+      },
+      "weight": 1,
+      "active": true
+    }
+  ]
+}

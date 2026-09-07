@@ -18,7 +18,7 @@ export class QuestionsFileService implements OnModuleInit {
   async onModuleInit(): Promise<void> {
     const filePath =
       process.env.QUESTIONS_FILE_PATH ??
-      join(process.cwd(), 'certification', 'questions.v1.json');
+      join(process.cwd(), 'certification', 'questions.v2.json');
     this.file = loadQuestionsFile(filePath);
     await this.syncToDatabase(this.file.questions);
   }
