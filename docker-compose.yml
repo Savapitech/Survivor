@@ -32,6 +32,8 @@ services:
     networks:
      - db-net
      - db-front
+    volumes:
+      - back_data:/usr/src/app/storage/videos
 
   front:
     build:
@@ -47,6 +49,7 @@ services:
 
 volumes:
   db_data:
+  back_data:
 
 networks:
   db-net:
