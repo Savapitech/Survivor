@@ -1,4 +1,4 @@
-FROM node:26 AS builder
+FROM node:26-alpine AS builder
 
 WORKDIR /usr/src/app
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx
+FROM nginx:alpine-slim
 
 WORKDIR /usr/share/nginx/
 
