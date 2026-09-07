@@ -79,10 +79,11 @@ export function Landing() {
             </p>
           </article>
           <article className={styles.featureCard}>
-            <h3 className={styles.featureTitle}>Certification JibJob</h3>
+            <h3 className={styles.featureTitle}>Badge de certification</h3>
             <p>
-              Faites certifier vos compétences clés via le badge de
-              certification JibJob, une marque de confiance et d'excellence.
+              Faites certifier vos compétences clés via un badge de
+              certification, une marque de confiance et d'excellence. Ce badge
+              ne confère aucun droit ni avantage réglementaire.
             </p>
           </article>
           <article className={styles.featureCard}>

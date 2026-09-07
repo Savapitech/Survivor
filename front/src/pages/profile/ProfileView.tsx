@@ -111,7 +111,12 @@ export function ProfileView() {
             {seeker.name} {seeker.lastname}
           </h1>
           {seeker.certification ? (
-            <Badge variant="success">Certifié JibJob</Badge>
+            <>
+              <Badge variant="success">Badge de certification obtenu</Badge>
+              <p className={styles.noRightsNotice}>
+                Ce badge ne confère aucun droit ni avantage réglementaire.
+              </p>
+            </>
           ) : isOwnProfile ? (
             <Link to="/questionnaire" className={styles.certificationLink}>
               <Badge variant="neutral">

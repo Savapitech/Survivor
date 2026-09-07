@@ -24,10 +24,13 @@ export function QuestionnaireResult({
         </p>
       )}
       {certified ? (
-        <Badge variant="success">Certification JibJob obtenue</Badge>
+        <>
+          <Badge variant="success">Badge de certification obtenu</Badge>
+          <p>Ce badge ne confère aucun droit ni avantage réglementaire.</p>
+        </>
       ) : (
         <Badge variant="warning">
-          Certification non obtenue (seuil : 60 %)
+          Badge de certification non obtenu (seuil : 60 %)
         </Badge>
       )}
       <p style={{ marginTop: 'var(--space-5)' }}>

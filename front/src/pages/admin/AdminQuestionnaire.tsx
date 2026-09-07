@@ -20,9 +20,9 @@ export function AdminQuestionnaire() {
       <h1>Questionnaire de certification</h1>
       <p>
         Le contenu du questionnaire est défini dans le fichier versionné{' '}
-        <code>back/certification/questions.v1.json</code> et chargé au
-        démarrage du serveur. Il n'est plus modifiable depuis cette page :
-        pour changer une question, publiez un nouveau commit sur ce fichier.
+        <code>back/certification/questions.v1.json</code> et chargé au démarrage
+        du serveur. Il n'est plus modifiable depuis cette page : pour changer
+        une question, publiez un nouveau commit sur ce fichier.
       </p>
       <p>
         {questions.data
@@ -42,7 +42,9 @@ export function AdminQuestionnaire() {
             <li key={question.id} className={styles.item}>
               <span className={styles.label}>
                 {question.label}
-                {!question.active && <Badge variant="neutral">Désactivée</Badge>}
+                {!question.active && (
+                  <Badge variant="neutral">Désactivée</Badge>
+                )}
               </span>
               <span className={styles.weight}>Poids : {question.weight}</span>
             </li>
