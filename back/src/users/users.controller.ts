@@ -16,7 +16,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PaginationQueryDto } from '../common/pagination';
 import { ApiTags } from '@nestjs/swagger';
-import { docUsersDeleteById, docUsersGetAll, docUsersGetById, docUsersPatchById, docUsersPost } from './users.doc';
+import {
+  docUsersDeleteById,
+  docUsersGetAll,
+  docUsersGetById,
+  docUsersPatchById,
+  docUsersPost,
+} from './users.doc';
 import { Public } from '../auth/public.decorateur';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from './entities/user.entity';

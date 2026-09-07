@@ -14,28 +14,28 @@ import { ApiProperty } from '@nestjs/swagger';
 export class Answer {
   @ApiProperty({
     description: "answer's id",
-    example: "1"
+    example: '1',
   })
   @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty({
-    description: "atttempt",
-    type: Attempt
+    description: 'atttempt',
+    type: Attempt,
   })
   @ManyToOne(() => Attempt, { onDelete: 'CASCADE' })
   attempt: Attempt;
 
   @ApiProperty({
-    description: "question",
-    type: Question
+    description: 'question',
+    type: Question,
   })
   @ManyToOne(() => Question, { onDelete: 'RESTRICT' })
   question: Question;
 
   @ApiProperty({
-    description: "value",
-    example: 0
+    description: 'value',
+    example: 0,
   })
   @Column({ type: 'float' })
   value: number;

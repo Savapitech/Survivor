@@ -23,29 +23,29 @@ export enum VideoStatus {
 export class Seeker {
   @ApiProperty({
     description: "Seeker's id",
-    example: "2"
+    example: '2',
   })
   @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty({
     description: "Seeker's name",
-    example: "Jean-Charle"
+    example: 'Jean-Charle',
   })
   @Column()
   name: string;
 
   @ApiProperty({
-    description: "Lastname",
-    example: "Fontaine"
+    description: 'Lastname',
+    example: 'Fontaine',
   })
   @Column()
   lastname: string;
 
   @ApiProperty({
-    description: "Certification",
+    description: 'Certification',
     type: Boolean,
-    example: true
+    example: true,
   })
   @Column({ default: false })
   certification: boolean;
@@ -54,14 +54,16 @@ export class Seeker {
   video: string | null;
 
   @ApiProperty({
-    description: "Name of the video provider currently holding this seeker's video",
+    description:
+      "Name of the video provider currently holding this seeker's video",
     example: 'local',
   })
   @Column({ type: 'varchar', nullable: true })
   videoProvider: string | null;
 
   @ApiProperty({
-    description: "Opaque id of the video within its provider (a file id for local/ministry, the URL itself for link)",
+    description:
+      'Opaque id of the video within its provider (a file id for local/ministry, the URL itself for link)',
     example: 'b3b1a7b0-0000-4000-8000-000000000000',
   })
   @Column({ type: 'varchar', nullable: true })
@@ -70,41 +72,41 @@ export class Seeker {
   @ApiProperty({
     description: "Video's status",
     enum: VideoStatus,
-    example: VideoStatus.PENDING
+    example: VideoStatus.PENDING,
   })
   @Column({ type: 'enum', enum: VideoStatus, default: VideoStatus.PENDING })
   videoStatus: VideoStatus;
 
   @ApiProperty({
     description: "Video's rejection reason",
-    example: "Your video isn't professional."
+    example: "Your video isn't professional.",
   })
   @Column({ type: 'text', nullable: true })
   videoRejectionReason: string | null;
 
   @ApiProperty({
     description: "Video's rejection reason",
-    type: Date
+    type: Date,
   })
   @Column({ type: 'timestamp', nullable: true })
   videoModeratedAt: Date | null;
 
   @ApiProperty({
     description: "Video's moderator's name",
-    example: "Admin_1"
+    example: 'Admin_1',
   })
   @Column({ type: 'uuid', nullable: true })
   videoModeratedBy: string | null;
 
   @ApiProperty({
-    description: "Consent public video date",
+    description: 'Consent public video date',
     type: Date,
   })
   @Column({ type: 'timestamp', nullable: true })
   videoConsentGivenAt: Date | null;
 
   @ApiProperty({
-    description: "Consent public video version",
+    description: 'Consent public video version',
     type: String,
   })
   @Column({ type: 'varchar', nullable: true })

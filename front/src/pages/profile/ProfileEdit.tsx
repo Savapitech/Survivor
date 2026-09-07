@@ -86,7 +86,9 @@ export function ProfileEdit() {
   function handleVideoFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const selected = event.target.files?.[0] ?? null;
     if (selected && selected.size > MAX_VIDEO_BYTES) {
-      setVideoError('Le fichier dépasse la taille maximale autorisée (100 Mo).');
+      setVideoError(
+        'Le fichier dépasse la taille maximale autorisée (100 Mo).',
+      );
       setVideoFile(null);
       return;
     }
@@ -244,7 +246,10 @@ export function ProfileEdit() {
         </Button>
       </form>
 
-      <section aria-labelledby="video-section-title" style={{ marginTop: 'var(--space-6)' }}>
+      <section
+        aria-labelledby="video-section-title"
+        style={{ marginTop: 'var(--space-6)' }}
+      >
         <h2 id="video-section-title">Vidéo de présentation</h2>
 
         {hasVideo && (
@@ -259,9 +264,16 @@ export function ProfileEdit() {
               ).
             </p>
             {seeker.data.videoConsentGivenAt && (
-              <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>
+              <p
+                style={{
+                  color: 'var(--color-text-muted)',
+                  fontSize: 'var(--font-size-sm)',
+                }}
+              >
                 Consentement donné le{' '}
-                {new Date(seeker.data.videoConsentGivenAt).toLocaleString('fr-FR')}
+                {new Date(seeker.data.videoConsentGivenAt).toLocaleString(
+                  'fr-FR',
+                )}
                 {seeker.data.videoConsentVersion
                   ? ` (texte version ${seeker.data.videoConsentVersion})`
                   : ''}
@@ -281,7 +293,9 @@ export function ProfileEdit() {
 
         <div style={{ marginTop: 'var(--space-4)' }}>
           <label htmlFor="video-file-edit">
-            {hasVideo ? 'Remplacer par une nouvelle vidéo' : 'Ajouter une vidéo'}
+            {hasVideo
+              ? 'Remplacer par une nouvelle vidéo'
+              : 'Ajouter une vidéo'}
           </label>
           <input
             id="video-file-edit"
@@ -293,7 +307,13 @@ export function ProfileEdit() {
 
         {videoFile && (
           <div role="group" style={{ marginTop: 'var(--space-3)' }}>
-            <label style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
+            <label
+              style={{
+                display: 'flex',
+                gap: 'var(--space-2)',
+                alignItems: 'flex-start',
+              }}
+            >
               <input
                 type="checkbox"
                 checked={videoConsent}

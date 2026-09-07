@@ -6,7 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateUserDto {
   @ApiProperty({
     description: "user's email",
-    example: "fake.email@extension.com"
+    example: 'fake.email@extension.com',
   })
   @IsEmail()
   email: string;
@@ -14,22 +14,22 @@ export class CreateUserDto {
   @ApiProperty({
     description: "user's password",
     minLength: 8,
-    example: "password1234"
+    example: 'password1234',
   })
   @MinLength(8)
   password: string;
 
   @ApiProperty({
-    description: "assigne the role of the user",
+    description: 'assigne the role of the user',
     enum: UserRole,
-    example: UserRole.SEEKER
-    })
+    example: UserRole.SEEKER,
+  })
   @IsIn([UserRole.SEEKER, UserRole.RECRUITER, UserRole.ADMIN])
   role: UserRole;
 
   @ApiProperty({
-    description: "verify if the user is older than 16",
-    example: "2000-12-31",
+    description: 'verify if the user is older than 16',
+    example: '2000-12-31',
     minimum: 16,
   })
   @IsDateString()

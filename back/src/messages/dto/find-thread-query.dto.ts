@@ -8,7 +8,7 @@ export class FindThreadQueryDto extends PaginationQueryDto {
     description: "recuiter's id",
     type: Number,
     example: 1,
-    required: true
+    required: true,
   })
   @Type(() => Number)
   @IsInt()
@@ -18,7 +18,7 @@ export class FindThreadQueryDto extends PaginationQueryDto {
     description: "seeker's id",
     type: Number,
     example: 2,
-    required: true
+    required: true,
   })
   @Type(() => Number)
   @IsInt()

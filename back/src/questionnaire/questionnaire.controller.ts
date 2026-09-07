@@ -19,7 +19,17 @@ import { SaveAnswersDto } from './dto/save-answers.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
-import { docQuestionnaireDelete, docQuestionnaireFindAttempt, docQuestionnaireGet, docQuestionnaireGetById, docQuestionnaireGetCurrentAttempt, docQuestionnairePatch, docQuestionnairePost, docQuestionnaireSaveAnswers, docQuestionnaireSubmitAttempt } from './questionnaire.doc';
+import {
+  docQuestionnaireDelete,
+  docQuestionnaireFindAttempt,
+  docQuestionnaireGet,
+  docQuestionnaireGetById,
+  docQuestionnaireGetCurrentAttempt,
+  docQuestionnairePatch,
+  docQuestionnairePost,
+  docQuestionnaireSaveAnswers,
+  docQuestionnaireSubmitAttempt,
+} from './questionnaire.doc';
 
 @ApiTags('questionnaire')
 @Controller('questionnaire')

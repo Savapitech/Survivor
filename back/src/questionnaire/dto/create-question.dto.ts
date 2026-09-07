@@ -14,7 +14,7 @@ export class CreateQuestionDto {
     description: "question's content",
     type: String,
     example: "êtes vous a l'aise de travailler en autonomie ?",
-    required: true
+    required: true,
   })
   @IsString()
   @IsNotEmpty()
@@ -25,7 +25,7 @@ export class CreateQuestionDto {
     description: "question's weight",
     type: Number,
     example: 1,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()

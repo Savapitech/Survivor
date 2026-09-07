@@ -15,7 +15,14 @@ import { CreateRecruiterDto } from './dto/create-recruiter.dto';
 import { UpdateRecruiterDto } from './dto/update-recruiter.dto';
 import { PaginationQueryDto } from '../common/pagination';
 import { ApiTags } from '@nestjs/swagger';
-import { docRecruitersDelete, docRecruitersGet, docRecruitersGetById, docRecruitersGetByUserId, docRecruitersPatch, docRecruitersPost } from './recruiter.doc';
+import {
+  docRecruitersDelete,
+  docRecruitersGet,
+  docRecruitersGetById,
+  docRecruitersGetByUserId,
+  docRecruitersPatch,
+  docRecruitersPost,
+} from './recruiter.doc';
 
 @ApiTags('recruiters')
 @Controller('recruiters')

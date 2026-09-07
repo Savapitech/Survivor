@@ -63,7 +63,10 @@ export class LocalVideoProvider implements VideoProvider {
 
     await fs.mkdir(this.storageDir, { recursive: true });
     const externalId = randomUUID();
-    const destination = this.pathFor(externalId, VIDEO_FORMAT_EXTENSIONS[format]);
+    const destination = this.pathFor(
+      externalId,
+      VIDEO_FORMAT_EXTENSIONS[format],
+    );
     await fs.writeFile(destination, file.buffer);
     return { externalId };
   }

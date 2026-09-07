@@ -5,7 +5,7 @@ export class CreateCompetenceDto {
   @ApiProperty({
     description: "competence's name",
     example: "travail d'équipe",
-    required: true
+    required: true,
   })
   @IsString()
   @IsNotEmpty()

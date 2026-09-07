@@ -11,26 +11,25 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity()
 export class Recruiter {
   @ApiProperty({
-    description: "id",
-    example: "1",
-    required: true
+    description: 'id',
+    example: '1',
+    required: true,
   })
   @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty({
-    description: "companyName",
-    example: "fake company",
-    required: true
+    description: 'companyName',
+    example: 'fake company',
+    required: true,
   })
   @Column()
   companyName: string;
 
-
   @ApiProperty({
-    description: "user",
+    description: 'user',
     type: User,
-    required: true
+    required: true,
   })
   @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()

@@ -7,7 +7,7 @@ export class RemoveFavoriteQueryDto {
     description: "recuiter's id",
     type: Number,
     example: 1,
-    required: true
+    required: true,
   })
   @Type(() => Number)
   @IsInt()
@@ -17,7 +17,7 @@ export class RemoveFavoriteQueryDto {
     description: "seeker's id",
     type: Number,
     example: 1,
-    required: true
+    required: true,
   })
   @Type(() => Number)
   @IsInt()

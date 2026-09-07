@@ -6,7 +6,7 @@ export class Question {
   @ApiProperty({
     description: "question's id",
     type: Number,
-    example: 1
+    example: 1,
   })
   @PrimaryGeneratedColumn()
   id: number;
@@ -14,7 +14,7 @@ export class Question {
   @ApiProperty({
     description: "question's content",
     type: String,
-    example: "êtes vous a l'aise de travailler en autonomie ?"
+    example: "êtes vous a l'aise de travailler en autonomie ?",
   })
   @Column()
   label: string;
@@ -22,7 +22,7 @@ export class Question {
   @ApiProperty({
     description: "question's weight",
     type: Number,
-    example: 1
+    example: 1,
   })
   @Column({ type: 'float', default: 1 })
   weight: number;
@@ -30,7 +30,7 @@ export class Question {
   @ApiProperty({
     description: "question's content",
     type: Boolean,
-    example: true
+    example: true,
   })
   @Column({ default: true })
   active: boolean;

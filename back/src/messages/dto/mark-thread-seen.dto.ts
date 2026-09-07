@@ -7,7 +7,7 @@ export class MarkThreadSeenDto {
     description: "recuiter's id",
     type: Number,
     example: 1,
-    required: true
+    required: true,
   })
   @IsInt()
   recruiterId: number;
@@ -16,7 +16,7 @@ export class MarkThreadSeenDto {
     description: "seeker's id",
     type: Number,
     example: 2,
-    required: true
+    required: true,
   })
   @IsInt()
   seekerId: number;
@@ -25,7 +25,7 @@ export class MarkThreadSeenDto {
     description: "sender's role",
     enum: MessageSenderRole,
     example: MessageSenderRole.RECRUITER,
-    required: true
+    required: true,
   })
   @IsEnum(MessageSenderRole)
   viewerRole: MessageSenderRole;

@@ -10,18 +10,18 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ModerateSeekerVideoDto {
   @ApiProperty({
-    description: "status",
+    description: 'status',
     enum: VideoStatus,
     example: VideoStatus.APPROVED,
-    required: true
+    required: true,
   })
   @IsEnum([VideoStatus.APPROVED, VideoStatus.REJECTED])
   status: VideoStatus.APPROVED | VideoStatus.REJECTED;
 
   @ApiProperty({
-    description: "reason",
-    example: "Not enought professional",
-    required: false
+    description: 'reason',
+    example: 'Not enought professional',
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -29,9 +29,9 @@ export class ModerateSeekerVideoDto {
   reason?: string;
 
   @ApiProperty({
-    description: "adminUserId",
+    description: 'adminUserId',
     example: 31,
-    required: true
+    required: true,
   })
   @IsUUID()
   adminUserId: string;

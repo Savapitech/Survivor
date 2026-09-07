@@ -17,7 +17,13 @@ import { ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/public.decorateur';
 import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
-import { docActivitySectorsDelete, docActivitySectorsGet, docActivitySectorsGetById, docActivitySectorsPatch, docActivitySectorsPost } from './activity-sectors.doc';
+import {
+  docActivitySectorsDelete,
+  docActivitySectorsGet,
+  docActivitySectorsGetById,
+  docActivitySectorsPatch,
+  docActivitySectorsPost,
+} from './activity-sectors.doc';
 
 @ApiTags('activity-sectors')
 @Controller('activity-sectors')

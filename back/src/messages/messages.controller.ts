@@ -11,7 +11,13 @@ import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { FindThreadQueryDto } from './dto/find-thread-query.dto';
 import { MarkThreadSeenDto } from './dto/mark-thread-seen.dto';
-import { docMessagesGetConversationsForRecruiter, docMessagesGetConversationsForSeeker, docMessagesGetThread, docMessagesPost, docMessagesPostThreadSeen } from './messages.doc';
+import {
+  docMessagesGetConversationsForRecruiter,
+  docMessagesGetConversationsForSeeker,
+  docMessagesGetThread,
+  docMessagesPost,
+  docMessagesPostThreadSeen,
+} from './messages.doc';
 
 @ApiTags('messages')
 @Controller('messages')

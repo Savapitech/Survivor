@@ -20,7 +20,7 @@ export enum InteractionType {
 export class Interaction {
   @ApiProperty({
     description: "interaction's id",
-    example: "1"
+    example: '1',
   })
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,28 +28,28 @@ export class Interaction {
   @ApiProperty({
     description: "competence's type",
     enum: InteractionType,
-    example: InteractionType.LIKE
+    example: InteractionType.LIKE,
   })
   @Column({ type: 'enum', enum: InteractionType })
   type: InteractionType;
 
   @ApiProperty({
-    description: "List of recuiter who have this interaction",
-    type: [Recruiter]
+    description: 'List of recuiter who have this interaction',
+    type: [Recruiter],
   })
   @ManyToOne(() => Recruiter, { onDelete: 'CASCADE' })
   recruiter: Recruiter;
 
   @ApiProperty({
-    description: "List of seeker who have this interaction",
-    type: [Seeker]
+    description: 'List of seeker who have this interaction',
+    type: [Seeker],
   })
   @ManyToOne(() => Seeker, { onDelete: 'CASCADE' })
   seeker: Seeker;
 
   @ApiProperty({
     description: "Interaction's date",
-    type: Date
+    type: Date,
   })
   @CreateDateColumn()
   createdAt: Date;
@@ -57,7 +57,7 @@ export class Interaction {
   @ApiProperty({
     description: "Interaction's view",
     nullable: true,
-    type: Date
+    type: Date,
   })
   @Column({ type: 'timestamp', nullable: true })
   seenAt: Date | null;
