@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -11,6 +12,20 @@ import { CreateRecruiterDto } from './dto/create-recruiter.dto';
 import { UpdateRecruiterDto } from './dto/update-recruiter.dto';
 import { User, UserRole } from '../users/entities/user.entity';
 import { PaginationQueryDto, paginate, toSkipTake } from '../common/pagination';
+
+interface Requester {
+  userId?: string;
+  role?: UserRole;
+}
+
+function assertOwnerOrAdmin(
+  requester: Requester | undefined,
+  ownerUserId: string,
+) {
+  if (requester?.role === UserRole.ADMIN) return;
+  if (requester?.userId === ownerUserId) return;
+  throw new ForbiddenException('This profile does not belong to you');
+}
 
 @Injectable()
 export class RecruitersService {
@@ -74,16 +89,16 @@ export class RecruitersService {
     return recruiter;
   }
 
-  async update(id: number, dto: UpdateRecruiterDto) {
-    await this.findOne(id);
+  async update(id: number, dto: UpdateRecruiterDto, requester?: Requester) {
+    const recruiter = await this.findOne(id);
+    assertOwnerOrAdmin(requester, recruiter.user.id);
     await this.recruitersRepository.update(id, dto);
     return this.findOne(id);
   }
 
-  async remove(id: number) {
-    const result = await this.recruitersRepository.delete(id);
-    if (!result.affected) {
-      throw new NotFoundException('Recruiter not found');
-    }
+  async remove(id: number, requester?: Requester) {
+    const recruiter = await this.findOne(id);
+    assertOwnerOrAdmin(requester, recruiter.user.id);
+    await this.recruitersRepository.delete(id);
   }
 }

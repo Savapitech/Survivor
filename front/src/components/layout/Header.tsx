@@ -56,6 +56,9 @@ export function Header() {
               <Link className={styles.navLink} to="/messagerie">
                 Messagerie
               </Link>
+              <Link className={styles.navLink} to="/mon-entreprise">
+                Mon entreprise
+              </Link>
             </>
           )}
           {isAdmin && (

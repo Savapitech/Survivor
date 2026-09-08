@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   Query,
+  Request,
   ParseIntPipe,
   ParseUUIDPipe,
 } from '@nestjs/common';
@@ -58,13 +59,14 @@ export class RecruitersController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRecruiterDto: UpdateRecruiterDto,
+    @Request() req: any,
   ) {
-    return this.recruitersService.update(id, updateRecruiterDto);
+    return this.recruitersService.update(id, updateRecruiterDto, req.user);
   }
 
   @Delete(':id')
   @docRecruitersDelete()
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.recruitersService.remove(id);
+  remove(@Param('id', ParseIntPipe) id: number, @Request() req: any) {
+    return this.recruitersService.remove(id, req.user);
   }
 }

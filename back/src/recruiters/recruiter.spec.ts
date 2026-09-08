@@ -148,6 +148,8 @@ describe('RecruitersController', () => {
                 companyName: 'company Updated',
             } as UpdateRecruiterDto;
 
+            const req = { user: { userId: 'user-uuid-123', role: 'recruiter' } };
+
             const expectedResult = {
                 id,
                 companyName: 'company Updated',
@@ -155,23 +157,24 @@ describe('RecruitersController', () => {
 
             recruitersServiceMock.update.mockResolvedValue(expectedResult);
 
-            const result = await controller.update(id, dto);
+            const result = await controller.update(id, dto, req);
 
             expect(result).toEqual(expectedResult);
             expect(recruitersServiceMock.update).toHaveBeenCalledTimes(1);
-            expect(recruitersServiceMock.update).toHaveBeenCalledWith(id, dto);
+            expect(recruitersServiceMock.update).toHaveBeenCalledWith(id, dto, req.user);
         });
     });
 
     describe('remove', () => {
         it('should remove a recruiter', async () => {
             const id = 1;
+            const req = { user: { userId: 'user-uuid-123', role: 'recruiter' } };
 
-            const result = await controller.remove(id);
+            const result = await controller.remove(id, req);
 
             expect(result).toBeUndefined();
             expect(recruitersServiceMock.remove).toHaveBeenCalledTimes(1);
-            expect(recruitersServiceMock.remove).toHaveBeenCalledWith(id);
+            expect(recruitersServiceMock.remove).toHaveBeenCalledWith(id, req.user);
         });
     });
 
@@ -204,24 +207,26 @@ describe('RecruitersController', () => {
             const dto = {
                 companyName: 'Updated',
             } as UpdateRecruiterDto;
+            const req = { user: { userId: 'user-uuid-123', role: 'recruiter' } };
 
             const error = new Error('Update failed');
 
             recruitersServiceMock.update.mockRejectedValue(error);
 
-            await expect(controller.update(1, dto)).rejects.toThrow(error);
+            await expect(controller.update(1, dto, req)).rejects.toThrow(error);
 
-            expect(recruitersServiceMock.update).toHaveBeenCalledWith(1, dto);
+            expect(recruitersServiceMock.update).toHaveBeenCalledWith(1, dto, req.user);
         });
 
         it('should propagate remove errors', async () => {
+            const req = { user: { userId: 'user-uuid-123', role: 'recruiter' } };
             const error = new Error('Delete failed');
 
             recruitersServiceMock.remove.mockRejectedValue(error);
 
-            await expect(controller.remove(1)).rejects.toThrow(error);
+            await expect(controller.remove(1, req)).rejects.toThrow(error);
 
-            expect(recruitersServiceMock.remove).toHaveBeenCalledWith(1);
+            expect(recruitersServiceMock.remove).toHaveBeenCalledWith(1, req.user);
         });
     });
 });
