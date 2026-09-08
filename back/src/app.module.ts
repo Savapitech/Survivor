@@ -24,7 +24,7 @@ import { AuthModule } from './auth/auth.module';
       password: process.env.DB_PASSWORD ?? 'postgres',
       database: process.env.DB_NAME ?? 'profilsactifs',
       autoLoadEntities: true,
-      synchronize: false,
+      synchronize: process.env.NODE_ENV == "development",
       migrations: [__dirname + '/migrations/*{.ts,.js}'],
       migrationsRun: true,
       retryAttempts: 10,
