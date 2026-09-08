@@ -4,9 +4,11 @@ RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY package.json .
 
 RUN npm i
+
+COPY . .
 
 EXPOSE ${PORT:-3000}
 
