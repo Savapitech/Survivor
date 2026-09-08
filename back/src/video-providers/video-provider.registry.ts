@@ -3,6 +3,7 @@ import { LocalVideoProvider } from './providers/local-video.provider';
 import { MinistryDummyVideoProvider } from './providers/ministry-dummy-video.provider';
 import { LinkVideoProvider } from './providers/link-video.provider';
 import { VideoProvider, VideoProviderName } from './video-provider.interface';
+import { VideoProviderUnavailableError } from './video-provider.errors';
 
 @Injectable()
 export class VideoProviderRegistry {
@@ -17,7 +18,14 @@ export class VideoProviderRegistry {
   }
 
   get(name: VideoProviderName): VideoProvider {
-    return this.providers[name];
+    const provider = this.providers[name];
+    if (!provider) {
+      throw new VideoProviderUnavailableError(
+        name,
+        `No video provider is registered for "${name}"`,
+      );
+    }
+    return provider;
   }
 
   getDefault(): VideoProvider {

@@ -24,6 +24,7 @@ import { VIDEO_CONSENT_VERSION } from './video-consent';
 import { VideoProviderRegistry } from '../video-providers/video-provider.registry';
 import {
   StoredVideoFile,
+  VideoProvider,
   VideoProviderName,
 } from '../video-providers/video-provider.interface';
 import { VideoProviderUnavailableError } from '../video-providers/video-provider.errors';
@@ -401,9 +402,15 @@ export class SeekersService {
     videoExternalId: string | null;
   }): Promise<void> {
     if (!seeker.videoProvider || !seeker.videoExternalId) return;
-    const provider = this.videoProviders.get(
-      seeker.videoProvider as VideoProviderName,
-    );
+    let provider: VideoProvider;
+    try {
+      provider = this.videoProviders.get(
+        seeker.videoProvider as VideoProviderName,
+      );
+    } catch (err) {
+      if (err instanceof VideoProviderUnavailableError) return;
+      throw err;
+    }
     await provider.delete(seeker.videoExternalId);
   }
 
