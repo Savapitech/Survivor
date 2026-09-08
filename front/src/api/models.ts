@@ -151,7 +151,7 @@ export interface SubmitAttemptResult {
   certified: boolean;
 }
 
-export type InteractionType = 'view' | 'contact' | 'favorite' | 'like';
+export type InteractionType = 'view' | 'contact' | 'favorite';
 
 interface InteractionBase {
   id: number;

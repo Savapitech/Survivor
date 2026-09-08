@@ -104,7 +104,7 @@ export function docInteractionsGetRecuiter() {
               id: 1,
               recruiterId: 10,
               seekerId: 20,
-              type: 'LIKE',
+              type: 'CONTACT',
               seen: true,
               createdAt: '2026-09-06T10:30:00.000Z',
             },
@@ -198,7 +198,7 @@ export function docInteractionsGetSeeker() {
               id: 1,
               recruiterId: 10,
               seekerId: 20,
-              type: 'LIKE',
+              type: 'CONTACT',
               seen: true,
               createdAt: '2026-09-06T10:30:00.000Z',
             },
@@ -424,72 +424,6 @@ export function docInteractionsDeleteFavorite() {
         example: {
           statusCode: 404,
           message: 'Favorite interaction not found',
-          error: 'Not Found',
-        },
-      },
-    }),
-  );
-}
-
-export function docInteractionsDeleteLike() {
-  return applyDecorators(
-    ApiBearerAuth('JWT'),
-    ApiOperation({
-      summary: 'Remove a like interaction',
-      description:
-        'Removes the like interaction between a recruiter and a seeker.',
-    }),
-    ApiQuery({
-      name: 'recruiterId',
-      required: true,
-      type: Number,
-      example: 10,
-      description: 'Recruiter id.',
-    }),
-    ApiQuery({
-      name: 'seekerId',
-      required: true,
-      type: Number,
-      example: 20,
-      description: 'Seeker id.',
-    }),
-    ApiResponse({
-      status: 200,
-      description: 'Like interaction successfully removed.',
-      schema: {
-        example: {
-          success: true,
-        },
-      },
-    }),
-    ApiResponse({
-      status: 400,
-      description: 'Error: Bad Request',
-      schema: {
-        example: {
-          statusCode: 400,
-          message: ['Invalid recruiter or seeker id'],
-          error: 'Bad Request',
-        },
-      },
-    }),
-    ApiResponse({
-      status: 401,
-      description: 'Error: Unauthorized',
-      schema: {
-        example: {
-          statusCode: 401,
-          message: 'Unauthorized',
-        },
-      },
-    }),
-    ApiResponse({
-      status: 404,
-      description: 'Like interaction not found.',
-      schema: {
-        example: {
-          statusCode: 404,
-          message: 'Like interaction not found',
           error: 'Not Found',
         },
       },

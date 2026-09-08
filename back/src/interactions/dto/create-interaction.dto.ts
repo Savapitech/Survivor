@@ -6,7 +6,7 @@ export class CreateInteractionDto {
   @ApiProperty({
     description: "interaction's type",
     enum: InteractionType,
-    example: InteractionType.LIKE,
+    example: InteractionType.FAVORITE,
     required: true,
   })
   @IsEnum(InteractionType)

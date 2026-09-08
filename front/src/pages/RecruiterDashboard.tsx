@@ -19,7 +19,6 @@ const TABS: { value: InteractionType | undefined; label: string }[] = [
   { value: 'contact', label: 'Contactés' },
   { value: 'favorite', label: 'Favoris' },
   { value: 'view', label: 'Vus' },
-  { value: 'like', label: 'Aimés' },
 ];
 
 export function RecruiterDashboard() {

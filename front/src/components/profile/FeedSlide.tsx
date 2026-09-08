@@ -8,11 +8,9 @@ import styles from './FeedSlide.module.css';
 interface FeedSlideProps {
   seeker: SeekerListItem;
   interactive: boolean;
-  liked: boolean;
   contacted: boolean;
   favorited: boolean;
   viewerId?: string;
-  onToggleLike: () => void;
   onContact: () => void;
   onToggleFavorite: () => void;
 }
@@ -20,11 +18,9 @@ interface FeedSlideProps {
 export function FeedSlide({
   seeker,
   interactive,
-  liked,
   contacted,
   favorited,
   viewerId,
-  onToggleLike,
   onContact,
   onToggleFavorite,
 }: FeedSlideProps) {
@@ -65,14 +61,6 @@ export function FeedSlide({
 
       {interactive && (
         <div className={styles.actions}>
-          <Button
-            variant={liked ? 'primary' : 'ghost'}
-            onClick={onToggleLike}
-            aria-pressed={liked}
-          >
-            <span aria-hidden="true">♦</span>{' '}
-            {liked ? 'Recommandé' : 'Recommander'}
-          </Button>
           <Button
             variant={favorited ? 'primary' : 'ghost'}
             onClick={onToggleFavorite}

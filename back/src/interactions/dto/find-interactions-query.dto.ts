@@ -15,7 +15,7 @@ export class FindInteractionsQueryDto extends PaginationQueryDto {
   @ApiProperty({
     description: "Interaction's type",
     enum: InteractionType,
-    example: InteractionType.LIKE,
+    example: InteractionType.FAVORITE,
     required: false,
   })
   @IsOptional()

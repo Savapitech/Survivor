@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getSeeker } from '../../api/seekers';
-import {
-  createInteraction,
-  listSent,
-  removeLike,
-} from '../../api/interactions';
+import { createInteraction } from '../../api/interactions';
 import { useSession } from '../../context/SessionContext';
 import { useAnnounce } from '../../context/AnnounceContext';
 import { useAsync } from '../../hooks/useAsync';
@@ -27,7 +23,6 @@ export function ProfileView() {
   const navigate = useNavigate();
   const hasLoggedView = useRef(false);
   const [contacted, setContacted] = useState(false);
-  const [liked, setLiked] = useState(false);
 
   const recruiterId = isRecruiter ? session?.recruiterId : undefined;
   const viewerId = session?.role === 'seeker' ? session.userId : undefined;
@@ -60,13 +55,6 @@ export function ProfileView() {
     }).catch(() => undefined);
   }, [seeker, isRecruiter, session?.recruiterId]);
 
-  useEffect(() => {
-    if (!seeker || !isRecruiter || !session?.recruiterId) return;
-    listSent(session.recruiterId, { type: 'like', pageSize: 100 })
-      .then((res) => setLiked(res.data.some((i) => i.seeker.id === seeker.id)))
-      .catch(() => undefined);
-  }, [seeker, isRecruiter, session?.recruiterId]);
-
   if (loading) return <LoadingState label="Chargement du profil..." />;
   if (error) return <ErrorState onRetry={refetch} />;
   if (!seeker) return null;
@@ -84,23 +72,6 @@ export function ProfileView() {
     setContacted(true);
     announce(`${seeker!.name} à été contacté.`);
     navigate(`/messagerie?seekerId=${seeker!.id}`);
-  }
-
-  async function handleToggleLike() {
-    if (!session?.recruiterId) return;
-    if (liked) {
-      await removeLike(session.recruiterId, seeker!.id);
-      setLiked(false);
-      announce('Recommandation retirée.');
-    } else {
-      await createInteraction({
-        type: 'like',
-        recruiterId: session.recruiterId,
-        seekerId: seeker!.id,
-      });
-      setLiked(true);
-      announce(`${seeker!.name} a été recommandé.`);
-    }
   }
 
   return (
@@ -186,13 +157,6 @@ export function ProfileView() {
         <div className={styles.actions}>
           <Button onClick={handleContact} disabled={contacted}>
             {contacted ? 'Contacté ' : `Contacter ${seeker.name}`}
-          </Button>
-          <Button
-            variant={liked ? 'primary' : 'ghost'}
-            onClick={handleToggleLike}
-            aria-pressed={liked}
-          >
-            {liked ? 'Recommandé' : 'Recommander'}
           </Button>
         </div>
       )}

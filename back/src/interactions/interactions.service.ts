@@ -36,10 +36,7 @@ export class InteractionsService {
       throw new NotFoundException('Seeker not found');
     }
 
-    if (
-      dto.type === InteractionType.FAVORITE ||
-      dto.type === InteractionType.LIKE
-    ) {
+    if (dto.type === InteractionType.FAVORITE) {
       const existing = await this.interactionsRepository.findOne({
         where: {
           type: dto.type,
@@ -148,17 +145,6 @@ export class InteractionsService {
     });
     if (!result.affected) {
       throw new NotFoundException('Favorite not found');
-    }
-  }
-
-  async removeLike(recruiterId: number, seekerId: number) {
-    const result = await this.interactionsRepository.delete({
-      recruiter: { id: recruiterId },
-      seeker: { id: seekerId },
-      type: InteractionType.LIKE,
-    });
-    if (!result.affected) {
-      throw new NotFoundException('Like not found');
     }
   }
 

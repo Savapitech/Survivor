@@ -15,7 +15,6 @@ const TYPE_LABEL: Record<string, string> = {
   view: 'a visionné votre profil',
   contact: 'vous a contacté',
   favorite: 'vous a ajouté en favori',
-  like: 'a aimé votre profil',
 };
 
 export function Notifications() {

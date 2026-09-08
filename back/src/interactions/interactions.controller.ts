@@ -18,7 +18,6 @@ import { RemoveFavoriteQueryDto } from './dto/remove-favorite-query.dto';
 import {
   docInteractionsDeleteById,
   docInteractionsDeleteFavorite,
-  docInteractionsDeleteLike,
   docInteractionsGetById,
   docInteractionsGetRecuiter,
   docInteractionsGetSeeker,
@@ -73,15 +72,6 @@ export class InteractionsController {
   @docInteractionsDeleteFavorite()
   removeFavorite(@Query() query: RemoveFavoriteQueryDto) {
     return this.interactionsService.removeFavorite(
-      query.recruiterId,
-      query.seekerId,
-    );
-  }
-
-  @Delete('like')
-  @docInteractionsDeleteLike()
-  removeLike(@Query() query: RemoveFavoriteQueryDto) {
-    return this.interactionsService.removeLike(
       query.recruiterId,
       query.seekerId,
     );

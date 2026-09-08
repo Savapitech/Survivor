@@ -4,12 +4,7 @@ import { listSeekers } from '../api/seekers';
 import { listCompetences } from '../api/competences';
 import { listActivitySectors } from '../api/activitySectors';
 import { listLocalisations } from '../api/localisations';
-import {
-  createInteraction,
-  listSent,
-  removeFavorite,
-  removeLike,
-} from '../api/interactions';
+import { createInteraction, listSent, removeFavorite } from '../api/interactions';
 import { ApiError } from '../api/http';
 import type { SeekerListItem } from '../api/models';
 import { useSession } from '../context/SessionContext';
@@ -42,7 +37,6 @@ export function Feed() {
   const [activitySectorIds, setActivitySectorIds] = useState<number[]>([]);
   const [favoriteIds, setFavoriteIds] = useState<Set<number>>(new Set());
   const [contactedIds, setContactedIds] = useState<Set<number>>(new Set());
-  const [likedIds, setLikedIds] = useState<Set<number>>(new Set());
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const [items, setItems] = useState<SeekerListItem[]>([]);
@@ -105,9 +99,6 @@ export function Feed() {
     listSent(session.recruiterId, { type: 'contact', pageSize: 100 })
       .then((res) => setContactedIds(new Set(res.data.map((i) => i.seeker.id))))
       .catch(() => setContactedIds(new Set()));
-    listSent(session.recruiterId, { type: 'like', pageSize: 100 })
-      .then((res) => setLikedIds(new Set(res.data.map((i) => i.seeker.id))))
-      .catch(() => setLikedIds(new Set()));
   }, [session?.recruiterId]);
 
   async function handleContact(seekerId: number) {
@@ -132,23 +123,6 @@ export function Feed() {
       await createInteraction({ type: 'favorite', recruiterId, seekerId });
       setFavoriteIds((prev) => new Set(prev).add(seekerId));
       announce('Profil ajouté aux favoris.');
-    }
-  }
-
-  async function handleToggleLike(seekerId: number) {
-    if (!recruiterId) return;
-    if (likedIds.has(seekerId)) {
-      await removeLike(recruiterId, seekerId);
-      setLikedIds((prev) => {
-        const next = new Set(prev);
-        next.delete(seekerId);
-        return next;
-      });
-      announce('Recommandation retirée.');
-    } else {
-      await createInteraction({ type: 'like', recruiterId, seekerId });
-      setLikedIds((prev) => new Set(prev).add(seekerId));
-      announce('Profil recommandé.');
     }
   }
 
@@ -194,11 +168,9 @@ export function Feed() {
                 key={seeker.id}
                 seeker={seeker}
                 interactive={Boolean(recruiterId)}
-                liked={likedIds.has(seeker.id)}
                 contacted={contactedIds.has(seeker.id)}
                 favorited={favoriteIds.has(seeker.id)}
                 viewerId={session?.userId}
-                onToggleLike={() => handleToggleLike(seeker.id)}
                 onContact={() => handleContact(seeker.id)}
                 onToggleFavorite={() => handleToggleFavorite(seeker.id)}
               />

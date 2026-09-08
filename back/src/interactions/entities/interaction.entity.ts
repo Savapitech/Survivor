@@ -13,7 +13,6 @@ export enum InteractionType {
   VIEW = 'view',
   CONTACT = 'contact',
   FAVORITE = 'favorite',
-  LIKE = 'like',
 }
 
 @Entity()
@@ -28,7 +27,7 @@ export class Interaction {
   @ApiProperty({
     description: "competence's type",
     enum: InteractionType,
-    example: InteractionType.LIKE,
+    example: InteractionType.FAVORITE,
   })
   @Column({ type: 'enum', enum: InteractionType })
   type: InteractionType;

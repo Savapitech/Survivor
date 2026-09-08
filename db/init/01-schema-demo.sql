@@ -38,8 +38,7 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 CREATE TYPE public.interaction_type_enum AS ENUM (
     'view',
     'contact',
-    'favorite',
-    'like'
+    'favorite'
 );
 
 
@@ -1011,7 +1010,6 @@ COPY public.interaction (id, type, "createdAt", "seenAt", "recruiterId", "seeker
 51	contact	2026-09-03 08:25:39.70348	\N	12	13
 52	contact	2026-09-03 08:25:39.728217	\N	12	14
 55	view	2026-09-03 08:25:39.781301	\N	12	17
-56	like	2026-09-03 08:49:49.06096	\N	12	13
 57	favorite	2026-09-03 08:49:55.730954	\N	12	15
 58	contact	2026-09-03 08:49:56.677799	\N	12	15
 \.
