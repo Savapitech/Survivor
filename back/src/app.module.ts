@@ -29,6 +29,9 @@ import { AuthModule } from './auth/auth.module';
       migrationsRun: true,
       retryAttempts: 10,
       retryDelay: 3000,
+      extra: {
+        max: 50,
+      },
     }),
     UsersModule,
     SeekersModule,
