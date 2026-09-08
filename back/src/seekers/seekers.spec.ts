@@ -23,12 +23,14 @@ let queryBuilderInteraction: {
 
 let queryBuilderSeeker: {
     select: jest.Mock;
+    addSelect: jest.Mock;
     distinct: jest.Mock;
     innerJoin: jest.Mock;
     andWhere: jest.Mock;
     clone: jest.Mock;
     getCount: jest.Mock;
     orderBy: jest.Mock;
+    addOrderBy: jest.Mock;
     offset: jest.Mock;
     limit: jest.Mock;
     getRawMany: jest.Mock;
@@ -48,12 +50,14 @@ describe('SeekersService', () => {
 
     queryBuilderSeeker = {
         select: jest.fn().mockReturnThis(),
+        addSelect: jest.fn().mockReturnThis(),
         distinct: jest.fn().mockReturnThis(),
         innerJoin: jest.fn().mockReturnThis(),
         andWhere: jest.fn().mockReturnThis(),
         clone: jest.fn().mockReturnThis(),
         getCount: jest.fn(),
         orderBy: jest.fn().mockReturnThis(),
+        addOrderBy: jest.fn().mockReturnThis(),
         offset: jest.fn().mockReturnThis(),
         limit: jest.fn().mockReturnThis(),
         getRawMany: jest.fn(),
@@ -360,6 +364,29 @@ describe('SeekersService', () => {
 
             expect(result).toBeDefined();
             expect(repository.find).not.toHaveBeenCalled();
+        });
+
+        it('should order by updatedAt DESC then id', async () => {
+            queryBuilderSeeker.getRawMany.mockResolvedValue([]);
+            queryBuilderSeeker.getCount.mockResolvedValue(0);
+
+            await service.findAll({ page: 1, pageSize: 20 });
+
+            expect(queryBuilderSeeker.orderBy).toHaveBeenCalledWith('updatedAt', 'DESC');
+            expect(queryBuilderSeeker.addOrderBy).toHaveBeenCalledWith('seeker.id', 'DESC');
+        });
+
+        it('should preserve the id order from the ranking query when re-fetching full entities', async () => {
+            queryBuilderSeeker.getRawMany.mockResolvedValue([{ id: 2 }, { id: 1 }]);
+            queryBuilderSeeker.getCount.mockResolvedValue(2);
+            repository.find!.mockResolvedValue([
+                { id: 1, videoProvider: null, videoExternalId: null },
+                { id: 2, videoProvider: null, videoExternalId: null },
+            ]);
+
+            const result = await service.findAll({ page: 1, pageSize: 20 });
+
+            expect(result.data.map((s: any) => s.id)).toEqual([2, 1]);
         });
     });
 

@@ -260,6 +260,7 @@ export class SeekersService {
     const total = await idQb.clone().getCount();
     const rows = await idQb
       .orderBy('updatedAt', 'DESC')
+      .addOrderBy('seeker.id', 'DESC')
       .offset(skip)
       .limit(take)
       .getRawMany<{ id: number }>();
@@ -272,11 +273,14 @@ export class SeekersService {
     const items = await this.seekersRepository.find({
       where: { id: In(ids) },
       relations: { ...SEEKER_RELATIONS, user: true },
-      order: { updatedAt: 'DESC' },
     });
+    const itemsById = new Map(items.map((item) => [item.id, item]));
+    const orderedItems = ids
+      .map((id) => itemsById.get(id))
+      .filter((item): item is Seeker => item !== undefined);
 
     const withVideoViews = await this.attachVideoView(
-      items.map((item) => toPublicSeeker(item)),
+      orderedItems.map((item) => toPublicSeeker(item)),
     );
     return paginate(withVideoViews, total, query);
   }
