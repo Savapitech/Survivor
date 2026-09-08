@@ -6,7 +6,6 @@ export class RemoveLikeInteractionType1788851165322
   name = 'RemoveLikeInteractionType1788851165322';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DELETE FROM "interaction" WHERE "type" = 'like'`);
     await queryRunner.query(
       `ALTER TYPE "public"."interaction_type_enum" RENAME TO "interaction_type_enum_old"`,
     );
