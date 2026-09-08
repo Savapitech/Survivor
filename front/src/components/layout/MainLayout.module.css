@@ -8,8 +8,6 @@
 .rightsNotice {
   margin: 0;
   padding: var(--space-3) var(--space-5);
-  background: var(--color-warning-bg);
-  color: var(--color-warning);
   font-size: var(--font-size-base);
   font-weight: 700;
   text-align: center;
