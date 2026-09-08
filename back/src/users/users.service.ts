@@ -62,7 +62,7 @@ export class UsersService {
     const [users, total] = await this.usersRepository.findAndCount({
       skip,
       take,
-      order: { email: 'ASC' },
+      order: { updatedAt: 'DESC' },
     });
     return paginate(
       users.map((user) => this.toPublicUser(user)),

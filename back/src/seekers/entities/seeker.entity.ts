@@ -6,6 +6,7 @@ import {
   JoinTable,
   JoinColumn,
   OneToOne,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Localisation } from '../../localisations/entities/localisation.entity';
@@ -143,4 +144,11 @@ export class Seeker {
   @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
+
+  @ApiProperty({
+    description: "user's update date",
+    type: User,
+  })
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

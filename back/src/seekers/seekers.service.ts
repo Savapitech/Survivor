@@ -243,6 +243,7 @@ export class SeekersService {
       );
     }
     idQb.innerJoin('seeker.user', 'seekerUser');
+    idQb.addSelect('seeker.updatedAt', 'updatedAt')
     if (!canSeeMinors) {
       idQb.andWhere('seekerUser.birthDate <= :adultCutoff', {
         adultCutoff: adultCutoffDate(),
@@ -257,7 +258,7 @@ export class SeekersService {
 
     const total = await idQb.clone().getCount();
     const rows = await idQb
-      .orderBy('seeker.id', 'ASC')
+      .orderBy('updatedAt', 'DESC')
       .offset(skip)
       .limit(take)
       .getRawMany<{ id: number }>();
@@ -270,7 +271,7 @@ export class SeekersService {
     const items = await this.seekersRepository.find({
       where: { id: In(ids) },
       relations: { ...SEEKER_RELATIONS, user: true },
-      order: { id: 'ASC' },
+      order: { updatedAt: 'DESC' },
     });
 
     const withVideoViews = await this.attachVideoView(
