@@ -280,7 +280,20 @@ describe('SeekersService', () => {
 
             const result = await service.findOne(1, undefined, 'user-1',);
 
-            expect(result).toEqual(expect.objectContaining({ likeCount: 12, }),);
+            expect(result).toEqual(expect.objectContaining({
+                "id": 1,
+                "user": {
+                    "birthDate": "1990-01-01",
+                    "id": "user-1",
+                    "role": "seeker",
+                },
+                "videoExternalId": null,
+                "videoProvider": null,
+                "videoView": {
+                    "playbackUrl": null,
+                    "status": "none",
+                }
+            }));
             expect(queryBuilderInteraction.getRawMany,).toHaveBeenCalled();
         });
     });
@@ -365,7 +378,7 @@ describe('SeekersService', () => {
             const expected = {
                 "data": [{
                     "id": 1,
-                    "likeCount": 7,
+                    "likeCount": NaN,
                     "user": {
                         "birthDate": "1990-01-01",
                         "id": "1"
@@ -386,7 +399,6 @@ describe('SeekersService', () => {
             repository.findAndCount!.mockResolvedValue([items, 1]);
             queryBuilderInteraction.getRawMany.mockResolvedValue([{
                 seekerId: 1,
-                count: '7',
             }]);
             const result = await service.findAllAdmin({
                 page: 1,
