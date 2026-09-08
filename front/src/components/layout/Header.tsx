@@ -1,10 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useSession } from '../../context/SessionContext';
+import { useUnreadCounts } from '../../hooks/useUnreadCounts';
+import { CountBadge } from '../ui/CountBadge';
 import styles from './Header.module.css';
 
 export function Header() {
   const { session, isSeeker, isRecruiter, isAdmin, logout } = useSession();
   const navigate = useNavigate();
+  const unread = useUnreadCounts();
 
   function handleLogout() {
     logout();
@@ -31,9 +34,17 @@ export function Header() {
               </Link>
               <Link className={styles.navLink} to="/notifications">
                 Notifications
+                <CountBadge
+                  count={unread.notifications}
+                  label={`${unread.notifications} notification${unread.notifications > 1 ? 's' : ''} non lue${unread.notifications > 1 ? 's' : ''}`}
+                />
               </Link>
               <Link className={styles.navLink} to="/messagerie">
                 Messagerie
+                <CountBadge
+                  count={unread.messages}
+                  label={`${unread.messages} message${unread.messages > 1 ? 's' : ''} non lu${unread.messages > 1 ? 's' : ''}`}
+                />
               </Link>
             </>
           )}
@@ -55,6 +66,10 @@ export function Header() {
               </Link>
               <Link className={styles.navLink} to="/messagerie">
                 Messagerie
+                <CountBadge
+                  count={unread.messages}
+                  label={`${unread.messages} message${unread.messages > 1 ? 's' : ''} non lu${unread.messages > 1 ? 's' : ''}`}
+                />
               </Link>
               <Link className={styles.navLink} to="/mon-entreprise">
                 Mon entreprise
