@@ -17,6 +17,9 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+COMMENT ON SCHEMA public IS '';
+
+
 --
 -- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
@@ -304,6 +307,37 @@ ALTER SEQUENCE public.message_id_seq OWNED BY public.message.id;
 
 
 --
+-- Name: migrations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.migrations (
+    id integer NOT NULL,
+    "timestamp" bigint NOT NULL,
+    name character varying NOT NULL
+);
+
+
+--
+-- Name: migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.migrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.migrations_id_seq OWNED BY public.migrations.id;
+
+
+--
 -- Name: question; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -378,13 +412,15 @@ CREATE TABLE public.seeker (
     video character varying,
     "videoProvider" character varying,
     "videoExternalId" character varying,
-    "userId" uuid,
     "videoStatus" public.seeker_videostatus_enum DEFAULT 'pending'::public.seeker_videostatus_enum NOT NULL,
     "videoRejectionReason" text,
     "videoModeratedAt" timestamp without time zone,
     "videoModeratedBy" uuid,
     "videoConsentGivenAt" timestamp without time zone,
-    "videoConsentVersion" character varying
+    "videoConsentVersion" character varying,
+    "userId" uuid,
+    "updatedAt" timestamp without time zone DEFAULT now() NOT NULL,
+    "withdrawnAt" timestamp without time zone
 );
 
 
@@ -498,6 +534,13 @@ ALTER TABLE ONLY public.localisation ALTER COLUMN id SET DEFAULT nextval('public
 --
 
 ALTER TABLE ONLY public.message ALTER COLUMN id SET DEFAULT nextval('public.message_id_seq'::regclass);
+
+
+--
+-- Name: migrations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.migrations ALTER COLUMN id SET DEFAULT nextval('public.migrations_id_seq'::regclass);
 
 
 --
@@ -956,11 +999,11 @@ COPY public.answer (id, value, "attemptId", "questionId") FROM stdin;
 -- Data for Name: attempt; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.attempt (id, "questionIds", score, "submittedAt", "seekerId") FROM stdin;
-10	{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100}	100	2026-09-03 08:18:47.324	13
-11	{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100}	100	2026-09-03 08:18:47.422	14
-12	{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100}	100	2026-09-03 08:18:47.517	15
-13	{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100}	100	2026-09-03 08:19:34.621	17
+COPY public.attempt (id, "questionIds", score, "submittedAt", "seekerId", "questionnaireVersion") FROM stdin;
+10	{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100}	100	2026-09-03 08:18:47.324	13	\N
+11	{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100}	100	2026-09-03 08:18:47.422	14	\N
+12	{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100}	100	2026-09-03 08:18:47.517	15	\N
+13	{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100}	100	2026-09-03 08:19:34.621	17	\N
 \.
 
 
@@ -1032,6 +1075,20 @@ COPY public.message (id, "senderRole", content, "createdAt", "seenAt", "recruite
 15	seeker	Bonjour, avec plaisir ! Je suis disponible dès demain.	2026-09-03 08:25:47.726276	\N	12	13
 14	recruiter	Bonjour Etienne, votre profil correspond exactement à ce que nous cherchons. Seriez-vous disponible pour un échange cette semaine ?	2026-09-03 08:25:47.704061	2026-09-03 08:26:24.364	12	13
 16	recruiter	Bonjour !	2026-09-03 08:50:00.921946	\N	12	15
+\.
+
+
+--
+-- Data for Name: migrations; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.migrations (id, "timestamp", name) FROM stdin;
+1	1788702983491	Init1788702983491
+2	1788769079931	AddQuestionnaireVersion1788769079931
+3	1788851165322	RemoveLikeInteractionType1788851165322
+4	1788944350000	AddSeekerUpdatedAt1788944350000
+5	1788944400000	AddSeekerUpdatedAtIdIndex1788944400000
+6	1789030800000	AddSeekerWithdrawnAt1789030800000
 \.
 
 
@@ -1156,12 +1213,12 @@ COPY public.recruiter (id, "companyName", "userId") FROM stdin;
 -- Data for Name: seeker; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.seeker (id, name, lastname, certification, video, "userId", "videoStatus", "videoRejectionReason", "videoModeratedAt", "videoModeratedBy") FROM stdin;
-16	Jeremie	Moulin	f	https://youtube.com/watch?v=ttaDZyPm608	749d510b-6248-4a8e-9cfb-0deb9c74b4f6	pending	\N	\N	\N
-13	Etienne	de la Fontaine	t	https://youtube.com/watch?v=UwMmKYR7sEs	109ba1c5-54b8-4e0c-8755-b5f4d06c1294	approved	\N	2026-09-03 08:18:54.725	db44cb77-c1d3-4afa-bd84-f1cd69169c2c
-14	Tanguy	Brague	t	https://youtube.com/watch?v=OcWfOgs_0Zk	680bbc07-055b-4f30-b1ab-7c23187b6c4d	approved	\N	2026-09-03 08:18:54.748	db44cb77-c1d3-4afa-bd84-f1cd69169c2c
-15	Georges	Ansquer	t	https://youtube.com/watch?v=_lGKG15E-jI	f4fa1b10-15df-4a5e-9ef5-9313552df325	approved	\N	2026-09-03 08:18:54.766	db44cb77-c1d3-4afa-bd84-f1cd69169c2c
-17	Benjamin	Croizet	t	https://www.youtube.com/watch?v=InMcm5gqHUs	97ee1332-00e0-407f-99e9-0f9246f160fa	approved	\N	2026-09-03 08:19:34.633	db44cb77-c1d3-4afa-bd84-f1cd69169c2c
+COPY public.seeker (id, name, lastname, certification, video, "videoProvider", "videoExternalId", "videoStatus", "videoRejectionReason", "videoModeratedAt", "videoModeratedBy", "videoConsentGivenAt", "videoConsentVersion", "userId", "updatedAt", "withdrawnAt") FROM stdin;
+16	Jeremie	Moulin	f	https://youtube.com/watch?v=ttaDZyPm608	\N	\N	pending	\N	\N	\N	\N	\N	749d510b-6248-4a8e-9cfb-0deb9c74b4f6	2026-09-09 18:06:12.666757	\N
+13	Etienne	de la Fontaine	t	https://youtube.com/watch?v=UwMmKYR7sEs	\N	\N	approved	\N	2026-09-03 08:18:54.725	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	109ba1c5-54b8-4e0c-8755-b5f4d06c1294	2026-09-09 18:06:12.666757	\N
+14	Tanguy	Brague	t	https://youtube.com/watch?v=OcWfOgs_0Zk	\N	\N	approved	\N	2026-09-03 08:18:54.748	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	680bbc07-055b-4f30-b1ab-7c23187b6c4d	2026-09-09 18:06:12.666757	\N
+15	Georges	Ansquer	t	https://youtube.com/watch?v=_lGKG15E-jI	\N	\N	approved	\N	2026-09-03 08:18:54.766	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	f4fa1b10-15df-4a5e-9ef5-9313552df325	2026-09-09 18:06:12.666757	\N
+17	Benjamin	Croizet	t	https://www.youtube.com/watch?v=InMcm5gqHUs	\N	\N	approved	\N	2026-09-03 08:19:34.633	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	97ee1332-00e0-407f-99e9-0f9246f160fa	2026-09-09 18:06:12.666757	\N
 \.
 
 
@@ -1274,6 +1331,13 @@ SELECT pg_catalog.setval('public.message_id_seq', 16, true);
 
 
 --
+-- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.migrations_id_seq', 6, true);
+
+
+--
 -- Name: question_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -1332,6 +1396,14 @@ ALTER TABLE ONLY public.attempt
 
 ALTER TABLE ONLY public.activity_sector
     ADD CONSTRAINT "PK_77933457dfcb2f851c75a36a370" PRIMARY KEY (id);
+
+
+--
+-- Name: migrations PK_8c82d7f526340ab734260ea46be; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.migrations
+    ADD CONSTRAINT "PK_8c82d7f526340ab734260ea46be" PRIMARY KEY (id);
 
 
 --
@@ -1513,6 +1585,13 @@ CREATE INDEX "IDX_fbf4bd024586a328d270739f21" ON public.seeker_activity_sectors_
 
 
 --
+-- Name: IDX_seeker_updatedAt_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX "IDX_seeker_updatedAt_id" ON public.seeker USING btree ("updatedAt" DESC, id DESC);
+
+
+--
 -- Name: seeker_activity_sectors_activity_sector FK_0d7df468a4255b2d82ec9983dd4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1631,32 +1710,6 @@ ALTER TABLE ONLY public.answer
 ALTER TABLE ONLY public.seeker_activity_sectors_activity_sector
     ADD CONSTRAINT "FK_fbf4bd024586a328d270739f214" FOREIGN KEY ("seekerId") REFERENCES public.seeker(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
-
-CREATE TABLE public.migrations (
-    id integer NOT NULL,
-    "timestamp" bigint NOT NULL,
-    name character varying NOT NULL
-);
-
-CREATE SEQUENCE public.migrations_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER SEQUENCE public.migrations_id_seq OWNED BY public.migrations.id;
-
-ALTER TABLE ONLY public.migrations ALTER COLUMN id SET DEFAULT nextval('public.migrations_id_seq'::regclass);
-
-ALTER TABLE ONLY public.migrations
-    ADD CONSTRAINT "PK_8c82d7f526340ab734260ea46be" PRIMARY KEY (id);
-
-INSERT INTO public.migrations (id, "timestamp", name) VALUES (1, 1788702983491, 'Init1788702983491');
-INSERT INTO public.migrations (id, "timestamp", name) VALUES (2, 1788769079931, 'AddQuestionnaireVersion1788769079931');
-
-SELECT pg_catalog.setval('public.migrations_id_seq', 2, true);
 
 --
 -- PostgreSQL database dump complete
