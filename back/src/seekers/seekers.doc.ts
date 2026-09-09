@@ -555,3 +555,187 @@ export function docSeekersDeleteById() {
     }),
   );
 }
+
+export function docSeekersPostVideo() {
+  return applyDecorators(
+    ApiBearerAuth('JWT'),
+    ApiOperation({
+      summary: 'Create a video',
+      description: "Create a video linked to the seeker's profile.",
+    }),
+    ApiParam({
+      name: "id",
+      type: Number,
+      example: 1,
+      description: "seeker's id",
+    }),
+    ApiBody({
+      type: String,
+      description: 'videoConsent',
+      required: true
+    }),
+    ApiResponse({
+      status: 201,
+      type: Seeker,
+      description: 'video successfully created.',
+    }),
+    ApiResponse({
+      status: 400,
+      description: 'Error: Bad Request',
+      schema: {
+        example: {
+          statusCode: 400,
+          message: 'id should not be empty',
+          error: 'Bad Request',
+        },
+      },
+    }),
+    ApiResponse({
+      status: 401,
+      description: 'Error: Unauthorized',
+      schema: {
+        example: {
+          statusCode: 401,
+          message: 'Unauthorized',
+          error: 'Unauthorized',
+        },
+      },
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'Error: Not Found',
+      schema: {
+        example: {
+          statusCode: 404,
+          message: 'Seeker not found',
+          error: 'Not Found',
+        },
+      },
+    }),
+    ApiResponse({
+      status: 409,
+      description: 'Error: Conflict',
+      schema: {
+        example: {
+          statusCode: 409,
+          message: 'This user already has a seeker profile',
+          error: 'Conflict',
+        },
+      },
+    }),
+    ApiResponse({
+      status: 422,
+      description: 'Error: Unprocessable Entity',
+      schema: {
+        example: {
+          statusCode: 422,
+          message: ['id should not be empty'],
+          error: 'Unprocessable Entity',
+        },
+      },
+    }),
+  );
+}
+
+export function docSeekersDeleteVideo() {
+  return applyDecorators(
+    ApiBearerAuth('JWT'),
+    ApiOperation({
+      summary: 'Delete a video',
+      description: 'Deletes the specified video.',
+    }),
+    ApiParam({
+      name: 'id',
+      required: true,
+      type: Number,
+      description: "The seeker's unique identifier.",
+      example: 42,
+    }),
+    ApiResponse({
+      status: 200,
+      description: 'Seeker successfully deleted.',
+    }),
+    ApiResponse({
+      status: 400,
+      description: 'Error: Bad Request',
+      schema: {
+        example: {
+          statusCode: 400,
+          message: 'Validation failed (numeric string is expected)',
+          error: 'Bad Request',
+        },
+      },
+    }),
+    ApiResponse({
+      status: 401,
+      description: 'Error: Unauthorized',
+      schema: {
+        example: {
+          statusCode: 401,
+          message: 'Unauthorized',
+          error: 'Unauthorized',
+        },
+      },
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'Seeker not found.',
+      schema: {
+        example: {
+          statusCode: 404,
+          message: 'Seeker not found',
+          error: 'Not Found',
+        },
+      },
+    }),
+  );
+}
+
+export function docSeekersGetVideoStream() {
+  return applyDecorators(
+    ApiOperation({
+      summary: 'Stream a seeker video',
+      description: 'Streams the video associated with a seeker. The endpoint is publicly accessible and optionally accepts a viewer identifier to resolve access to the local video file.'
+    }),
+    ApiQuery({
+      name: 'viewerId',
+      type: String,
+      required: false,
+      example: '123',
+      description: 'Optional identifier of the viewer requesting access to the video.'
+    }),
+    ApiResponse({
+      status: 200,
+      description: 'Seeker video successfully streamed.',
+      content: {
+        'video/mp4': {
+          schema: {
+            type: 'string',
+            format: 'binary'
+          },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 400,
+      description: 'Error: Bad Request',
+      schema: {
+        example: {
+          statusCode: 400,
+          message: 'Validation failed (numeric string is expected)',
+          error: 'Bad Request'
+        },
+      },
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'Error: Not Found',
+      schema: {
+        example: {
+          statusCode: 404,
+          message: 'Video not found'
+        },
+      },
+    }),
+  );
+}

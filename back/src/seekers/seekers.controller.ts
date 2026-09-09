@@ -32,13 +32,16 @@ import { Roles } from '../auth/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
 import {
   docSeekersDeleteById,
+  docSeekersDeleteVideo,
   docSeekersGet,
   docSeekersGetAdmin,
   docSeekersGetById,
   docSeekersGetByUserId,
+  docSeekersGetVideoStream,
   docSeekersPatch,
   docSeekersPatchById,
   docSeekersPost,
+  docSeekersPostVideo,
 } from './seekers.doc';
 
 @ApiTags('seekers')
@@ -121,6 +124,7 @@ export class SeekersController {
       limits: { fileSize: MAX_VIDEO_UPLOAD_BYTES },
     }),
   )
+  @docSeekersPostVideo()
   uploadVideo(
     @Param('id', ParseIntPipe) id: number,
     @UploadedFile() file: Express.Multer.File,
@@ -143,12 +147,14 @@ export class SeekersController {
   }
 
   @Delete(':id/video')
+  @docSeekersDeleteVideo()
   deleteVideo(@Param('id', ParseIntPipe) id: number, @Request() req: any) {
     return this.seekersService.deleteVideo(id, req.user);
   }
 
   @Public()
   @Get(':id/video/stream')
+  @docSeekersGetVideoStream()
   async streamVideo(
     @Param('id', ParseIntPipe) id: number,
     @Query('viewerId') viewerId: string | undefined,
