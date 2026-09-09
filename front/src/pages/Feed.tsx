@@ -35,6 +35,7 @@ export function Feed() {
   const [competenceIds, setCompetenceIds] = useState<number[]>([]);
   const [localisationIds, setLocalisationIds] = useState<number[]>([]);
   const [activitySectorIds, setActivitySectorIds] = useState<number[]>([]);
+  const [certifiedOnly, setCertifiedOnly] = useState(false);
   const [favoriteIds, setFavoriteIds] = useState<Set<number>>(new Set());
   const [contactedIds, setContactedIds] = useState<Set<number>>(new Set());
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -91,6 +92,10 @@ export function Feed() {
     loadPage(1);
   }, [loadPage]);
 
+  const visibleItems = certifiedOnly
+    ? items.filter((seeker) => seeker.certification)
+    : items;
+
   useEffect(() => {
     if (!session?.recruiterId) return;
     listSent(session.recruiterId, { type: 'favorite', pageSize: 100 })
@@ -137,6 +142,14 @@ export function Feed() {
             <span className="visually-hidden"> correspondant aux filtres</span>
           </p>
         )}
+        <label className={styles.sortToggle}>
+          <input
+            type="checkbox"
+            checked={certifiedOnly}
+            onChange={(e) => setCertifiedOnly(e.target.checked)}
+          />
+          Certifiés uniquement
+        </label>
         <Button variant="secondary" onClick={() => setFiltersOpen(true)}>
           Filtres
         </Button>
@@ -154,16 +167,16 @@ export function Feed() {
         </div>
       )}
 
-      {!loading && !loadError && items.length === 0 && (
+      {!loading && !loadError && visibleItems.length === 0 && (
         <div className={styles.centerState}>
           <EmptyState>Aucun profil ne correspond à ces critères.</EmptyState>
         </div>
       )}
 
-      {!loading && !loadError && items.length > 0 && (
+      {!loading && !loadError && visibleItems.length > 0 && (
         <>
           <ul className={styles.grid} aria-label="Profils de candidats">
-            {items.map((seeker) => (
+            {visibleItems.map((seeker) => (
               <FeedSlide
                 key={seeker.id}
                 seeker={seeker}
