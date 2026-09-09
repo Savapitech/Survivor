@@ -58,13 +58,41 @@ gitignored).
 Un dossier par domaine métier sous `src/`, chacun avec ses
 `*.controller.ts` / `*.service.ts` / `*.module.ts` / `entities/` :
 
+- `auth` — authentification (JWT), garde globale, décorateurs `@Public()` / `@Roles()`
 - `users` — comptes (email, mot de passe haché, rôle)
-- `seekers` — profils demandeurs d'emploi
+- `seekers` — profils demandeurs d'emploi (vidéo, certification, retrait du catalogue)
 - `recruiters` — profils recruteurs
 - `competences`, `activity-sectors`, `localisations` — référentiels liés aux profils demandeurs
 - `questionnaire` — questionnaire de certification (questions pondérées, tentatives, réponses)
 - `interactions` — vues / contacts / favoris entre recruteurs et candidats
+- `messages` — messagerie entre un recruteur et un candidat
+- `video-providers` — abstraction du stockage vidéo (fichier local, lien externe)
 - `health` — supervision (voir ci-dessous)
+- `migrations` — migrations TypeORM (voir ci-dessous)
+
+Le dossier `scripts/` contient des utilitaires ponctuels, à exécuter
+manuellement via `npm run <script>` (voir la table `scripts` de
+`package.json`) :
+
+| Script | Effet |
+| --- | --- |
+| `npm run migrate:videos` | Renseigne `videoProvider`/`videoExternalId` sur les profils dont la vidéo a été enregistrée avant l'introduction de l'abstraction fournisseur |
+| `npm run recalculate:certification-v2` | Recalcule le score de certification des tentatives existantes après un changement du barème de questions |
+| `npm run seed:load-test` | Génère un jeu de profils candidats (avec vidéo) via l'API publique, pour un test de charge |
+
+## Migrations
+
+`synchronize` (TypeORM) n'est actif qu'en développement (`NODE_ENV=development`).
+En dehors de ce mode, le schéma est uniquement géré par les migrations
+sous `src/migrations/`, exécutées automatiquement au démarrage
+(`migrationsRun: true`).
+
+| Commande | Effet |
+| --- | --- |
+| `npm run migration:generate -- src/migrations/NomDeLaMigration` | Génère une migration à partir des écarts d'entités |
+| `npm run migration:create -- src/migrations/NomDeLaMigration` | Crée une migration vide |
+| `npm run migration:run` | Applique les migrations en attente |
+| `npm run migration:revert` | Annule la dernière migration appliquée |
 
 ## Health check
 
