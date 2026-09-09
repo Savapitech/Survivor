@@ -84,7 +84,7 @@ export function Step1Account() {
   return (
     <form onSubmit={handleSubmit} noValidate>
       <p className={styles.step}>Étape 1 sur 3 - Création de compte</p>
-      <h1>Rejoindre ProfilsActifs</h1>
+      <h1>Rejoindre Compétences+</h1>
       <p>
         Inscrivez-vous gratuitement pour commencer à valoriser vos compétences.
       </p>

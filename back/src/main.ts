@@ -13,7 +13,7 @@ const { version } = JSON.parse(
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new ConsoleLogger({
-      prefix: 'ProfilsActifs',
+      prefix: 'Compétences+',
     }),
   });
   app.enableCors();
@@ -28,7 +28,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(
     app,
     new DocumentBuilder()
-      .setTitle('ProfilsActifs API')
+      .setTitle('Compétences+ API')
       .setDescription(
         'Démonstrateur technique, ne constitue pas un service public en exploitation.',
       )

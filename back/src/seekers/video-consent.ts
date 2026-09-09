@@ -1,7 +1,7 @@
-export const VIDEO_CONSENT_VERSION = 'v2-2026-09-07';
+export const VIDEO_CONSENT_VERSION = 'v3-2026-09-09';
 
 export const VIDEO_CONSENT_TEXT =
-  "J'autorise ProfilsActifs à publier cette vidéo, qui comporte mon image et ma voix, sur mon profil visible des recruteurs. " +
+  "J'autorise Compétences+ à publier cette vidéo, qui comporte mon image et ma voix, sur mon profil visible des recruteurs. " +
   'Je sais que je peux retirer ce consentement à tout moment depuis mon profil, ce qui supprime immédiatement le lien ' +
-  'enregistré sur ProfilsActifs ; le fichier reste néanmoins hébergé par la plateforme tierce (YouTube ou Vimeo) tant que je ' +
+  'enregistré sur Compétences+ ; le fichier reste néanmoins hébergé par la plateforme tierce (YouTube ou Vimeo) tant que je ' +
   "ne l'aurai pas supprimé moi-même sur ce service.";

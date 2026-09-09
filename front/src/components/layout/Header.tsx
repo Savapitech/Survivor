@@ -19,7 +19,7 @@ export function Header() {
       <div className={`container ${styles.bar}`}>
         <Link to="/" className={styles.brand}>
           <span className={styles.brandText}>
-            <span className={styles.product}>ProfilsActifs</span>
+            <span className={styles.product}>Compétences+</span>
           </span>
         </Link>
 

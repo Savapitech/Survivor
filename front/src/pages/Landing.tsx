@@ -42,14 +42,14 @@ export function Landing() {
     <>
       <section className={styles.hero}>
         <div className={styles.heroText}>
-          <p className={styles.tagline}>ProfilsActifs</p>
+          <p className={styles.tagline}>Compétences+</p>
           <h1 className={styles.title}>
             Valorisez vos compétences au-delà du CV
           </h1>
           <p>
             Faites la différence auprès des recruteurs publics et privés grâce à
             une courte vidéo de présentation et valorisez votre parcours via le
-            système officiel de certification ProfilsActifs.
+            système officiel de certification Compétences+.
           </p>
           <div className={styles.ctas}>
             <Link to={profileTo ?? '/inscription/compte'}>
@@ -57,7 +57,7 @@ export function Landing() {
             </Link>
             <Link to={certificationTo}>
               <Button variant="secondary">
-                Découvrir la certification ProfilsActifs
+                Découvrir la certification Compétences+
               </Button>
             </Link>
           </div>
@@ -101,7 +101,7 @@ export function Landing() {
           {publishedCount !== null && (
             <div>
               <span className={styles.statValue}>{publishedCount}</span>
-              Profils publiés sur ProfilsActifs
+              Profils publiés sur Compétences+
             </div>
           )}
           {recruiterCount !== null && (

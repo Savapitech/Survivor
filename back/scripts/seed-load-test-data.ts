@@ -40,7 +40,7 @@ async function createOneSeeker(
   activitySectorIds: number[],
   videoBuffer: Buffer,
 ): Promise<void> {
-  const email = `loadtest${index}@profilsactifs.fr`;
+  const email = `loadtest${index}@competences-plus.fr`;
   const password = 'LoadTest1234!';
 
   await fetchJson(`${API_URL}/users`, {

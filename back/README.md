@@ -1,6 +1,6 @@
-# ProfilsActifs Backend
+# Compétences+ Backend
 
-API du démonstrateur **ProfilsActifs**, développé pour le Ministère du Job
+API du démonstrateur **Compétences+**, développé pour le Ministère du Job
 et Bonheur : mise en relation entre demandeurs d'emploi et recruteurs via
 des profils vidéo courts et un questionnaire de certification
 professionnelle.
