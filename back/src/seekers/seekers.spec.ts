@@ -276,11 +276,10 @@ describe('SeekersService', () => {
             expect(result).toBeDefined();
             expect(repoRecruiter.existsBy).toHaveBeenCalledWith({ id: 123, });
         });
-        it('should return likeCount for the owner', async () => {
+        it('should return the seeker for the owner', async () => {
             const seeker = { id: 1, user: { id: 'user-1', role: UserRole.SEEKER, birthDate: '1990-01-01', }, videoProvider: null, videoExternalId: null, };
 
             repository.findOne!.mockResolvedValue(seeker);
-            queryBuilderInteraction.getRawMany.mockResolvedValue([{ seekerId: 1, count: '12', },]);
 
             const result = await service.findOne(1, undefined, 'user-1',);
 
@@ -298,7 +297,6 @@ describe('SeekersService', () => {
                     "status": "none",
                 }
             }));
-            expect(queryBuilderInteraction.getRawMany,).toHaveBeenCalled();
         });
     });
 
@@ -405,7 +403,6 @@ describe('SeekersService', () => {
             const expected = {
                 "data": [{
                     "id": 1,
-                    "likeCount": NaN,
                     "user": {
                         "birthDate": "1990-01-01",
                         "id": "1"
@@ -424,9 +421,6 @@ describe('SeekersService', () => {
             }
 
             repository.findAndCount!.mockResolvedValue([items, 1]);
-            queryBuilderInteraction.getRawMany.mockResolvedValue([{
-                seekerId: 1,
-            }]);
             const result = await service.findAllAdmin({
                 page: 1,
                 pageSize: 20,
@@ -448,14 +442,12 @@ describe('SeekersService', () => {
                 skip: 0,
                 take: 20,
             });
-            expect(queryBuilderInteraction.getRawMany).toHaveBeenCalled();
         });
     });
     it('should filter by videoStatus', async () => {
         const expected = {
             data: [{
                 "0": "1",
-                "likeCount": 0,
                 "videoView": {
                     "playbackUrl": null,
                     "status": "none",
@@ -463,7 +455,6 @@ describe('SeekersService', () => {
             },
             {
                 "0": "2",
-                "likeCount": 0,
                 "videoView": {
                     "playbackUrl": null,
                     "status": "none",
