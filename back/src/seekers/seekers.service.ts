@@ -245,6 +245,7 @@ export class SeekersService {
     }
     idQb.innerJoin('seeker.user', 'seekerUser');
     idQb.addSelect('seeker.updatedAt', 'updatedAt')
+    idQb.andWhere('seeker.visible');
     if (!canSeeMinors) {
       idQb.andWhere('seekerUser.birthDate <= :adultCutoff', {
         adultCutoff: adultCutoffDate(),
@@ -293,8 +294,9 @@ export class SeekersService {
     if (!seeker) {
       throw new NotFoundException('Seeker not found');
     }
-
     const isOwner = Boolean(viewerId) && seeker.user.id === viewerId;
+    if (!isOwner && !seeker.visible)
+      throw new NotFoundException('Seeker not found');
     if (!isOwner && seeker.user.birthDate && isMinor(seeker.user.birthDate)) {
       const canSeeMinors = await this.hasValidRecruiter(recruiterId);
       if (!canSeeMinors) {

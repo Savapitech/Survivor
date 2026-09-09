@@ -151,4 +151,11 @@ export class Seeker {
   })
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ApiProperty({
+    description: "user's visible consentment",
+    type: Boolean,
+  })
+  @Column({ default: false })
+  visible: Boolean;
 }
