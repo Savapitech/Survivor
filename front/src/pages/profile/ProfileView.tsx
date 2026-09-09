@@ -12,7 +12,7 @@ import { DeleteAccountFlow } from '../../components/profile/DeleteAccountFlow';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { LoadingState } from '../../components/ui/LoadingState';
-import { ErrorState } from '../../components/ui/ErrorState';
+import { ErrorStateFindSeeker } from '../../components/ui/ErrorState';
 import styles from './ProfileView.module.css';
 
 export function ProfileView() {
@@ -56,7 +56,7 @@ export function ProfileView() {
   }, [seeker, isRecruiter, session?.recruiterId]);
 
   if (loading) return <LoadingState label="Chargement du profil..." />;
-  if (error) return <ErrorState onRetry={refetch} />;
+  if (error) return <ErrorStateFindSeeker onRetry={refetch} />;
   if (!seeker) return null;
 
   const isOwnProfile =

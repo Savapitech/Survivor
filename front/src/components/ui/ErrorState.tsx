@@ -21,3 +21,19 @@ export function ErrorState({
     </div>
   );
 }
+
+export function ErrorStateFindSeeker({
+  message = 'Utilisateur introuvable.',
+  onRetry,
+}: ErrorStateProps) {
+  return (
+    <div className={`${styles.state} ${styles.error}`} role="alert">
+      <p>{message}</p>
+      {onRetry && (
+        <Button variant="secondary" onClick={onRetry} className={styles.retry}>
+          Réessayer
+        </Button>
+      )}
+    </div>
+  );
+}
