@@ -35,3 +35,15 @@
   font-size: var(--font-size-sm);
   font-weight: 400;
 }
+
+.viewsSection {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+
+.viewsDisclaimer {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: var(--space-2) 0 var(--space-4);
+}

@@ -12,6 +12,12 @@ import { Recruiter } from '../recruiters/entities/recruiter.entity';
 import { Seeker } from '../seekers/entities/seeker.entity';
 import { toPublicSeeker } from '../seekers/seeker-view.util';
 import { paginate, toSkipTake } from '../common/pagination';
+import { UserRole } from '../users/entities/user.entity';
+
+interface Requester {
+  userId?: string;
+  role?: UserRole;
+}
 
 @Injectable()
 export class InteractionsService {
@@ -23,6 +29,20 @@ export class InteractionsService {
     @InjectRepository(Seeker)
     private readonly seekersRepository: Repository<Seeker>,
   ) {}
+
+  private async assertSeekerOwnerOrAdmin(
+    requester: Requester | undefined,
+    seekerId: number,
+  ) {
+    if (requester?.role === UserRole.ADMIN) return;
+    const seeker = await this.seekersRepository.findOne({
+      where: { id: seekerId },
+      relations: { user: true },
+    });
+    if (!seeker || requester?.userId !== seeker.user.id) {
+      throw new ForbiddenException('This profile does not belong to you');
+    }
+  }
 
   async create(dto: CreateInteractionDto) {
     const recruiter = await this.recruitersRepository.findOneBy({
@@ -78,7 +98,12 @@ export class InteractionsService {
     );
   }
 
-  async findReceived(seekerId: number, query: FindInteractionsQueryDto) {
+  async findReceived(
+    seekerId: number,
+    query: FindInteractionsQueryDto,
+    requester?: Requester,
+  ) {
+    await this.assertSeekerOwnerOrAdmin(requester, seekerId);
     const { skip, take } = toSkipTake(query);
     const [items, total] = await this.interactionsRepository.findAndCount({
       where: {
@@ -94,7 +119,8 @@ export class InteractionsService {
     return paginate(items, total, query);
   }
 
-  async countUnread(seekerId: number) {
+  async countUnread(seekerId: number, requester?: Requester) {
+    await this.assertSeekerOwnerOrAdmin(requester, seekerId);
     const unread = await this.interactionsRepository.countBy({
       seeker: { id: seekerId },
       seenAt: IsNull(),
@@ -118,7 +144,8 @@ export class InteractionsService {
     return { ...interaction, seeker: toPublicSeeker(interaction.seeker) };
   }
 
-  async markSeen(id: number, seekerId: number) {
+  async markSeen(id: number, seekerId: number, requester?: Requester) {
+    await this.assertSeekerOwnerOrAdmin(requester, seekerId);
     const interaction = await this.findOneRaw(id);
     if (interaction.seeker.id !== seekerId) {
       throw new ForbiddenException('This interaction does not belong to you');
@@ -130,7 +157,8 @@ export class InteractionsService {
     return { ...interaction, seeker: toPublicSeeker(interaction.seeker) };
   }
 
-  async markAllSeen(seekerId: number) {
+  async markAllSeen(seekerId: number, requester?: Requester) {
+    await this.assertSeekerOwnerOrAdmin(requester, seekerId);
     const result = await this.interactionsRepository.update(
       { seeker: { id: seekerId }, seenAt: IsNull() },
       { seenAt: new Date() },

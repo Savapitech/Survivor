@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  Request,
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -52,20 +53,24 @@ export class InteractionsController {
   findReceived(
     @Query('seekerId', ParseIntPipe) seekerId: number,
     @Query() query: FindInteractionsQueryDto,
+    @Request() req: any,
   ) {
-    return this.interactionsService.findReceived(seekerId, query);
+    return this.interactionsService.findReceived(seekerId, query, req.user);
   }
 
   @Get('unread-count')
   @docInteractionsGetUnread()
-  countUnread(@Query('seekerId', ParseIntPipe) seekerId: number) {
-    return this.interactionsService.countUnread(seekerId);
+  countUnread(
+    @Query('seekerId', ParseIntPipe) seekerId: number,
+    @Request() req: any,
+  ) {
+    return this.interactionsService.countUnread(seekerId, req.user);
   }
 
   @Post('seen-all')
   @docInteractionsPostSeen()
-  markAllSeen(@Body() dto: MarkAllSeenDto) {
-    return this.interactionsService.markAllSeen(dto.seekerId);
+  markAllSeen(@Body() dto: MarkAllSeenDto, @Request() req: any) {
+    return this.interactionsService.markAllSeen(dto.seekerId, req.user);
   }
 
   @Delete('favorite')
@@ -82,8 +87,9 @@ export class InteractionsController {
   markSeen(
     @Param('id', ParseIntPipe) id: number,
     @Query('seekerId', ParseIntPipe) seekerId: number,
+    @Request() req: any,
   ) {
-    return this.interactionsService.markSeen(id, seekerId);
+    return this.interactionsService.markSeen(id, seekerId, req.user);
   }
 
   @Get(':id')

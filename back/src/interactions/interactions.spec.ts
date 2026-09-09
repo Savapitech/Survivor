@@ -151,9 +151,12 @@ describe('InteractionsController', () => {
                 expectedResult,
             );
 
+            const req = { user: { userId: 'user-2', role: 'seeker' } };
+
             const result = await controller.findReceived(
                 seekerId,
                 query,
+                req,
             );
 
             expect(result).toEqual(expectedResult);
@@ -164,7 +167,7 @@ describe('InteractionsController', () => {
 
             expect(
                 interactionsServiceMock.findReceived,
-            ).toHaveBeenCalledWith(seekerId, query);
+            ).toHaveBeenCalledWith(seekerId, query, req.user);
         });
 
         it('should pass seekerId and query unchanged', async () => {
@@ -175,26 +178,29 @@ describe('InteractionsController', () => {
                 pageSize: 10,
             } as FindInteractionsQueryDto;
 
+            const req = { user: { userId: 'user-42', role: 'seeker' } };
+
             interactionsServiceMock.findReceived.mockResolvedValue([]);
 
-            await controller.findReceived(seekerId, query);
+            await controller.findReceived(seekerId, query, req);
 
             expect(
                 interactionsServiceMock.findReceived,
-            ).toHaveBeenCalledWith(seekerId, query);
+            ).toHaveBeenCalledWith(seekerId, query, req.user);
         });
     });
 
     describe('countUnread', () => {
         it('should return the unread interaction count', async () => {
             const seekerId = 2;
+            const req = { user: { userId: 'user-2', role: 'seeker' } };
             const expectedResult = 5;
 
             interactionsServiceMock.countUnread.mockResolvedValue(
                 expectedResult,
             );
 
-            const result = await controller.countUnread(seekerId);
+            const result = await controller.countUnread(seekerId, req);
 
             expect(result).toBe(expectedResult);
 
@@ -204,7 +210,7 @@ describe('InteractionsController', () => {
 
             expect(
                 interactionsServiceMock.countUnread,
-            ).toHaveBeenCalledWith(seekerId);
+            ).toHaveBeenCalledWith(seekerId, req.user);
         });
     });
 
@@ -213,6 +219,7 @@ describe('InteractionsController', () => {
             const dto = {
                 seekerId: 2,
             } as MarkAllSeenDto;
+            const req = { user: { userId: 'user-2', role: 'seeker' } };
 
             const expectedResult = {
                 success: true,
@@ -222,7 +229,7 @@ describe('InteractionsController', () => {
                 expectedResult,
             );
 
-            const result = await controller.markAllSeen(dto);
+            const result = await controller.markAllSeen(dto, req);
 
             expect(result).toEqual(expectedResult);
 
@@ -232,23 +239,24 @@ describe('InteractionsController', () => {
 
             expect(
                 interactionsServiceMock.markAllSeen,
-            ).toHaveBeenCalledWith(dto.seekerId);
+            ).toHaveBeenCalledWith(dto.seekerId, req.user);
         });
 
         it('should pass only seekerId to the service', async () => {
             const dto = {
                 seekerId: 42,
             } as MarkAllSeenDto;
+            const req = { user: { userId: 'user-42', role: 'seeker' } };
 
             interactionsServiceMock.markAllSeen.mockResolvedValue({
                 success: true,
             });
 
-            await controller.markAllSeen(dto);
+            await controller.markAllSeen(dto, req);
 
             expect(
                 interactionsServiceMock.markAllSeen,
-            ).toHaveBeenCalledWith(42);
+            ).toHaveBeenCalledWith(42, req.user);
         });
     });
 
@@ -305,6 +313,7 @@ describe('InteractionsController', () => {
         it('should mark an interaction as seen', async () => {
             const id = 1;
             const seekerId = 2;
+            const req = { user: { userId: 'user-2', role: 'seeker' } };
 
             const expectedResult = {
                 id,
@@ -315,7 +324,7 @@ describe('InteractionsController', () => {
                 expectedResult,
             );
 
-            const result = await controller.markSeen(id, seekerId);
+            const result = await controller.markSeen(id, seekerId, req);
 
             expect(result).toEqual(expectedResult);
 
@@ -325,23 +334,24 @@ describe('InteractionsController', () => {
 
             expect(
                 interactionsServiceMock.markSeen,
-            ).toHaveBeenCalledWith(id, seekerId);
+            ).toHaveBeenCalledWith(id, seekerId, req.user);
         });
 
         it('should pass id and seekerId unchanged', async () => {
             const id = 42;
             const seekerId = 100;
+            const req = { user: { userId: 'user-100', role: 'seeker' } };
 
             interactionsServiceMock.markSeen.mockResolvedValue({
                 id,
                 seen: true,
             });
 
-            await controller.markSeen(id, seekerId);
+            await controller.markSeen(id, seekerId, req);
 
             expect(
                 interactionsServiceMock.markSeen,
-            ).toHaveBeenCalledWith(id, seekerId);
+            ).toHaveBeenCalledWith(id, seekerId, req.user);
         });
     });
 
@@ -452,49 +462,52 @@ describe('InteractionsController', () => {
         it('should propagate findReceived errors', async () => {
             const seekerId = 1;
             const query = {} as FindInteractionsQueryDto;
+            const req = { user: { userId: 'user-1', role: 'seeker' } };
             const error = new Error('Find received failed');
 
             interactionsServiceMock.findReceived.mockRejectedValue(error);
 
             await expect(
-                controller.findReceived(seekerId, query),
+                controller.findReceived(seekerId, query, req),
             ).rejects.toThrow(error);
 
             expect(
                 interactionsServiceMock.findReceived,
-            ).toHaveBeenCalledWith(seekerId, query);
+            ).toHaveBeenCalledWith(seekerId, query, req.user);
         });
 
         it('should propagate countUnread errors', async () => {
+            const req = { user: { userId: 'user-1', role: 'seeker' } };
             const error = new Error('Count unread failed');
 
             interactionsServiceMock.countUnread.mockRejectedValue(error);
 
             await expect(
-                controller.countUnread(1),
+                controller.countUnread(1, req),
             ).rejects.toThrow(error);
 
             expect(
                 interactionsServiceMock.countUnread,
-            ).toHaveBeenCalledWith(1);
+            ).toHaveBeenCalledWith(1, req.user);
         });
 
         it('should propagate markAllSeen errors', async () => {
             const dto = {
                 seekerId: 1,
             } as MarkAllSeenDto;
+            const req = { user: { userId: 'user-1', role: 'seeker' } };
 
             const error = new Error('Mark all seen failed');
 
             interactionsServiceMock.markAllSeen.mockRejectedValue(error);
 
             await expect(
-                controller.markAllSeen(dto),
+                controller.markAllSeen(dto, req),
             ).rejects.toThrow(error);
 
             expect(
                 interactionsServiceMock.markAllSeen,
-            ).toHaveBeenCalledWith(dto.seekerId);
+            ).toHaveBeenCalledWith(dto.seekerId, req.user);
         });
 
         it('should propagate removeFavorite errors', async () => {
@@ -519,17 +532,18 @@ describe('InteractionsController', () => {
         });
 
         it('should propagate markSeen errors', async () => {
+            const req = { user: { userId: 'user-2', role: 'seeker' } };
             const error = new Error('Mark seen failed');
 
             interactionsServiceMock.markSeen.mockRejectedValue(error);
 
             await expect(
-                controller.markSeen(1, 2),
+                controller.markSeen(1, 2, req),
             ).rejects.toThrow(error);
 
             expect(
                 interactionsServiceMock.markSeen,
-            ).toHaveBeenCalledWith(1, 2);
+            ).toHaveBeenCalledWith(1, 2, req.user);
         });
 
         it('should propagate findOne errors', async () => {

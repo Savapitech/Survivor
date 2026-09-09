@@ -32,6 +32,18 @@ export function Notifications() {
     [seekerId],
   );
 
+  const {
+    data: views,
+    loading: viewsLoading,
+    error: viewsError,
+  } = useAsync(
+    () =>
+      seekerId
+        ? listReceived(seekerId, { type: 'view', pageSize: 50 })
+        : Promise.reject(new Error('no seeker')),
+    [seekerId],
+  );
+
   if (!isSeeker || !seekerId) {
     return <Navigate to="/" replace />;
   }
@@ -92,6 +104,41 @@ export function Notifications() {
           })}
         </ul>
       )}
+
+      <div className={styles.viewsSection}>
+        <h2>Qui a consulté votre profil</h2>
+        <p className={styles.viewsDisclaimer}>
+          Seules les consultations effectuées par un compte recruteur
+          connecté sont enregistrées ici, avec la date et l'organisation
+          concernée. Les consultations anonymes (sans connexion) ne sont pas
+          comptabilisées.
+        </p>
+
+        {viewsLoading && (
+          <LoadingState label="Chargement des consultations..." />
+        )}
+        {viewsError && <ErrorState message={viewsError} />}
+        {views && views.data.length === 0 && (
+          <EmptyState>
+            Aucune consultation de votre profil pour le moment.
+          </EmptyState>
+        )}
+        {views && views.data.length > 0 && (
+          <ul className={styles.list}>
+            {views.data.map((item) => (
+              <li key={item.id} className={styles.item}>
+                <span>
+                  <strong>{item.recruiter.companyName}</strong> a consulté
+                  votre profil.{' '}
+                  <span className={styles.date}>
+                    {formatDate(item.createdAt)}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </section>
   );
 }
