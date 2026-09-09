@@ -245,7 +245,7 @@ export class SeekersService {
     }
     idQb.innerJoin('seeker.user', 'seekerUser');
     idQb.addSelect('seeker.updatedAt', 'updatedAt')
-    idQb.andWhere('seeker.visible');
+    idQb.andWhere('seeker.withdrawnAt IS NULL');
     if (!canSeeMinors) {
       idQb.andWhere('seekerUser.birthDate <= :adultCutoff', {
         adultCutoff: adultCutoffDate(),
@@ -295,8 +295,9 @@ export class SeekersService {
       throw new NotFoundException('Seeker not found');
     }
     const isOwner = Boolean(viewerId) && seeker.user.id === viewerId;
-    if (!isOwner && !seeker.visible)
+    if (!isOwner && seeker.withdrawnAt) {
       throw new NotFoundException('Seeker not found');
+    }
     if (!isOwner && seeker.user.birthDate && isMinor(seeker.user.birthDate)) {
       const canSeeMinors = await this.hasValidRecruiter(recruiterId);
       if (!canSeeMinors) {
@@ -386,6 +387,34 @@ export class SeekersService {
       );
     }
 
+    return this.seekersRepository.save(seeker);
+  }
+
+  async withdraw(id: number, requester?: Requester) {
+    const seeker = await this.seekersRepository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
+    if (!seeker) {
+      throw new NotFoundException('Seeker not found');
+    }
+    assertOwnerOrAdmin(requester, seeker.user.id);
+
+    seeker.withdrawnAt = new Date();
+    return this.seekersRepository.save(seeker);
+  }
+
+  async restore(id: number, requester?: Requester) {
+    const seeker = await this.seekersRepository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
+    if (!seeker) {
+      throw new NotFoundException('Seeker not found');
+    }
+    assertOwnerOrAdmin(requester, seeker.user.id);
+
+    seeker.withdrawnAt = null;
     return this.seekersRepository.save(seeker);
   }
 

@@ -153,9 +153,11 @@ export class Seeker {
   updatedAt: Date;
 
   @ApiProperty({
-    description: "user's visible consentment",
-    type: Boolean,
+    description:
+      'Date at which the seeker withdrew their profile from the catalogue (null if published)',
+    type: Date,
+    nullable: true,
   })
-  @Column({ default: false })
-  visible: Boolean;
+  @Column({ type: 'timestamp', nullable: true })
+  withdrawnAt: Date | null;
 }

@@ -9,6 +9,7 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { ProfileVideo } from '../../components/profile/ProfileVideo';
 import { SkillTags } from '../../components/profile/SkillTags';
 import { DeleteAccountFlow } from '../../components/profile/DeleteAccountFlow';
+import { WithdrawProfileFlow } from '../../components/profile/WithdrawProfileFlow';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { LoadingState } from '../../components/ui/LoadingState';
@@ -140,11 +141,23 @@ export function ProfileView() {
         getText={(l) => l.localisation}
       />
 
+      {isOwnProfile && seeker.withdrawnAt && (
+        <p role="status" className={styles.moderationNotice}>
+          Votre profil est retiré du catalogue : il n'est visible ni dans les
+          recherches, ni via un lien direct. Vous seul pouvez le voir.
+        </p>
+      )}
+
       {isOwnProfile && (
         <div className={styles.actions}>
           <Link to={`/profils/${seeker.id}/modifier`}>
             <Button variant="secondary">Modifier mon profil</Button>
           </Link>
+          <WithdrawProfileFlow
+            profileId={seeker.id}
+            withdrawn={Boolean(seeker.withdrawnAt)}
+            onChange={refetch}
+          />
           <DeleteAccountFlow
             role="seeker"
             profileId={seeker.id}

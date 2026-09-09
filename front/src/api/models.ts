@@ -60,6 +60,7 @@ export type SeekerDetail = SeekerBase & {
   videoRejectionReason?: string | null;
   videoConsentGivenAt?: string | null;
   videoConsentVersion?: string | null;
+  withdrawnAt?: string | null;
 };
 export type SeekerAdmin = SeekerDetail & {
   user: PublicUser;

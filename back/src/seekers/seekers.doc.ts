@@ -739,3 +739,92 @@ export function docSeekersGetVideoStream() {
     }),
   );
 }
+
+export function docSeekersWithdraw() {
+  return applyDecorators(
+    ApiBearerAuth('JWT'),
+    ApiOperation({
+      summary: 'Withdraw a seeker profile from the catalogue',
+      description:
+        'Removes the profile from the public catalogue, search results and direct links (without deleting the account). Reversible via the restore endpoint.',
+    }),
+    ApiParam({
+      name: 'id',
+      required: true,
+      type: Number,
+      description: "The seeker's unique identifier.",
+      example: 42,
+    }),
+    ApiResponse({
+      status: 200,
+      type: Seeker,
+      description: 'Seeker successfully withdrawn.',
+    }),
+    ApiResponse({
+      status: 403,
+      description: 'Error: Forbidden',
+      schema: {
+        example: {
+          statusCode: 403,
+          message: 'This profile does not belong to you',
+          error: 'Forbidden',
+        },
+      },
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'Seeker not found.',
+      schema: {
+        example: {
+          statusCode: 404,
+          message: 'Seeker not found',
+          error: 'Not Found',
+        },
+      },
+    }),
+  );
+}
+
+export function docSeekersRestore() {
+  return applyDecorators(
+    ApiBearerAuth('JWT'),
+    ApiOperation({
+      summary: 'Restore a withdrawn seeker profile',
+      description: 'Republishes a previously withdrawn profile.',
+    }),
+    ApiParam({
+      name: 'id',
+      required: true,
+      type: Number,
+      description: "The seeker's unique identifier.",
+      example: 42,
+    }),
+    ApiResponse({
+      status: 200,
+      type: Seeker,
+      description: 'Seeker successfully restored.',
+    }),
+    ApiResponse({
+      status: 403,
+      description: 'Error: Forbidden',
+      schema: {
+        example: {
+          statusCode: 403,
+          message: 'This profile does not belong to you',
+          error: 'Forbidden',
+        },
+      },
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'Seeker not found.',
+      schema: {
+        example: {
+          statusCode: 404,
+          message: 'Seeker not found',
+          error: 'Not Found',
+        },
+      },
+    }),
+  );
+}

@@ -63,6 +63,7 @@ export class InteractionsService {
     const [items, total] = await this.interactionsRepository.findAndCount({
       where: {
         recruiter: { id: recruiterId },
+        seeker: { withdrawnAt: IsNull() },
         ...(query.type && { type: query.type }),
       },
       relations: { seeker: { user: true } },

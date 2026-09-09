@@ -42,6 +42,8 @@ import {
   docSeekersPatchById,
   docSeekersPost,
   docSeekersPostVideo,
+  docSeekersWithdraw,
+  docSeekersRestore,
 } from './seekers.doc';
 
 @ApiTags('seekers')
@@ -115,6 +117,18 @@ export class SeekersController {
   @docSeekersDeleteById()
   remove(@Param('id', ParseIntPipe) id: number, @Request() req: any) {
     return this.seekersService.remove(id, req.user);
+  }
+
+  @Patch(':id/withdraw')
+  @docSeekersWithdraw()
+  withdraw(@Param('id', ParseIntPipe) id: number, @Request() req: any) {
+    return this.seekersService.withdraw(id, req.user);
+  }
+
+  @Patch(':id/restore')
+  @docSeekersRestore()
+  restore(@Param('id', ParseIntPipe) id: number, @Request() req: any) {
+    return this.seekersService.restore(id, req.user);
   }
 
   @Post(':id/video')

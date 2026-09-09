@@ -53,6 +53,18 @@ export function deleteSeeker(id: number) {
   return apiFetch<void>(`/seekers/${id}`, { method: 'DELETE' });
 }
 
+export function withdrawSeeker(id: number) {
+  return apiFetch<SeekerDetail>(`/seekers/${id}/withdraw`, {
+    method: 'PATCH',
+  });
+}
+
+export function restoreSeeker(id: number) {
+  return apiFetch<SeekerDetail>(`/seekers/${id}/restore`, {
+    method: 'PATCH',
+  });
+}
+
 export function listSeekersAdmin(query: FindSeekersAdminQuery = {}) {
   return apiFetch<Paginated<SeekerAdmin>>('/seekers/admin', { query });
 }
