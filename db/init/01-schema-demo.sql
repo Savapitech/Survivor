@@ -1214,11 +1214,11 @@ COPY public.recruiter (id, "companyName", "userId") FROM stdin;
 --
 
 COPY public.seeker (id, name, lastname, certification, video, "videoProvider", "videoExternalId", "videoStatus", "videoRejectionReason", "videoModeratedAt", "videoModeratedBy", "videoConsentGivenAt", "videoConsentVersion", "userId", "updatedAt", "withdrawnAt") FROM stdin;
-16	Jeremie	Moulin	f	https://youtube.com/watch?v=ttaDZyPm608	\N	\N	pending	\N	\N	\N	\N	\N	749d510b-6248-4a8e-9cfb-0deb9c74b4f6	2026-09-09 18:06:12.666757	\N
-13	Etienne	de la Fontaine	t	https://youtube.com/watch?v=UwMmKYR7sEs	\N	\N	approved	\N	2026-09-03 08:18:54.725	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	109ba1c5-54b8-4e0c-8755-b5f4d06c1294	2026-09-09 18:06:12.666757	\N
-14	Tanguy	Brague	t	https://youtube.com/watch?v=OcWfOgs_0Zk	\N	\N	approved	\N	2026-09-03 08:18:54.748	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	680bbc07-055b-4f30-b1ab-7c23187b6c4d	2026-09-09 18:06:12.666757	\N
-15	Georges	Ansquer	t	https://youtube.com/watch?v=_lGKG15E-jI	\N	\N	approved	\N	2026-09-03 08:18:54.766	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	f4fa1b10-15df-4a5e-9ef5-9313552df325	2026-09-09 18:06:12.666757	\N
-17	Benjamin	Croizet	t	https://www.youtube.com/watch?v=InMcm5gqHUs	\N	\N	approved	\N	2026-09-03 08:19:34.633	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	97ee1332-00e0-407f-99e9-0f9246f160fa	2026-09-09 18:06:12.666757	\N
+16	Jeremie	Moulin	f	https://youtube.com/watch?v=ttaDZyPm608	link	https://youtube.com/watch?v=ttaDZyPm608	pending	\N	\N	\N	\N	\N	749d510b-6248-4a8e-9cfb-0deb9c74b4f6	2026-09-09 18:06:12.666757	\N
+13	Etienne	de la Fontaine	t	https://youtube.com/watch?v=UwMmKYR7sEs	link	https://youtube.com/watch?v=UwMmKYR7sEs	approved	\N	2026-09-03 08:18:54.725	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	109ba1c5-54b8-4e0c-8755-b5f4d06c1294	2026-09-09 18:06:12.666757	\N
+14	Tanguy	Brague	t	https://youtube.com/watch?v=OcWfOgs_0Zk	link	https://youtube.com/watch?v=OcWfOgs_0Zk	approved	\N	2026-09-03 08:18:54.748	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	680bbc07-055b-4f30-b1ab-7c23187b6c4d	2026-09-09 18:06:12.666757	\N
+15	Georges	Ansquer	t	https://youtube.com/watch?v=_lGKG15E-jI	link	https://youtube.com/watch?v=_lGKG15E-jI	approved	\N	2026-09-03 08:18:54.766	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	f4fa1b10-15df-4a5e-9ef5-9313552df325	2026-09-09 18:06:12.666757	\N
+17	Benjamin	Croizet	t	https://www.youtube.com/watch?v=InMcm5gqHUs	link	https://www.youtube.com/watch?v=InMcm5gqHUs	approved	\N	2026-09-03 08:19:34.633	db44cb77-c1d3-4afa-bd84-f1cd69169c2c	\N	\N	97ee1332-00e0-407f-99e9-0f9246f160fa	2026-09-09 18:06:12.666757	\N
 \.
 
 
